@@ -1,0 +1,14 @@
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Data.deps.json
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Data.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Data.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Common.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Entities.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Entities.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Data\bin\Debug\netcoreapp2.1\Common.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.csprojAssemblyReference.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.csproj.CoreCompileInputs.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.AssemblyInfoInputs.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.AssemblyInfo.cs
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.csproj.CopyComplete
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Data\obj\Debug\netcoreapp2.1\Data.pdb

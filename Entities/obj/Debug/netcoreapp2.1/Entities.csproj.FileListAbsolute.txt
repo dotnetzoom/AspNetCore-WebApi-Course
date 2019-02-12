@@ -1,0 +1,12 @@
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\bin\Debug\netcoreapp2.1\Entities.deps.json
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\bin\Debug\netcoreapp2.1\Entities.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\bin\Debug\netcoreapp2.1\Entities.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\bin\Debug\netcoreapp2.1\Common.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\bin\Debug\netcoreapp2.1\Common.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.csprojAssemblyReference.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.csproj.CoreCompileInputs.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.AssemblyInfoInputs.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.AssemblyInfo.cs
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.csproj.CopyComplete
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Entities\obj\Debug\netcoreapp2.1\Entities.pdb

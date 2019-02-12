@@ -1,0 +1,16 @@
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Services.deps.json
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Services.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Services.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Common.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Data.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Entities.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Data.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Common.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Services\bin\Debug\netcoreapp2.1\Entities.pdb
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.csprojAssemblyReference.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.csproj.CoreCompileInputs.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.AssemblyInfoInputs.cache
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.AssemblyInfo.cs
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.csproj.CopyComplete
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.dll
+C:\Users\Ebrahimi\source\repos\MyApi\Services\obj\Debug\netcoreapp2.1\Services.pdb

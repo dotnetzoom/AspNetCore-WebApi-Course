@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyApi</name>
+    </assembly>
+    <members>
+        <member name="M:MyApi.Controllers.v1.UsersController.Token(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            This method is for generate jwt token
+            </summary>
+            <param name="username">The username of user</param>
+            <param name="password">The password of user</param>
+            <returns>return generated jwt token</returns>
+        </member>
+        <member name="P:MyApi.Models.UserDto.UserName">
+            <summary>
+            userame field
+            </summary>
+        </member>
+        <member name="P:MyApi.Models.UserDto.Email">
+            <summary>
+            email field 
+            </summary>
+        </member>
+    </members>
+</doc>
