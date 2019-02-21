@@ -1,30 +1,34 @@
 ﻿using Data.Repositories;
 using Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services.DataInitializer
 {
     public class UserDataInitializer : IDataInitializer
     {
-        private readonly IUserRepository userRepository;
+        private readonly UserManager<User> userManager;
 
-        public UserDataInitializer(IUserRepository userRepository)
+        public UserDataInitializer(UserManager<User> userManager)
         {
-            this.userRepository = userRepository;
+            this.userManager = userManager;
         }
 
         public void InitializeData()
         {
-            if (!userRepository.TableNoTracking.Any(p => p.UserName == "Admin"))
+            if (!userManager.Users.AsNoTracking().Any(p => p.UserName == "Admin"))
             {
-                userRepository.Add(new User
+                var user = new User
                 {
-                    UserName = "Admin",
-                    Email = "admin@site.com",
                     Age = 25,
-                    FullName = "محمدجواد ابراهیمی",
-                    Gender = GenderType.Male
-                });
+                    FullName = "محمد جوادابراهیمی",
+                    Gender = GenderType.Male,
+                    UserName = "admin",
+                    Email = "admin@site.com"
+                };
+                var result = userManager.CreateAsync(user, "123456").GetAwaiter().GetResult();
             }
         }
     }
