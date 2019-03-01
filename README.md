@@ -14,7 +14,7 @@ If you want a total deep dive on REST, API security, ASP.NET Core, and much more
 3. Goto **MyApi** directory and run project using command line with `dotnet run`
 4. Browse this url https://localhost:5001/swagger to see SwaggerUI page
 
-### Techniques for building RESTful APIs in ASP.NET Core
+### Techniques and Features
 - JWT Authentication
 - Secure JWT using Encryption (JWE)
 - Logging to File, Console and Database using Elmah & NLog
