@@ -1,3 +1,37 @@
+<div dir=ltr>
+
+## 🥇Professional REST API design with ASP.NET Core and WebAPI
+
+This project is an example of Lightweight and Extensible Infrastructure for Building RESTful Web API with ASP.NET Core.
+This example contains a number of tricks and techniques I've learned while building APIs in ASP.NET Core.
+If you want a total deep dive on REST, API security, ASP.NET Core, and much more, check out my (Course)[http://beyamooz.com/project-based-aspnet/%D8%AF%D9%88%D8%B1%D9%87-api-%D9%86%D9%88%DB%8C%D8%B3%DB%8C-%D8%A7%D8%B5%D9%88%D9%84%DB%8C-%D9%88-%D8%AD%D8%B1%D9%81%D9%87-%D8%A7%DB%8C-%D8%AF%D8%B1-asp-net-core] 
+
+### Testing it out
+1. Clone or Download this repository
+2. Build the solution using command line with `dotnet build`
+3. Goto **MyApi** directory and run project using command line with `dotnet run`
+4. Browse this url https://localhost:5001/swagger to see SwaggerUI page
+
+### Techniques for building RESTful APIs in ASP.NET Core
+- JWT Authentication
+- Secure JWT using Encryption (JWE)
+- Logging to File, Console and Database using Elmah & NLog
+- Logging to sentry.io (Log Management System)
+- Exception Handling using Custom Middleware
+- Automatic Validation
+- Standard API Resulting
+- Dependency Injection using Autofac
+- Map resources using AutoMapper
+- Async/await Best Practices
+- Versioning Management
+- Using Swagger (Swashbuckle)
+- Auto Document Generator for Swagger
+- Integrate Swagger and Versioning
+- Integrate Swagger and Jwt/OAuth Authentication
+- Best Practices for Performance and Security
+
+</div>
+
 <div dir="rtl">
 
 # 🥇پروژه دوره API نویسی اصولی و حرفه ای در ASP.NET Core
