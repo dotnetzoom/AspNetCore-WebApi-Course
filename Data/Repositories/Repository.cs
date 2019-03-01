@@ -52,7 +52,7 @@ namespace Data.Repositories
             Assert.NotNull(entity, nameof(entity));
             Entities.Update(entity);
             if (saveNow)
-                await DbContext.SaveChangesAsync(cancellationToken);
+                await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)
@@ -60,7 +60,7 @@ namespace Data.Repositories
             Assert.NotNull(entities, nameof(entities));
             Entities.UpdateRange(entities);
             if (saveNow)
-                await DbContext.SaveChangesAsync(cancellationToken);
+                await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true)
@@ -68,7 +68,7 @@ namespace Data.Repositories
             Assert.NotNull(entity, nameof(entity));
             Entities.Remove(entity);
             if (saveNow)
-                await DbContext.SaveChangesAsync(cancellationToken);
+                await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)
@@ -76,7 +76,7 @@ namespace Data.Repositories
             Assert.NotNull(entities, nameof(entities));
             Entities.RemoveRange(entities);
             if (saveNow)
-                await DbContext.SaveChangesAsync(cancellationToken);
+                await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
         #endregion
 
@@ -106,7 +106,8 @@ namespace Data.Repositories
         {
             Assert.NotNull(entity, nameof(entity));
             Entities.Update(entity);
-            DbContext.SaveChanges();
+            if (saveNow)
+				DbContext.SaveChanges();
         }
 
         public virtual void UpdateRange(IEnumerable<TEntity> entities, bool saveNow = true)
