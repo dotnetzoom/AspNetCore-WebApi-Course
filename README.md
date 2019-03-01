@@ -3,7 +3,9 @@
 ## 🥇Professional REST API design with ASP.NET Core and WebAPI
 
 This project is an example of Lightweight and Extensible Infrastructure for Building RESTful Web API with ASP.NET Core.
+
 This example contains a number of tricks and techniques I've learned while building APIs in ASP.NET Core.
+
 If you want a total deep dive on REST, API security, ASP.NET Core, and much more, check out my [Course](http://beyamooz.com/project-based-aspnet/%D8%AF%D9%88%D8%B1%D9%87-api-%D9%86%D9%88%DB%8C%D8%B3%DB%8C-%D8%A7%D8%B5%D9%88%D9%84%DB%8C-%D9%88-%D8%AD%D8%B1%D9%81%D9%87-%D8%A7%DB%8C-%D8%AF%D8%B1-asp-net-core) 
 
 ### Testing it out
