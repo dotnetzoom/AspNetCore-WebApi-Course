@@ -34,6 +34,8 @@ If you want a total deep dive on REST, API security, ASP.NET Core, and much more
 
 </div>
 
+---
+
 <div dir="rtl">
 
 # 🥇پروژه دوره API نویسی اصولی و حرفه ای در ASP.NET Core
