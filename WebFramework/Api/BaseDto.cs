@@ -16,7 +16,7 @@ namespace WebFramework.Api
         {
             return Mapper.Map<TEntity>(CastToDerivedClass(this));
         }
-
+        
         public TEntity ToEntity(TEntity entity)
         {
             return Mapper.Map(CastToDerivedClass(this), entity);

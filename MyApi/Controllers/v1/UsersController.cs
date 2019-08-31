@@ -3,7 +3,6 @@ using Data.Repositories;
 using ElmahCore;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,11 +13,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Api;
-using WebFramework.Filters;
-using Common;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Swashbuckle.AspNetCore.Filters;
 
 namespace MyApi.Controllers.v1
 {

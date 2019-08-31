@@ -4,9 +4,7 @@ using Common.Utilities;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,15 +25,15 @@ namespace Data.Repositories
 
         public Task UpdateSecuirtyStampAsync(User user, CancellationToken cancellationToken)
         {
-            //user.SecurityStamp = Guid.NewGuid();
+            user.SecurityStamp = Guid.NewGuid().ToString();
             return UpdateAsync(user, cancellationToken);
         }
 
-        //public override void Update(User entity, bool saveNow = true)
-        //{
-        //    entity.SecurityStamp = Guid.NewGuid();
-        //    base.Update(entity, saveNow);
-        //}
+        public override void Update(User entity, bool saveNow = true)
+        {
+            entity.SecurityStamp = Guid.NewGuid().ToString();
+            base.Update(entity, saveNow);
+        }
 
         public Task UpdateLastLoginDateAsync(User user, CancellationToken cancellationToken)
         {

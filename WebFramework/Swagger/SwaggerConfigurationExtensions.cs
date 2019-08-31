@@ -7,16 +7,15 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace WebFramework.Swagger
 {
     public static class SwaggerConfigurationExtensions
     {
+        [Obsolete]
         public static void AddSwagger(this IServiceCollection services)
         {
             Assert.NotNull(services, nameof(services));

@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 
@@ -17,7 +11,7 @@ namespace MyApi
         public static void Main(string[] args)
         {
             //Set deafult proxy
-            WebRequest.DefaultWebProxy = new WebProxy("http://127.0.0.1:8118", true) { UseDefaultCredentials = true };
+            //WebRequest.DefaultWebProxy = new WebProxy("http://127.0.0.1:8118", true) { UseDefaultCredentials = true };
 
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try

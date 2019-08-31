@@ -5,12 +5,8 @@ using MyApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1

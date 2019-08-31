@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Entities;
+﻿using Entities;
 using WebFramework.Api;
 
 namespace MyApi.Models

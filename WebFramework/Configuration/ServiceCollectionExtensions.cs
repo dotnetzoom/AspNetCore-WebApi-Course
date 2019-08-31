@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +21,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace WebFramework.Configuration
 {
@@ -61,8 +61,7 @@ namespace WebFramework.Configuration
                 options.Formatting = Newtonsoft.Json.Formatting.Indented;
                 options.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             }*/)
-            .AddCors()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public static void AddElmah(this IServiceCollection services, IConfiguration configuration, SiteSettings siteSetting)
@@ -117,8 +116,8 @@ namespace WebFramework.Configuration
                 {
                     OnAuthenticationFailed = context =>
                     {
-                        //var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
-                        //logger.LogError("Authentication failed.", context.Exception);
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
+                        logger.LogError("Authentication failed.", context.Exception);
 
                         if (context.Exception != null)
                             throw new AppException(ApiResultStatusCode.UnAuthorized, "Authentication failed.", HttpStatusCode.Unauthorized, context.Exception, null);
@@ -156,8 +155,8 @@ namespace WebFramework.Configuration
                     },
                     OnChallenge = context =>
                     {
-                        //var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
-                        //logger.LogError("OnChallenge error", context.Error, context.ErrorDescription);
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
+                        logger.LogError("OnChallenge error", context.Error, context.ErrorDescription);
 
                         if (context.AuthenticateFailure != null)
                             throw new AppException(ApiResultStatusCode.UnAuthorized, "Authenticate failure.", HttpStatusCode.Unauthorized, context.AuthenticateFailure, null);
@@ -180,7 +179,7 @@ namespace WebFramework.Configuration
 
                 ApiVersion.TryParse("1.0", out var version10);
                 ApiVersion.TryParse("1", out var version1);
-                var a = version10 == version1;
+                //var a = version10 == version1;
 
                 //options.ApiVersionReader = new QueryStringApiVersionReader("api-version");
                 // api/posts?api-version=1

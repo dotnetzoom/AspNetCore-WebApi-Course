@@ -1,15 +1,11 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Data.Repositories;
 using Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WebFramework.Filters;
 
 namespace WebFramework.Api
 {

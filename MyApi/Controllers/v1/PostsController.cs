@@ -1,6 +1,5 @@
 ﻿using Data.Repositories;
 using Entities;
-using Microsoft.AspNetCore.Mvc;
 using MyApi.Models;
 using System;
 using WebFramework.Api;

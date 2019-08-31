@@ -6,10 +6,7 @@ using Data.Repositories;
 using Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Services;
-using Services.DataInitializer;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WebFramework.Configuration
 {

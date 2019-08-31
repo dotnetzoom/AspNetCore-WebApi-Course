@@ -1,18 +1,14 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using AutoMapper.QueryableExtensions;
 using Data.Repositories;
 using Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Api;
-using WebFramework.Filters;
 
 namespace MyApi.Controllers.v1
 {

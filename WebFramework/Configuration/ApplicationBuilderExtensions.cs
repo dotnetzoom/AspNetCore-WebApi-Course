@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Services.DataInitializer;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WebFramework.Configuration
 {
