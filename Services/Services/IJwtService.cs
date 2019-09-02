@@ -1,7 +1,7 @@
-﻿using Entities;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Entities.User;
 
-namespace Services
+namespace Services.Services
 {
     public interface IJwtService
     {

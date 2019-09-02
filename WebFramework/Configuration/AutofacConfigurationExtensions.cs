@@ -1,12 +1,13 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
+﻿using Data;
 using Common;
-using Data;
-using Data.Repositories;
-using Entities;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
 using System;
+using Autofac;
+using Services.Services;
+using Data.Repositories;
+using Autofac.Extensions.DependencyInjection;
+using Data.Contracts;
+using Entities.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebFramework.Configuration
 {

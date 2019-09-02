@@ -1,5 +1,4 @@
 ﻿using Common.Utilities;
-using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Data.Contracts;
+using Entities.Common;
 
 namespace Data.Repositories
 {
@@ -40,8 +41,9 @@ namespace Data.Repositories
 
         public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)
         {
-            Assert.NotNull(entities, nameof(entities));
-            await Entities.AddRangeAsync(entities, cancellationToken).ConfigureAwait(false);
+            var enumerable = entities as TEntity[] ?? entities.ToArray();
+            Assert.NotNull(enumerable, nameof(entities));
+            await Entities.AddRangeAsync(enumerable, cancellationToken).ConfigureAwait(false);
             if (saveNow)
                 await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -56,8 +58,9 @@ namespace Data.Repositories
 
         public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)
         {
-            Assert.NotNull(entities, nameof(entities));
-            Entities.UpdateRange(entities);
+            var enumerable = entities as TEntity[] ?? entities.ToArray();
+            Assert.NotNull(enumerable, nameof(entities));
+            Entities.UpdateRange(enumerable);
             if (saveNow)
                 await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -72,8 +75,9 @@ namespace Data.Repositories
 
         public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true)
         {
-            Assert.NotNull(entities, nameof(entities));
-            Entities.RemoveRange(entities);
+            var enumerable = entities as TEntity[] ?? entities.ToArray();
+            Assert.NotNull(enumerable, nameof(entities));
+            Entities.RemoveRange(enumerable);
             if (saveNow)
                 await DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -95,8 +99,9 @@ namespace Data.Repositories
 
         public virtual void AddRange(IEnumerable<TEntity> entities, bool saveNow = true)
         {
-            Assert.NotNull(entities, nameof(entities));
-            Entities.AddRange(entities);
+            var enumerable = entities as TEntity[] ?? entities.ToArray();
+            Assert.NotNull(enumerable, nameof(entities));
+            Entities.AddRange(enumerable);
             if (saveNow)
                 DbContext.SaveChanges();
         }
@@ -111,8 +116,9 @@ namespace Data.Repositories
 
         public virtual void UpdateRange(IEnumerable<TEntity> entities, bool saveNow = true)
         {
-            Assert.NotNull(entities, nameof(entities));
-            Entities.UpdateRange(entities);
+            var enumerable = entities as TEntity[] ?? entities.ToArray();
+            Assert.NotNull(enumerable, nameof(entities));
+            Entities.UpdateRange(enumerable);
             if (saveNow)
                 DbContext.SaveChanges();
         }
@@ -127,8 +133,9 @@ namespace Data.Repositories
 
         public virtual void DeleteRange(IEnumerable<TEntity> entities, bool saveNow = true)
         {
-            Assert.NotNull(entities, nameof(entities));
-            Entities.RemoveRange(entities);
+            var enumerable = entities as TEntity[] ?? entities.ToArray();
+            Assert.NotNull(enumerable, nameof(entities));
+            Entities.RemoveRange(enumerable);
             if (saveNow)
                 DbContext.SaveChanges();
         }

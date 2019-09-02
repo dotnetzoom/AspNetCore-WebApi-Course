@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Entities;
+using Entities.User;
 
-namespace Data.Repositories
+namespace Data.Contracts
 {
     public interface IUserRepository : IRepository<User>
     {

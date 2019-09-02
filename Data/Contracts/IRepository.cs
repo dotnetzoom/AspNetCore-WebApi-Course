@@ -4,10 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Entities;
+using Entities.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.Repositories
+namespace Data.Contracts
 {
     public interface IRepository<TEntity> where TEntity : class, IEntity
     {

@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+﻿using Common;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Common;
 using System.Net;
+using Newtonsoft.Json;
+using WebFramework.Api;
 using Common.Exceptions;
+using System.Globalization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
-using WebFramework.Api;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebFramework.Middlewares
 {
@@ -40,8 +41,8 @@ namespace WebFramework.Middlewares
         public async Task Invoke(HttpContext context)
         {
             string message = null;
-            HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
-            ApiResultStatusCode apiStatusCode = ApiResultStatusCode.ServerError;
+            var httpStatusCode = HttpStatusCode.InternalServerError;
+            var apiStatusCode = ApiResultStatusCode.ServerError;
 
             try
             {
@@ -130,7 +131,7 @@ namespace WebFramework.Middlewares
                         ["StackTrace"] = exception.StackTrace
                     };
                     if (exception is SecurityTokenExpiredException tokenException)
-                        dic.Add("Expires", tokenException.Expires.ToString());
+                        dic.Add("Expires", tokenException.Expires.ToString(CultureInfo.InvariantCulture));
 
                     message = JsonConvert.SerializeObject(dic);
                 }

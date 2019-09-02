@@ -1,7 +1,7 @@
-﻿using Entities;
+﻿using System.Linq;
+using Entities.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Services.DataInitializer
 {
@@ -16,18 +16,18 @@ namespace Services.DataInitializer
 
         public void InitializeData()
         {
-            if (!userManager.Users.AsNoTracking().Any(p => p.UserName == "Admin"))
+            if (userManager.Users.AsNoTracking().Any(p => p.UserName == "Admin")) return;
+
+            var user = new User
             {
-                var user = new User
-                {
-                    Age = 25,
-                    FullName = "محمد جوادابراهیمی",
-                    Gender = GenderType.Male,
-                    UserName = "admin",
-                    Email = "admin@site.com"
-                };
-                var result = userManager.CreateAsync(user, "123456").GetAwaiter().GetResult();
-            }
+                Age = 25,
+                FullName = "محمد جوادابراهیمی",
+                Gender = GenderType.Male,
+                UserName = "admin",
+                Email = "admin@site.com"
+            };
+
+            userManager.CreateAsync(user, "123456").GetAwaiter().GetResult();
         }
     }
 }

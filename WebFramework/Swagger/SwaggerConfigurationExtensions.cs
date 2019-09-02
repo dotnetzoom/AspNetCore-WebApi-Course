@@ -1,15 +1,15 @@
-﻿using Common.Utilities;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using Common.Utilities;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebFramework.Swagger
 {
@@ -84,9 +84,9 @@ namespace WebFramework.Swagger
                 //Seperate and categorize end-points by doc version
                 options.DocInclusionPredicate((docName, apiDesc) =>
                 {
-                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+                    if (!apiDesc.TryGetMethodInfo(out var methodInfo)) return false;
 
-                    var versions = methodInfo.DeclaringType
+                    var versions = (methodInfo.DeclaringType ?? throw new InvalidOperationException())
                         .GetCustomAttributes<ApiVersionAttribute>(true)
                         .SelectMany(attr => attr.Versions);
 

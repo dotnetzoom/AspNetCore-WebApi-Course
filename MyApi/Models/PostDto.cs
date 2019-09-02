@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Entities;
 using System;
+using Entities.Post;
 using WebFramework.Api;
 
 namespace MyApi.Models

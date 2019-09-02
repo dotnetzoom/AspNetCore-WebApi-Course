@@ -1,5 +1,5 @@
-﻿using Data.Repositories;
-using Entities;
+﻿using Data.Contracts;
+using Entities.Post;
 using MyApi.Models;
 using WebFramework.Api;
 

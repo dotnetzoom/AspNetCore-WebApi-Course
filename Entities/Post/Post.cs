@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Entities.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 
-namespace Entities
+namespace Entities.Post
 {
     public class Post : BaseEntity<Guid>
     {
@@ -12,7 +13,7 @@ namespace Entities
         public int AuthorId { get; set; }
 
         public Category Category { get; set; }
-        public User Author { get; set; }
+        public User.User Author { get; set; }
     }
 
     public class PostConfiguration : IEntityTypeConfiguration<Post>

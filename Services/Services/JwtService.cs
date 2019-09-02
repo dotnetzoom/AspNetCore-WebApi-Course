@@ -1,16 +1,16 @@
-﻿using Common;
-using Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System;
+using Common;
 using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Entities.User;
 
-namespace Services
+namespace Services.Services
 {
     public class JwtService : IJwtService, IScopedDependency
     {
@@ -63,7 +63,7 @@ namespace Services
             var result = await signInManager.ClaimsFactory.CreateAsync(user);
             //add custom claims
             var list = new List<Claim>(result.Claims);
-            list.Add(new Claim(ClaimTypes.MobilePhone, "09123456987"));
+            //list.Add(new Claim(ClaimTypes.MobilePhone, "09123456987"));
 
             //JwtRegisteredClaimNames.Sub
             //var securityStampClaimType = new ClaimsIdentityOptions().SecurityStampClaimType;

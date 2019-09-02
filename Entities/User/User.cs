@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Entities.Common;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Entities
+namespace Entities.User
 {
     public class User : IdentityUser<int>, IEntity
     {
@@ -22,7 +23,7 @@ namespace Entities
         public bool IsActive { get; set; }
         public DateTimeOffset? LastLoginDate { get; set; }
 
-        public ICollection<Post> Posts { get; set; }
+        public ICollection<Post.Post> Posts { get; set; }
     }
 
     public class UserConfiguration : IEntityTypeConfiguration<User>

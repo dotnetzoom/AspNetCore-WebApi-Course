@@ -1,10 +1,9 @@
-﻿using Common.Utilities;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Common
+namespace Common.Utilities
 {
     public static class IdentityExtensions
     {
@@ -29,7 +28,7 @@ namespace Common
             var userId = identity?.GetUserId();
             return userId.HasValue()
                 ? (T)Convert.ChangeType(userId, typeof(T), CultureInfo.InvariantCulture)
-                : default(T);
+                : default;
         }
 
         public static string GetUserName(this IIdentity identity)

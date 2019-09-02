@@ -1,12 +1,13 @@
 ﻿using Common;
 using Common.Exceptions;
 using Common.Utilities;
-using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Data.Contracts;
+using Entities.User;
 
 namespace Data.Repositories
 {

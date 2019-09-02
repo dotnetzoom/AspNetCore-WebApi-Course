@@ -1,11 +1,12 @@
-﻿using Common.Utilities;
-using Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
+using Common.Utilities;
 using System.Threading;
+using System.Reflection;
 using System.Threading.Tasks;
+using Entities.Common;
+using Entities.User;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Data
 {
@@ -75,16 +76,15 @@ namespace Data
 
                 foreach (var property in properties)
                 {
-                    var propName = property.Name;
+                    //var propName = property.Name;
                     var val = (string)property.GetValue(item.Entity, null);
 
-                    if (val.HasValue())
-                    {
-                        var newVal = val.Fa2En().FixPersianChars();
-                        if (newVal == val)
-                            continue;
-                        property.SetValue(item.Entity, newVal, null);
-                    }
+                    if (!val.HasValue()) continue;
+
+                    var newVal = val.Fa2En().FixPersianChars();
+                    if (newVal == val)
+                        continue;
+                    property.SetValue(item.Entity, newVal, null);
                 }
             }
         }

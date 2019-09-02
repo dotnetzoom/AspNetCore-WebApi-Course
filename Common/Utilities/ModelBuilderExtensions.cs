@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Pluralize.NET;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using Pluralize.NET;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Common.Utilities
 {
@@ -16,10 +14,10 @@ namespace Common.Utilities
         /// <param name="modelBuilder"></param>
         public static void AddSingularizingTableNameConvention(this ModelBuilder modelBuilder)
         {
-            Pluralizer pluralizer = new Pluralizer();
-            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+            var pluralizer = new Pluralizer();
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                string tableName = entityType.Relational().TableName;
+                var tableName = entityType.Relational().TableName;
                 entityType.Relational().TableName = pluralizer.Singularize(tableName);
             }
         }
@@ -30,10 +28,10 @@ namespace Common.Utilities
         /// <param name="modelBuilder"></param>
         public static void AddPluralizingTableNameConvention(this ModelBuilder modelBuilder)
         {
-            Pluralizer pluralizer = new Pluralizer();
-            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+            var pluralizer = new Pluralizer();
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                string tableName = entityType.Relational().TableName;
+                var tableName = entityType.Relational().TableName;
                 entityType.Relational().TableName = pluralizer.Pluralize(tableName);
             }
         }
@@ -42,7 +40,6 @@ namespace Common.Utilities
         /// Set NEWSEQUENTIALID() sql function for all columns named "Id"
         /// </summary>
         /// <param name="modelBuilder"></param>
-        /// <param name="mustBeIdentity">Set to true if you want only "Identity" guid fields that named "Id"</param>
         public static void AddSequentialGuidForIdConvention(this ModelBuilder modelBuilder)
         {
             modelBuilder.AddDefaultValueSqlConvention("Id", typeof(Guid), "NEWSEQUENTIALID()");
@@ -57,9 +54,9 @@ namespace Common.Utilities
         /// <param name="defaultValueSql">DefaultValueSql like "NEWSEQUENTIALID()"</param>
         public static void AddDefaultValueSqlConvention(this ModelBuilder modelBuilder, string propertyName, Type propertyType, string defaultValueSql)
         {
-            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                IMutableProperty property = entityType.GetProperties().SingleOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+                var property = entityType.GetProperties().SingleOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
                 if (property != null && property.ClrType == propertyType)
                     property.Relational().DefaultValueSql = defaultValueSql;
             }
@@ -71,10 +68,10 @@ namespace Common.Utilities
         /// <param name="modelBuilder"></param>
         public static void AddRestrictDeleteBehaviorConvention(this ModelBuilder modelBuilder)
         {
-            IEnumerable<IMutableForeignKey> cascadeFKs = modelBuilder.Model.GetEntityTypes()
+            var cascadeFKs = modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetForeignKeys())
                 .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
-            foreach (IMutableForeignKey fk in cascadeFKs)
+            foreach (var fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
         }
 
@@ -85,19 +82,19 @@ namespace Common.Utilities
         /// <param name="assemblies">Assemblies contains Entities</param>
         public static void RegisterEntityTypeConfiguration(this ModelBuilder modelBuilder, params Assembly[] assemblies)
         {
-            MethodInfo applyGenericMethod = typeof(ModelBuilder).GetMethods().First(m => m.Name == nameof(ModelBuilder.ApplyConfiguration));
+            var applyGenericMethod = typeof(ModelBuilder).GetMethods().First(m => m.Name == nameof(ModelBuilder.ApplyConfiguration));
 
-            IEnumerable<Type> types = assemblies.SelectMany(a => a.GetExportedTypes())
+            var types = assemblies.SelectMany(a => a.GetExportedTypes())
                 .Where(c => c.IsClass && !c.IsAbstract && c.IsPublic);
 
-            foreach (Type type in types)
+            foreach (var type in types)
             {
-                foreach (Type iface in type.GetInterfaces())
+                foreach (var iface in type.GetInterfaces())
                 {
                     if (iface.IsConstructedGenericType && iface.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
                     {
-                        MethodInfo applyConcreteMethod = applyGenericMethod.MakeGenericMethod(iface.GenericTypeArguments[0]);
-                        applyConcreteMethod.Invoke(modelBuilder, new object[] { Activator.CreateInstance(type) });
+                        var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(iface.GenericTypeArguments[0]);
+                        applyConcreteMethod.Invoke(modelBuilder, new[] { Activator.CreateInstance(type) });
                     }
                 }
             }
@@ -107,14 +104,13 @@ namespace Common.Utilities
         /// Dynamicaly register all Entities that inherit from specific BaseType
         /// </summary>
         /// <param name="modelBuilder"></param>
-        /// <param name="baseType">Base type that Entities inherit from this</param>
         /// <param name="assemblies">Assemblies contains Entities</param>
         public static void RegisterAllEntities<BaseType>(this ModelBuilder modelBuilder, params Assembly[] assemblies)
         {
-            IEnumerable<Type> types = assemblies.SelectMany(a => a.GetExportedTypes())
+            var types = assemblies.SelectMany(a => a.GetExportedTypes())
                 .Where(c => c.IsClass && !c.IsAbstract && c.IsPublic && typeof(BaseType).IsAssignableFrom(c));
 
-            foreach (Type type in types)
+            foreach (var type in types)
                 modelBuilder.Entity(type);
         }
     }

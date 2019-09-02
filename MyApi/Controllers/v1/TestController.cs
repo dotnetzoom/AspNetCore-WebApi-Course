@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Entities.User;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
@@ -67,12 +68,13 @@ namespace MyApi.Controllers.v1
             return Ok();
         }
 
+        [System.Obsolete]
         [AddSwaggerFileUploadButton]
         [HttpPost("[action]")]
         [AllowAnonymous]
         public ActionResult UploadFile2()
         {
-            var file = Request.Form.Files[0];
+            //var file = Request.Form.Files[0];
             return Ok();
         }
 
@@ -142,7 +144,7 @@ namespace MyApi.Controllers.v1
                 Age = 25,
                 UserName = "mjebrahimi",
                 Email = "admin@site.com",
-                Gender = Entities.GenderType.Male,
+                Gender = GenderType.Male,
                 Password = "1234567"
             };
         }
@@ -158,7 +160,7 @@ namespace MyApi.Controllers.v1
                 Age = 25,
                 UserName = "mjebrahimi",
                 Email = "admin@site.com",
-                Gender = Entities.GenderType.Male,
+                Gender = GenderType.Male,
                 Password = "1234567"
             };
         }

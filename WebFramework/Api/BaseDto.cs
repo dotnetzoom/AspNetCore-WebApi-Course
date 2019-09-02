@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Entities;
 using System.ComponentModel.DataAnnotations;
+using Entities.Common;
 using WebFramework.CustomMapping;
 
 namespace WebFramework.Api

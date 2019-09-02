@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Common.Utilities
 {
@@ -22,7 +23,7 @@ namespace Common.Utilities
                 throw new NotSupportedException();
 
             foreach (var value in Enum.GetValues(input.GetType()))
-                if ((input as Enum).HasFlag(value as Enum))
+                if ((input as Enum).HasFlag(value as Enum ?? throw new InvalidOperationException()))
                     yield return (T)value;
         }
 
@@ -36,13 +37,13 @@ namespace Common.Utilities
             if (attribute == null)
                 return value.ToString();
 
-            var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
-            return propValue.ToString();
+            var propValue = attribute.GetType().GetProperty(property.ToString())?.GetValue(attribute, null);
+            return propValue?.ToString();
         }
 
         public static Dictionary<int, string> ToDictionary(this Enum value)
         {
-            return Enum.GetValues(value.GetType()).Cast<Enum>().ToDictionary(p => Convert.ToInt32(p), q => ToDisplay(q));
+            return Enum.GetValues(value.GetType()).Cast<Enum>().ToDictionary(Convert.ToInt32, q => ToDisplay(q));
         }
     }
 

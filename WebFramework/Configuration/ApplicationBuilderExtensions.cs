@@ -1,10 +1,10 @@
-﻿using Common.Utilities;
-using Data;
+﻿using Data;
+using Common.Utilities;
+using Services.DataInitializer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Services.DataInitializer;
 
 namespace WebFramework.Configuration
 {

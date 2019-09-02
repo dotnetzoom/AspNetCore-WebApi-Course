@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Entities.Common;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities
+namespace Entities.Post
 {
     public class Category : BaseEntity
     {

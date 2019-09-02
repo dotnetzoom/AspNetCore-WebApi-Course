@@ -1,6 +1,4 @@
 ﻿using AutoMapper.QueryableExtensions;
-using Data.Repositories;
-using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyApi.Models;
@@ -8,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Data.Contracts;
+using Entities.Post;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1

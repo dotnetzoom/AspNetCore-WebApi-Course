@@ -1,27 +1,27 @@
-﻿using Common;
-using Common.Exceptions;
-using Common.Utilities;
-using Data;
-using Data.Repositories;
+﻿using Data;
+using Common;
+using System;
+using System.Net;
+using System.Text;
+using System.Linq;
 using ElmahCore.Mvc;
 using ElmahCore.Sql;
-using Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Linq;
-using System.Net;
+using Common.Utilities;
+using Common.Exceptions;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+using Data.Contracts;
+using Entities.User;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebFramework.Configuration
 {
@@ -40,7 +40,6 @@ namespace WebFramework.Configuration
 
         public static void AddMinimalMvc(this IServiceCollection services)
         {
-            //https://github.com/aspnet/Mvc/blob/release/2.2/src/Microsoft.AspNetCore.Mvc/MvcServiceCollectionExtensions.cs
             services.AddMvcCore(options =>
             {
                 options.Filters.Add(new AuthorizeFilter());
@@ -130,7 +129,7 @@ namespace WebFramework.Configuration
                         var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
 
                         var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-                        if (claimsIdentity.Claims?.Any() != true)
+                        if (claimsIdentity?.Claims?.Any() != true)
                             context.Fail("This token has no claims.");
 
                         var securityStamp = claimsIdentity.FindFirstValue(new ClaimsIdentityOptions().SecurityStampClaimType);
@@ -177,8 +176,8 @@ namespace WebFramework.Configuration
                 options.DefaultApiVersion = new ApiVersion(1, 0); //v1.0 == v1
                 options.ReportApiVersions = true;
 
-                ApiVersion.TryParse("1.0", out var version10);
-                ApiVersion.TryParse("1", out var version1);
+                //ApiVersion.TryParse("1.0", out var version10);
+                //ApiVersion.TryParse("1", out var version1);
                 //var a = version10 == version1;
 
                 //options.ApiVersionReader = new QueryStringApiVersionReader("api-version");

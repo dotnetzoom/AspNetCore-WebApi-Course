@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Post;
 using WebFramework.Api;
 
 namespace MyApi.Models

@@ -1,7 +1,7 @@
-﻿using Data.Repositories;
-using Entities;
-using MyApi.Models;
+﻿using MyApi.Models;
 using System;
+using Data.Contracts;
+using Entities.Post;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1

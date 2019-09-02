@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Entities;
 using Common;
 using Microsoft.AspNetCore.Identity;
 using Data;
+using Entities.User;
 
 namespace WebFramework.Configuration
 {

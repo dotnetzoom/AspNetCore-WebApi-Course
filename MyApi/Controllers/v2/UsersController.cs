@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Data.Repositories;
-using Entities;
+using Data.Contracts;
+using Entities.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyApi.Models;
-using Services;
+using Services.Services;
 using WebFramework.Api;
+// ReSharper disable RedundantOverriddenMember
 
 namespace MyApi.Controllers.v2
 {

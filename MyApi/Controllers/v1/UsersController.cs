@@ -1,19 +1,20 @@
 ﻿using Common.Exceptions;
-using Data.Repositories;
 using ElmahCore;
-using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MyApi.Models;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Data.Contracts;
+using Entities.User;
 using WebFramework.Api;
 using Microsoft.AspNetCore.Identity;
+using Services.Services;
+// ReSharper disable NotAccessedField.Local
 
 namespace MyApi.Controllers.v1
 {
@@ -91,7 +92,6 @@ namespace MyApi.Controllers.v1
             if (!isPasswordValid)
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
-
             //if (user == null)
             //    throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
@@ -109,7 +109,6 @@ namespace MyApi.Controllers.v1
             //var exists = await userRepository.TableNoTracking.AnyAsync(p => p.UserName == userDto.UserName);
             //if (exists)
             //    return BadRequest("نام کاربری تکراری است");
-
 
             var user = new User
             {
