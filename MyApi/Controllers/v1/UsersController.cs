@@ -79,15 +79,15 @@ namespace MyApi.Controllers.v1
         [AllowAnonymous]
         public virtual async Task<ActionResult> Token([FromForm]TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
-            if (!tokenRequest.grant_type.Equals("password", StringComparison.OrdinalIgnoreCase))
+            if (!tokenRequest.Grant_type.Equals("password", StringComparison.OrdinalIgnoreCase))
                 throw new Exception("OAuth flow is not password.");
 
             //var user = await userRepository.GetByUserAndPass(username, password, cancellationToken);
-            var user = await userManager.FindByNameAsync(tokenRequest.username);
+            var user = await userManager.FindByNameAsync(tokenRequest.Username);
             if (user == null)
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
-            var isPasswordValid = await userManager.CheckPasswordAsync(user, tokenRequest.password);
+            var isPasswordValid = await userManager.CheckPasswordAsync(user, tokenRequest.Password);
             if (!isPasswordValid)
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
