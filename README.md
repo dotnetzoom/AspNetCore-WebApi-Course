@@ -1,6 +1,6 @@
 <div dir="ltr">
 
-## 🥇Professional REST API design with ASP.NET Core 2.2 and WebAPI
+## 🥇Professional REST API design with ASP.NET Core 3 and WebAPI
 
 This project is an example of lightweight and extensible infrastructure for building RESTful Web API with ASP.NET Core.
 
