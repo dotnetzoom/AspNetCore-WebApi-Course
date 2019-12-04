@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using Swashbuckle.AspNetCore.Filters;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Entities.User;
@@ -69,7 +68,7 @@ namespace MyApi.Controllers.v1
         }
 
         [System.Obsolete]
-        [AddSwaggerFileUploadButton]
+        //[AddSwaggerFileUploadButton]
         [HttpPost("[action]")]
         [AllowAnonymous]
         public ActionResult UploadFile2()
@@ -104,8 +103,8 @@ namespace MyApi.Controllers.v1
 
         [HttpPost("[action]")]
         [AllowAnonymous]
-        [SwaggerRequestExample(typeof(UserDto), typeof(CreateUserRequestExample))]
-        [SwaggerResponseExample(200, typeof(CreateUserResponseExample))]
+        //[SwaggerRequestExample(typeof(UserDto), typeof(CreateUserRequestExample))]
+        //[SwaggerResponseExample(200, typeof(CreateUserResponseExample))]
         [SwaggerResponse(200)]
         [SwaggerResponse(StatusCodes.Status406NotAcceptable)]
         public ActionResult<UserDto> CreateUser(UserDto userDto)
@@ -134,35 +133,35 @@ namespace MyApi.Controllers.v1
         }
     }
 
-    public class CreateUserRequestExample : IExamplesProvider
-    {
-        public object GetExamples()
-        {
-            return new UserDto
-            {
-                FullName = "محمدجواد ابراهیمی",
-                Age = 25,
-                UserName = "mjebrahimi",
-                Email = "admin@site.com",
-                Gender = GenderType.Male,
-                Password = "1234567"
-            };
-        }
-    }
+    //public class CreateUserRequestExample : IExamplesProvider<object>
+    //{
+    //    public object GetExamples()
+    //    {
+    //        return new UserDto
+    //        {
+    //            FullName = "محمد حسین کرمی",
+    //            Age = 23,
+    //            UserName = "mhkarami97",
+    //            Email = "mhkarami1997@gmail.com",
+    //            Gender = GenderType.Male,
+    //            Password = "1234567"
+    //        };
+    //    }
+    //}
 
-    public class CreateUserResponseExample : IExamplesProvider
-    {
-        public object GetExamples()
-        {
-            return new UserDto
-            {
-                FullName = "محمدجواد ابراهیمی",
-                Age = 25,
-                UserName = "mjebrahimi",
-                Email = "admin@site.com",
-                Gender = GenderType.Male,
-                Password = "1234567"
-            };
-        }
-    }
+    //public class CreateUserResponseExample : IExamplesProvider<object>
+    //{
+    //    public object GetExamples()
+    //    {
+    //        return new UserDto
+    //        {
+    //            FullName = "محمد حسین کرمی",
+    //            Age = 23,
+    //            UserName = "mhkarami97",
+    //            Email = "mhkarami1997@gmail.com",
+    //            Gender = GenderType.Male,
+    //            Password = "1234567"
+    //        };
+    //    }
+    //}
 }

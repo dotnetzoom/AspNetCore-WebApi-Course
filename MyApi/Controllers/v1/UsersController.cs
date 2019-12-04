@@ -19,24 +19,25 @@ using Services.Services;
 namespace MyApi.Controllers.v1
 {
     [ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class UsersController : BaseController
     {
-        private readonly IUserRepository userRepository;
-        private readonly ILogger<UsersController> logger;
-        private readonly IJwtService jwtService;
-        private readonly UserManager<User> userManager;
-        private readonly RoleManager<Role> roleManager;
-        private readonly SignInManager<User> signInManager;
+        private readonly IUserRepository _userRepository;
+        private readonly ILogger<UsersController> _logger;
+        private readonly IJwtService _jwtService;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
+        private readonly SignInManager<User> _signInManager;
 
         public UsersController(IUserRepository userRepository, ILogger<UsersController> logger, IJwtService jwtService,
             UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager)
         {
-            this.userRepository = userRepository;
-            this.logger = logger;
-            this.jwtService = jwtService;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            this.signInManager = signInManager;
+            _userRepository = userRepository;
+            _logger = logger;
+            _jwtService = jwtService;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -50,21 +51,21 @@ namespace MyApi.Controllers.v1
             //var phone = HttpContext.User.Identity.FindFirstValue(ClaimTypes.MobilePhone);
             //var role = HttpContext.User.Identity.FindFirstValue(ClaimTypes.Role);
 
-            var users = await userRepository.TableNoTracking.ToListAsync(cancellationToken);
+            var users = await _userRepository.TableNoTracking.ToListAsync(cancellationToken);
             return Ok(users);
         }
 
         [HttpGet("{id:int}")]
         public virtual async Task<ApiResult<User>> Get(int id, CancellationToken cancellationToken)
         {
-            var user2 = await userManager.FindByIdAsync(id.ToString());
-            var role = await roleManager.FindByNameAsync("Admin");
+            var user2 = await _userManager.FindByIdAsync(id.ToString());
+            var role = await _roleManager.FindByNameAsync("Admin");
 
-            var user = await userRepository.GetByIdAsync(cancellationToken, id);
+            var user = await _userRepository.GetByIdAsync(cancellationToken, id);
             if (user == null)
                 return NotFound();
 
-            await userManager.UpdateSecurityStampAsync(user);
+            await _userManager.UpdateSecurityStampAsync(user);
             //await userRepository.UpdateSecuirtyStampAsync(user, cancellationToken);
 
             return user;
@@ -84,18 +85,18 @@ namespace MyApi.Controllers.v1
                 throw new Exception("OAuth flow is not password.");
 
             //var user = await userRepository.GetByUserAndPass(username, password, cancellationToken);
-            var user = await userManager.FindByNameAsync(tokenRequest.Username);
+            var user = await _userManager.FindByNameAsync(tokenRequest.Username);
             if (user == null)
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
-            var isPasswordValid = await userManager.CheckPasswordAsync(user, tokenRequest.Password);
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, tokenRequest.Password);
             if (!isPasswordValid)
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
             //if (user == null)
             //    throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
-            var jwt = await jwtService.GenerateAsync(user);
+            var jwt = await _jwtService.GenerateAsync(user);
             return new JsonResult(jwt);
         }
 
@@ -103,7 +104,7 @@ namespace MyApi.Controllers.v1
         [AllowAnonymous]
         public virtual async Task<ApiResult<User>> Create(UserDto userDto, CancellationToken cancellationToken)
         {
-            logger.LogError("متد Create فراخوانی شد");
+            _logger.LogError("متد Create فراخوانی شد");
             HttpContext.RiseError(new Exception("متد Create فراخوانی شد"));
 
             //var exists = await userRepository.TableNoTracking.AnyAsync(p => p.UserName == userDto.UserName);
@@ -118,15 +119,15 @@ namespace MyApi.Controllers.v1
                 UserName = userDto.UserName,
                 Email = userDto.Email
             };
-            var result = await userManager.CreateAsync(user, userDto.Password);
+            var result = await _userManager.CreateAsync(user, userDto.Password);
 
-            var result2 = await roleManager.CreateAsync(new Role
+            var result2 = await _roleManager.CreateAsync(new Role
             {
                 Name = "Admin",
                 Description = "admin role"
             });
 
-            var result3 = await userManager.AddToRoleAsync(user, "Admin");
+            var result3 = await _userManager.AddToRoleAsync(user, "Admin");
 
             //await userRepository.AddAsync(user, userDto.Password, cancellationToken);
             return user;
@@ -135,7 +136,7 @@ namespace MyApi.Controllers.v1
         [HttpPut]
         public virtual async Task<ApiResult> Update(int id, User user, CancellationToken cancellationToken)
         {
-            var updateUser = await userRepository.GetByIdAsync(cancellationToken, id);
+            var updateUser = await _userRepository.GetByIdAsync(cancellationToken, id);
 
             updateUser.UserName = user.UserName;
             updateUser.PasswordHash = user.PasswordHash;
@@ -145,7 +146,7 @@ namespace MyApi.Controllers.v1
             updateUser.IsActive = user.IsActive;
             updateUser.LastLoginDate = user.LastLoginDate;
 
-            await userRepository.UpdateAsync(updateUser, cancellationToken);
+            await _userRepository.UpdateAsync(updateUser, cancellationToken);
 
             return Ok();
         }
@@ -153,8 +154,8 @@ namespace MyApi.Controllers.v1
         [HttpDelete]
         public virtual async Task<ApiResult> Delete(int id, CancellationToken cancellationToken)
         {
-            var user = await userRepository.GetByIdAsync(cancellationToken, id);
-            await userRepository.DeleteAsync(user, cancellationToken);
+            var user = await _userRepository.GetByIdAsync(cancellationToken, id);
+            await _userRepository.DeleteAsync(user, cancellationToken);
 
             return Ok();
         }

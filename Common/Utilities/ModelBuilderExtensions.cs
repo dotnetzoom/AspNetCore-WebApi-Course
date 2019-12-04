@@ -17,8 +17,8 @@ namespace Common.Utilities
             var pluralizer = new Pluralizer();
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                var tableName = entityType.Relational().TableName;
-                entityType.Relational().TableName = pluralizer.Singularize(tableName);
+                var tableName = entityType.GetTableName();
+                entityType.SetTableName(pluralizer.Singularize(tableName));
             }
         }
 
@@ -31,8 +31,8 @@ namespace Common.Utilities
             var pluralizer = new Pluralizer();
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                var tableName = entityType.Relational().TableName;
-                entityType.Relational().TableName = pluralizer.Pluralize(tableName);
+                var tableName = entityType.GetTableName();
+                entityType.SetTableName(pluralizer.Singularize(tableName));
             }
         }
 
@@ -58,7 +58,7 @@ namespace Common.Utilities
             {
                 var property = entityType.GetProperties().SingleOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
                 if (property != null && property.ClrType == propertyType)
-                    property.Relational().DefaultValueSql = defaultValueSql;
+                    property.SetDefaultValueSql(defaultValueSql);
             }
         }
 

@@ -1,21 +1,17 @@
 ﻿using Data;
 using Common;
-using System;
 using Autofac;
 using Services.Services;
 using Data.Repositories;
-using Autofac.Extensions.DependencyInjection;
 using Data.Contracts;
 using Entities.Common;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WebFramework.Configuration
 {
-    public static class AutofacConfigurationExtensions
+    public class AutofacConfigurationExtensions : Module
     {
-        public static void AddServices(this ContainerBuilder containerBuilder)
+        protected override void Load(ContainerBuilder containerBuilder)
         {
-            //RegisterType > As > Liftetime
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 
             var commonAssembly = typeof(SiteSettings).Assembly;
@@ -37,18 +33,6 @@ namespace WebFramework.Configuration
                 .AssignableTo<ISingletonDependency>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-        }
-
-        public static IServiceProvider BuildAutofacServiceProvider(this IServiceCollection services)
-        {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.Populate(services);
-
-            //Register Services to Autofac ContainerBuilder
-            containerBuilder.AddServices();
-
-            var container = containerBuilder.Build();
-            return new AutofacServiceProvider(container);
         }
     }
 }

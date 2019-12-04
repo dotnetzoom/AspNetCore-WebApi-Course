@@ -1,23 +1,25 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
+﻿using System.Collections;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.OpenApi.Models;
 
 namespace WebFramework.Swagger
 {
     public class UnauthorizedResponsesOperationFilter : IOperationFilter
     {
         private readonly bool includeUnauthorizedAndForbiddenResponses;
-        private readonly string schemeName;
+        private readonly OpenApiSecurityScheme schemeName;
 
-        public UnauthorizedResponsesOperationFilter(bool includeUnauthorizedAndForbiddenResponses, string schemeName = "Bearer")
+        public UnauthorizedResponsesOperationFilter(bool includeUnauthorizedAndForbiddenResponses, OpenApiSecurityScheme schemeName)
         {
             this.includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
             this.schemeName = schemeName;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var filters = context.ApiDescription.ActionDescriptor.FilterDescriptors;
 
@@ -29,13 +31,13 @@ namespace WebFramework.Swagger
 
             if (includeUnauthorizedAndForbiddenResponses)
             {
-                operation.Responses.TryAdd("401", new Response { Description = "Unauthorized" });
-                operation.Responses.TryAdd("403", new Response { Description = "Forbidden" });
+                operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
+                operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
             }
 
-            operation.Security = new List<IDictionary<string, IEnumerable<string>>>
+            operation.Security = new List<OpenApiSecurityRequirement>
             {
-                new Dictionary<string, IEnumerable<string>> { { schemeName, new string[] { } } }
+                new OpenApiSecurityRequirement { { schemeName, new string[] { } } }
             };
         }
     }

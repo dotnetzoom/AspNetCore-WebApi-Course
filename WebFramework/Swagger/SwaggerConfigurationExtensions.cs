@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Common.Utilities;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace WebFramework.Swagger
 {
@@ -21,10 +21,32 @@ namespace WebFramework.Swagger
             Assert.NotNull(services, nameof(services));
 
             //Add services to use Example Filters in swagger
-            services.AddSwaggerExamples();
+            //services.AddSwaggerExamples();
+            //services.AddSwaggerExamplesFromAssemblyOf<MyExample>();
+
             //Add services and configuration to use swagger
             services.AddSwaggerGen(options =>
             {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API V1",
+                    Description = "A ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://mhkarami97.github.io"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Mohammad Hossein Karami",
+                        Email = "mhkarami1997@gmail.com",
+                        Url = new Uri("https://mhkarami97.github.io"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = new Uri("https://mhkarami97.github.io"),
+                    }
+                });
+                options.SwaggerDoc("v2", new OpenApiInfo { Version = "v2", Title = "API V2" });
+
                 var xmlDocPath = Path.Combine(AppContext.BaseDirectory, "MyApi.xml");
                 //show controller XML comments like summary
                 options.IncludeXmlComments(xmlDocPath, true);
@@ -37,22 +59,25 @@ namespace WebFramework.Swagger
                 //options.IgnoreObsoleteActions();
                 //options.IgnoreObsoleteProperties();
 
-                options.SwaggerDoc("v1", new Info { Version = "v1", Title = "API V1" });
-                options.SwaggerDoc("v2", new Info { Version = "v2", Title = "API V2" });
+                //options.ExampleFilters();
 
                 #region Filters
                 //Enable to use [SwaggerRequestExample] & [SwaggerResponseExample]
-                options.ExampleFilters();
+                //options.ExampleFilters();
 
                 //Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
-                options.OperationFilter<AddFileParamTypesOperationFilter>();
+                //options.OperationFilter<AddFileParamTypesOperationFilter>();
 
                 //Set summary of action if not already set
                 options.OperationFilter<ApplySummariesOperationFilter>();
 
                 #region Add UnAuthorized to Response
                 //Add 401 response and security requirements (Lock icon) to actions that need authorization
-                options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, "Bearer");
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = "Bearer"
+                };
+                options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, securityScheme);
                 #endregion
 
                 #region Add Jwt Authentication
@@ -67,10 +92,28 @@ namespace WebFramework.Swagger
                 //{
                 //    {"Bearer", new string[] { }}
                 //});
-                options.AddSecurityDefinition("Bearer", new OAuth2Scheme
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Flow = "password",
-                    TokenUrl = "https://localhost:5001/api/v1/users/Token",
+                    Type = SecuritySchemeType.OAuth2,
+                    Scheme = "Bearer",
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "readAccess", "Access read operations" },
+                                { "writeAccess", "Access write operations" }
+                            },
+                            TokenUrl = new Uri("https://localhost:5001/api/v1/users/Token")
+                        }
+                    },
+                    //Flow = "password",
+                    //TokenUrl = "https://localhost:5001/api/v1/users/Token",
                 });
                 #endregion
 

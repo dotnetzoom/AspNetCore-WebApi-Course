@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac;
 using Common;
 using WebFramework.Swagger;
 using WebFramework.Middlewares;
@@ -14,19 +15,26 @@ namespace MyApi
     public class Startup
     {
         private readonly SiteSettings _siteSetting;
+
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
 
             AutoMapperConfiguration.InitializeAutoMapper();
 
-            _siteSetting = configuration.GetSection(nameof(SiteSettings)).Get<SiteSettings>();
+            _siteSetting = Configuration.GetSection(nameof(SiteSettings)).Get<SiteSettings>();
         }
 
         [Obsolete]
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SiteSettings>(Configuration.GetSection(nameof(SiteSettings)));
 
@@ -36,24 +44,27 @@ namespace MyApi
 
             services.AddMinimalMvc();
 
-            //services.AddElmah(Configuration, _siteSetting);
-
             services.AddJwtAuthentication(_siteSetting.JwtSettings);
 
             services.AddCustomApiVersioning();
 
             services.AddSwagger();
 
-            return services.BuildAutofacServiceProvider();
+            //services.AddElmah(Configuration, _siteSetting);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void ConfigureContainer(ContainerBuilder builder) {
+            
+            builder.RegisterModule(new AutofacConfigurationExtensions());
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.IntializeDatabase();
 
             app.UseCustomExceptionHandler();
 
-            app.UseHsts(env);
+            app.UseHsts();
 
             //app.UseElmah();
 
@@ -61,9 +72,24 @@ namespace MyApi
 
             app.UseSwaggerAndUI();
 
+            app.UseRouting();
+
+            // app.UseCors(builder =>
+            //     {
+            //         builder.AllowAnyHeader();
+            //         builder.AllowAnyMethod();
+            //         builder.AllowAnyOrigin();
+            //     }
+            // );
+
             app.UseAuthentication();
 
-            app.UseMvc();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers().RequireAuthorization();
+            });
         }
     }
 }

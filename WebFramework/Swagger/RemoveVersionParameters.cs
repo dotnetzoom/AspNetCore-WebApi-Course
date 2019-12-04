@@ -1,12 +1,12 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
+using Microsoft.OpenApi.Models;
 
 namespace WebFramework.Swagger
 {
     public class RemoveVersionParameters : IOperationFilter
     {
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             // Remove version parameter from all Operations
             var versionParameter = operation.Parameters.SingleOrDefault(p => p.Name == "version");

@@ -26,7 +26,7 @@ namespace Data.Repositories
         }
 
         #region Async Method
-        public virtual Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
+        public virtual ValueTask<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
         {
             return Entities.FindAsync(ids, cancellationToken);
         }

@@ -14,6 +14,7 @@ using WebFramework.Api;
 namespace MyApi.Controllers.v2
 {
     [ApiVersion("2")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class UsersController : v1.UsersController
     {
         public UsersController(IUserRepository userRepository,

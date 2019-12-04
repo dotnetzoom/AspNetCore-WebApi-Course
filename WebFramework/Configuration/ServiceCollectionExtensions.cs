@@ -40,27 +40,30 @@ namespace WebFramework.Configuration
 
         public static void AddMinimalMvc(this IServiceCollection services)
         {
-            services.AddMvcCore(options =>
-            {
-                options.Filters.Add(new AuthorizeFilter());
+            services.AddControllers(op => op.Filters.Add(new AuthorizeFilter()))
+                .AddNewtonsoftJson();
 
-                //Like [ValidateAntiforgeryToken] attribute but dose not validatie for GET and HEAD http method
-                //You can ingore validate by using [IgnoreAntiforgeryToken] attribute
-                //Use this filter when use cookie 
-                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            //services.AddMvcCore(options =>
+            //{
+            //    options.Filters.Add(new AuthorizeFilter());
 
-                //options.UseYeKeModelBinder();
-            })
-            .AddApiExplorer()
-            .AddAuthorization()
-            .AddFormatterMappings()
-            .AddDataAnnotations()
-            .AddJsonFormatters(/*options =>
-            {
-                options.Formatting = Newtonsoft.Json.Formatting.Indented;
-                options.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            }*/)
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //    //Like [ValidateAntiforgeryToken] attribute but dose not validatie for GET and HEAD http method
+            //    //You can ingore validate by using [IgnoreAntiforgeryToken] attribute
+            //    //Use this filter when use cookie 
+            //    //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
+            //    //options.UseYeKeModelBinder();
+            //})
+            //.AddApiExplorer()
+            //.AddAuthorization()
+            //.AddFormatterMappings()
+            //.AddDataAnnotations()
+            //// .AddJsonFormatters(/*options =>
+            //// {
+            ////     options.Formatting = Newtonsoft.Json.Formatting.Indented;
+            ////     options.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            //// }*/)
+            //.SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         public static void AddElmah(this IServiceCollection services, IConfiguration configuration, SiteSettings siteSetting)
