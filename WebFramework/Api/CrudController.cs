@@ -10,6 +10,7 @@ using Entities.Common;
 namespace WebFramework.Api
 {
     [ApiVersion("1")]
+    //[Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class CrudController<TDto, TSelectDto, TEntity, TKey> : BaseController
         where TDto : BaseDto<TDto, TEntity, TKey>, new()
         where TSelectDto : BaseDto<TSelectDto, TEntity, TKey>, new()
