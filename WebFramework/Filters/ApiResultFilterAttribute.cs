@@ -51,13 +51,22 @@ namespace WebFramework.Filters
                 var apiResult = new ApiResult<object>(false, ApiResultStatusCode.NotFound, notFoundObjectResult.Value);
                 context.Result = new JsonResult(apiResult) { StatusCode = notFoundObjectResult.StatusCode };
             }
-            else if (context.Result is ObjectResult objectResult && objectResult.StatusCode == null 
+            else if (context.Result is ObjectResult objectResult && objectResult.StatusCode == null
                 && !(objectResult.Value is ApiResult))
             {
                 var apiResult = new ApiResult<object>(true, ApiResultStatusCode.Success, objectResult.Value);
                 context.Result = new JsonResult(apiResult) { StatusCode = objectResult.StatusCode };
             }
-
+            else if (context.Result is ObjectResult objectResuNotKnow)
+            {
+                var apiResult = new ApiResult(false, ApiResultStatusCode.NotKnow);
+                context.Result = new JsonResult(apiResult) { StatusCode = objectResuNotKnow.StatusCode };
+            }
+            else
+            {
+                var apiResult = new ApiResult(false, ApiResultStatusCode.NotKnow);
+                context.Result = new JsonResult(apiResult) { StatusCode = 0 };
+            }
             base.OnResultExecuting(context);
         }
     }

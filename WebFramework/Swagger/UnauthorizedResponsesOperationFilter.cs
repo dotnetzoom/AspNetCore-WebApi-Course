@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
 
@@ -21,19 +20,39 @@ namespace WebFramework.Swagger
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            var requiredScopes = context.MethodInfo
+                .GetCustomAttributes(true)
+                .OfType<AuthorizeAttribute>()
+                .Select(attr => attr.Policy)
+                .Distinct();
+
             var filters = context.ApiDescription.ActionDescriptor.FilterDescriptors;
 
             var hasAnonymous = filters.Any(p => p.Filter is AllowAnonymousFilter);
-
             if (hasAnonymous) return;
 
             var hasAuthorize = filters.Any(p => p.Filter is AuthorizeFilter);
             if (!hasAuthorize) return;
 
-            if (_includeUnauthorizedAndForbiddenResponses)
+            var enumerable = requiredScopes.ToList();
+
+            if (enumerable.Any() && _includeUnauthorizedAndForbiddenResponses)
             {
-                operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
-                operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
+                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+
+                var oAuthScheme = new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                };
+
+                operation.Security = new List<OpenApiSecurityRequirement>
+                 {
+                     new OpenApiSecurityRequirement
+                     {
+                         [ oAuthScheme ] = enumerable
+                     }
+                 };
             }
 
             operation.Security = new List<OpenApiSecurityRequirement>

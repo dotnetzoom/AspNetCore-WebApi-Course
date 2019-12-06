@@ -71,16 +71,6 @@ namespace WebFramework.Swagger
                 //Set summary of action if not already set
                 options.OperationFilter<ApplySummariesOperationFilter>();
 
-                #region Add UnAuthorized to Response
-                //Add 401 response and security requirements (Lock icon) to actions that need authorization
-                var securityScheme = new OpenApiSecurityScheme
-                {
-                    Scheme = "Bearer"
-                    
-                };
-                options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, securityScheme);
-                #endregion
-
                 #region Add Jwt Authentication
                 //Add Lockout icon on top of swagger ui page to authenticate
                 //options.AddSecurityDefinition("Bearer", new ApiKeyScheme
@@ -96,7 +86,7 @@ namespace WebFramework.Swagger
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    //Type = SecuritySchemeType.OAuth2,
+                    Type = SecuritySchemeType.OAuth2,
                     Scheme = "Bearer",
                     Description =
                         "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
@@ -113,10 +103,18 @@ namespace WebFramework.Swagger
                             },
                             TokenUrl = new Uri("https://localhost:44339/api/v1/users/Token")
                         }
-                    },
-                    //Flow = "password",
-                    //TokenUrl = "https://localhost:5001/api/v1/users/Token",
+                    }
                 });
+                #endregion
+
+                #region Add UnAuthorized to Response
+                //Add 401 response and security requirements (Lock icon) to actions that need authorization
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = "Bearer"
+                    
+                };
+                options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, securityScheme);
                 #endregion
 
                 #region Versioning
@@ -181,6 +179,14 @@ namespace WebFramework.Swagger
                 //options.InjectJavascript("/ext/custom-javascript.js");
                 //options.RoutePrefix = "api-docs";
                 #endregion
+
+                options.OAuthClientId("test-id");
+                options.OAuthClientSecret("test-secret");
+                options.OAuthRealm("test-realm");
+                options.OAuthAppName("test-app");
+                options.OAuthScopeSeparator(" ");
+                //options.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "foo", "bar" }}); 
+                options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
 
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
                 options.SwaggerEndpoint("/swagger/v2/swagger.json", "V2 Docs");

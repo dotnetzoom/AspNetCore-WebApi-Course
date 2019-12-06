@@ -14,12 +14,10 @@ using Entities.User;
 using WebFramework.Api;
 using Microsoft.AspNetCore.Identity;
 using Services.Services;
-// ReSharper disable NotAccessedField.Local
 
 namespace MyApi.Controllers.v1
 {
     [ApiVersion("1")]
-    //[Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class UsersController : BaseController
     {
         private readonly IUserRepository _userRepository;
@@ -58,15 +56,16 @@ namespace MyApi.Controllers.v1
         [HttpGet("{id:int}")]
         public virtual async Task<ApiResult<User>> Get(int id, CancellationToken cancellationToken)
         {
-            var user2 = await _userManager.FindByIdAsync(id.ToString());
-            var role = await _roleManager.FindByNameAsync("Admin");
+            var user = await _userManager.FindByIdAsync(id.ToString());
 
-            var user = await _userRepository.GetByIdAsync(cancellationToken, id);
+            //var role = await _roleManager.FindByNameAsync("Admin");
+
+            //var user = await _userRepository.GetByIdAsync(cancellationToken, id);
             if (user == null)
                 return NotFound();
 
             await _userManager.UpdateSecurityStampAsync(user);
-            //await userRepository.UpdateSecuirtyStampAsync(user, cancellationToken);
+            //await _userRepository.UpdateSecuirtyStampAsync(user, cancellationToken);
 
             return user;
         }
@@ -121,13 +120,8 @@ namespace MyApi.Controllers.v1
             };
             var result = await _userManager.CreateAsync(user, userDto.Password);
 
-            var result2 = await _roleManager.CreateAsync(new Role
-            {
-                Name = "Admin",
-                Description = "admin role"
-            });
-
-            var result3 = await _userManager.AddToRoleAsync(user, "Admin");
+            if (!result.Succeeded)
+                return BadRequest();
 
             //await userRepository.AddAsync(user, userDto.Password, cancellationToken);
             return user;

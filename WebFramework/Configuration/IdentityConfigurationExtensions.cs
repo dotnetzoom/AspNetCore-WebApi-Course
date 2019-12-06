@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Common;
 using Microsoft.AspNetCore.Identity;
 using Data;
@@ -27,8 +28,8 @@ namespace WebFramework.Configuration
                 //identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
 
                 //Lockout Settings
-                //identityOptions.Lockout.MaxFailedAccessAttempts = 5;
-                //identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                identityOptions.Lockout.MaxFailedAccessAttempts = 3;
+                identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 //identityOptions.Lockout.AllowedForNewUsers = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()

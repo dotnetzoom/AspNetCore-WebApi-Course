@@ -12,8 +12,7 @@ namespace WebFramework.Swagger
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            var controllerActionDescriptor = context.ApiDescription.ActionDescriptor as ControllerActionDescriptor;
-            if (controllerActionDescriptor == null) return;
+            if (!(context.ApiDescription.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)) return;
 
             var pluralizer = new Pluralizer();
 
@@ -69,7 +68,7 @@ namespace WebFramework.Swagger
             {
                 foreach (var name in new[] { "Get", "Read", "Select" })
                 {
-                    if ((actionName.Equals(name, StringComparison.OrdinalIgnoreCase) && parameterCount == 0) ||
+                    if (actionName.Equals(name, StringComparison.OrdinalIgnoreCase) && parameterCount == 0 ||
                         actionName.Equals($"{name}All", StringComparison.OrdinalIgnoreCase) ||
                         actionName.Equals($"{name}{pluralizeName}", StringComparison.OrdinalIgnoreCase) ||
                         actionName.Equals($"{name}All{singularizeName}", StringComparison.OrdinalIgnoreCase) ||

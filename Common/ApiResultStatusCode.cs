@@ -23,6 +23,9 @@ namespace Common
         LogicError = 5,
 
         [Display(Name = "خطای احراز هویت")]
-        UnAuthorized = 6
+        UnAuthorized = 6,
+
+        [Display(Name = "خطای نامشخص")]
+        NotKnow = 7
     }
 }

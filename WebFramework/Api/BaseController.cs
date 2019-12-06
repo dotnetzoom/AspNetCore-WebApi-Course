@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebFramework.Filters;
 
 namespace WebFramework.Api
 {
+    [Authorize]
     [ApiController]
     //[AllowAnonymous]
     [ApiResultFilter]
