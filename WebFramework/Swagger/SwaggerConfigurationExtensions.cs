@@ -30,8 +30,8 @@ namespace WebFramework.Swagger
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "API V1",
-                    Description = "A ASP.NET Core Web API",
+                    Title = "API",
+                    Description = "ASP.NET Core Web API",
                     TermsOfService = new Uri("https://mhkarami97.github.io"),
                     Contact = new OpenApiContact
                     {
@@ -76,6 +76,7 @@ namespace WebFramework.Swagger
                 var securityScheme = new OpenApiSecurityScheme
                 {
                     Scheme = "Bearer"
+                    
                 };
                 options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, securityScheme);
                 #endregion
@@ -92,9 +93,10 @@ namespace WebFramework.Swagger
                 //{
                 //    {"Bearer", new string[] { }}
                 //});
+
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.OAuth2,
+                    //Type = SecuritySchemeType.OAuth2,
                     Scheme = "Bearer",
                     Description =
                         "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
@@ -102,14 +104,14 @@ namespace WebFramework.Swagger
                     In = ParameterLocation.Header,
                     Flows = new OpenApiOAuthFlows
                     {
-                        Implicit = new OpenApiOAuthFlow
+                        Password = new OpenApiOAuthFlow
                         {
                             Scopes = new Dictionary<string, string>
                             {
                                 { "readAccess", "Access read operations" },
                                 { "writeAccess", "Access write operations" }
                             },
-                            TokenUrl = new Uri("https://localhost:5001/api/v1/users/Token")
+                            TokenUrl = new Uri("https://localhost:44339/api/v1/users/Token")
                         }
                     },
                     //Flow = "password",
@@ -164,18 +166,18 @@ namespace WebFramework.Swagger
                 //options.DisplayOperationId();
                 //options.DisplayRequestDuration();
                 options.DocExpansion(DocExpansion.None);
-                //options.EnableDeepLinking();
+                options.EnableDeepLinking();
                 //options.EnableFilter();
                 //options.MaxDisplayedTags(5);
-                //options.ShowExtensions();
+                options.ShowExtensions();
 
                 //// Network
-                //options.EnableValidator();
+                options.EnableValidator();
                 //options.SupportedSubmitMethods(SubmitMethod.Get);
 
                 //// Other
                 //options.DocumentTitle = "CustomUIConfig";
-                //options.InjectStylesheet("/ext/custom-stylesheet.css");
+                options.InjectStylesheet("/style/custom-stylesheet.css");
                 //options.InjectJavascript("/ext/custom-javascript.js");
                 //options.RoutePrefix = "api-docs";
                 #endregion

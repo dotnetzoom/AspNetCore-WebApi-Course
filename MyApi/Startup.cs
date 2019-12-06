@@ -70,6 +70,8 @@ namespace MyApi
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseSwaggerAndUI();
 
             app.UseRouting();

@@ -10,13 +10,13 @@ namespace WebFramework.Swagger
 {
     public class UnauthorizedResponsesOperationFilter : IOperationFilter
     {
-        private readonly bool includeUnauthorizedAndForbiddenResponses;
-        private readonly OpenApiSecurityScheme schemeName;
+        private readonly bool _includeUnauthorizedAndForbiddenResponses;
+        private readonly OpenApiSecurityScheme _schemeName;
 
         public UnauthorizedResponsesOperationFilter(bool includeUnauthorizedAndForbiddenResponses, OpenApiSecurityScheme schemeName)
         {
-            this.includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
-            this.schemeName = schemeName;
+            _includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
+            _schemeName = schemeName;
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -24,12 +24,13 @@ namespace WebFramework.Swagger
             var filters = context.ApiDescription.ActionDescriptor.FilterDescriptors;
 
             var hasAnonymous = filters.Any(p => p.Filter is AllowAnonymousFilter);
+
             if (hasAnonymous) return;
 
             var hasAuthorize = filters.Any(p => p.Filter is AuthorizeFilter);
             if (!hasAuthorize) return;
 
-            if (includeUnauthorizedAndForbiddenResponses)
+            if (_includeUnauthorizedAndForbiddenResponses)
             {
                 operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
                 operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
@@ -37,7 +38,7 @@ namespace WebFramework.Swagger
 
             operation.Security = new List<OpenApiSecurityRequirement>
             {
-                new OpenApiSecurityRequirement { { schemeName, new string[] { } } }
+                new OpenApiSecurityRequirement { { _schemeName, new string[] { } } }
             };
         }
     }
