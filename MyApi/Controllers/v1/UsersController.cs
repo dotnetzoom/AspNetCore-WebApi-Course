@@ -14,6 +14,7 @@ using Entities.User;
 using WebFramework.Api;
 using Microsoft.AspNetCore.Identity;
 using Services.Services;
+using WebFramework.Filters;
 
 namespace MyApi.Controllers.v1
 {
@@ -78,6 +79,7 @@ namespace MyApi.Controllers.v1
         /// <returns></returns>
         [HttpPost("[action]")]
         [AllowAnonymous]
+        [HasAnonymousFilter]
         public virtual async Task<ActionResult> Token([FromForm]TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             if (!tokenRequest.Grant_type.Equals("password", StringComparison.OrdinalIgnoreCase))
@@ -101,6 +103,7 @@ namespace MyApi.Controllers.v1
 
         [HttpPost]
         [AllowAnonymous]
+        [HasAnonymousFilter]
         public virtual async Task<ApiResult<User>> Create(UserDto userDto, CancellationToken cancellationToken)
         {
             _logger.LogError("متد Create فراخوانی شد");

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
+using WebFramework.Filters;
 
 namespace WebFramework.Swagger
 {
@@ -20,39 +20,23 @@ namespace WebFramework.Swagger
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            var requiredScopes = context.MethodInfo
+            var hasAnonymousAttribute = context.MethodInfo
+                .GetCustomAttributes(true)
+                .OfType<HasAnonymousFilterAttribute>()
+                .Distinct()
+                .Any();
+
+            if (hasAnonymousAttribute) return;
+
+            var hasAuthorizeFilterAttribute = context.MethodInfo
                 .GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
-                .Select(attr => attr.Policy)
-                .Distinct();
+                .Any();
 
-            var filters = context.ApiDescription.ActionDescriptor.FilterDescriptors;
-
-            var hasAnonymous = filters.Any(p => p.Filter is AllowAnonymousFilter);
-            if (hasAnonymous) return;
-
-            var hasAuthorize = filters.Any(p => p.Filter is AuthorizeFilter);
-            if (!hasAuthorize) return;
-
-            var enumerable = requiredScopes.ToList();
-
-            if (enumerable.Any() && _includeUnauthorizedAndForbiddenResponses)
+            if (hasAuthorizeFilterAttribute && _includeUnauthorizedAndForbiddenResponses)
             {
-                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
-
-                var oAuthScheme = new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
-                };
-
-                operation.Security = new List<OpenApiSecurityRequirement>
-                 {
-                     new OpenApiSecurityRequirement
-                     {
-                         [ oAuthScheme ] = enumerable
-                     }
-                 };
+                operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
+                operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
             }
 
             operation.Security = new List<OpenApiSecurityRequirement>
