@@ -43,6 +43,8 @@ namespace MyApi
                 {
                     webBuilder.UseContentRoot(Directory.GetCurrentDirectory())
                         .UseIISIntegration()
+                        //use in cmd mode, not iis express
+                        //.UseKestrel(c => c.AddServerHeader = false)
                         .UseStartup<Startup>();
                 });
     }
