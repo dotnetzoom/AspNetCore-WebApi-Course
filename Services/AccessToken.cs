@@ -11,11 +11,12 @@ namespace Services
         public string Token_type { get; set; }
         public int Expires_in { get; set; }
 
-        public AccessToken(SecurityToken securityToken)
+        public AccessToken(string accessToken, string refreshToken,int expires)
         {
-            Access_token = new JwtSecurityTokenHandler().WriteToken(securityToken);
+            Access_token = accessToken;
+            Refresh_token = refreshToken;
             Token_type = "Bearer";
-            Expires_in = (int)(securityToken.ValidTo - DateTime.UtcNow).TotalSeconds;
+            Expires_in = expires;
         }
     }
 }

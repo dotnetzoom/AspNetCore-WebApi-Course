@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class ApiMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -181,6 +181,30 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserToken",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    AccessTokenHash = table.Column<string>(nullable: true),
+                    AccessTokenExpiresDateTime = table.Column<DateTimeOffset>(nullable: false),
+                    RefreshTokenIdHash = table.Column<string>(nullable: true),
+                    RefreshTokenIdHashSource = table.Column<string>(nullable: true),
+                    RefreshTokenExpiresDateTime = table.Column<DateTimeOffset>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserToken_AspNetUser_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Post",
                 columns: table => new
                 {
@@ -260,6 +284,11 @@ namespace Data.Migrations
                 name: "IX_Post_CategoryId",
                 table: "Post",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserToken_UserId",
+                table: "UserToken",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -283,13 +312,16 @@ namespace Data.Migrations
                 name: "Post");
 
             migrationBuilder.DropTable(
+                name: "UserToken");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRole");
 
             migrationBuilder.DropTable(
-                name: "AspNetUser");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "AspNetUser");
         }
     }
 }

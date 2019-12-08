@@ -73,7 +73,7 @@ namespace MyApi
 
             app.UseStaticFiles();
 
-            app.UseSwaggerAndUI();
+            app.UseSwaggerAndUi();
 
             app.UseRouting();
 

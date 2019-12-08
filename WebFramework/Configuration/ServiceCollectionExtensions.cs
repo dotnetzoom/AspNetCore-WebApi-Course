@@ -27,6 +27,7 @@ namespace WebFramework.Configuration
 {
     public static class ServiceCollectionExtensions
     {
+        [Obsolete]
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -47,8 +48,8 @@ namespace WebFramework.Configuration
             //{
             //    options.Filters.Add(new AuthorizeFilter());
 
-            //    //Like [ValidateAntiforgeryToken] attribute but dose not validatie for GET and HEAD http method
-            //    //You can ingore validate by using [IgnoreAntiforgeryToken] attribute
+            //    //Like [ValidateAntiforgeryToken] attribute but dose not validate for GET and HEAD http method
+            //    //You can ignore validate by using [IgnoreAntiforgeryToken] attribute
             //    //Use this filter when use cookie 
             //    //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
@@ -88,8 +89,8 @@ namespace WebFramework.Configuration
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                var secretkey = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
-                var encryptionkey = Encoding.UTF8.GetBytes(jwtSettings.Encryptkey);
+                var secretKey = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
+                var encryptionKey = Encoding.UTF8.GetBytes(jwtSettings.Encryptkey);
 
                 var validationParameters = new TokenValidationParameters
                 {
@@ -97,7 +98,7 @@ namespace WebFramework.Configuration
                     RequireSignedTokens = true,
 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secretkey),
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
 
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
@@ -108,7 +109,7 @@ namespace WebFramework.Configuration
                     ValidateIssuer = true, //default : false
                     ValidIssuer = jwtSettings.Issuer,
 
-                    TokenDecryptionKey = new SymmetricSecurityKey(encryptionkey)
+                    TokenDecryptionKey = new SymmetricSecurityKey(encryptionKey)
                 };
 
                 options.RequireHttpsMetadata = false;
@@ -137,18 +138,18 @@ namespace WebFramework.Configuration
 
                         var securityStamp = claimsIdentity.FindFirstValue(new ClaimsIdentityOptions().SecurityStampClaimType);
                         if (!securityStamp.HasValue())
-                            context.Fail("This token has no secuirty stamp");
+                            context.Fail("This token has no security stamp");
 
                         //Find user and token from database and perform your custom validation
                         var userId = claimsIdentity.GetUserId<int>();
                         var user = await userRepository.GetByIdAsync(context.HttpContext.RequestAborted, userId);
 
                         //if (user.SecurityStamp != Guid.Parse(securityStamp))
-                        //    context.Fail("Token secuirty stamp is not valid.");
+                        //    context.Fail("Token security stamp is not valid.");
 
                         var validatedUser = await signInManager.ValidateSecurityStampAsync(context.Principal);
                         if (validatedUser == null)
-                            context.Fail("Token secuirty stamp is not valid.");
+                            context.Fail("Token security stamp is not valid.");
 
                         if (!user.IsActive)
                             context.Fail("User is not active.");

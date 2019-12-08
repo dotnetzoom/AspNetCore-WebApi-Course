@@ -41,7 +41,7 @@ namespace WebFramework.Swagger
                     },
                     License = new OpenApiLicense
                     {
-                        Name = "Use under LICX",
+                        Name = "Use under GPL",
                         Url = new Uri("https://mhkarami97.github.io"),
                     }
                 });
@@ -89,7 +89,7 @@ namespace WebFramework.Swagger
                     Type = SecuritySchemeType.OAuth2,
                     Scheme = "Bearer",
                     Description =
-                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345deface\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Flows = new OpenApiOAuthFlows
@@ -111,8 +111,12 @@ namespace WebFramework.Swagger
                 //Add 401 response and security requirements (Lock icon) to actions that need authorization
                 var securityScheme = new OpenApiSecurityScheme
                 {
-                    Scheme = "Bearer"
-                    
+                    Scheme = "Bearer",
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345deface\"",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.OAuth2,
+                    In = ParameterLocation.Header
                 };
                 options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, securityScheme);
                 #endregion
@@ -121,10 +125,10 @@ namespace WebFramework.Swagger
                 // Remove version parameter from all Operations
                 options.OperationFilter<RemoveVersionParameters>();
 
-                //set version "api/v{version}/[controller]" from current swagger doc verion
+                //set version "api/v{version}/[controller]" from current swagger doc version
                 options.DocumentFilter<SetVersionInPaths>();
 
-                //Seperate and categorize end-points by doc version
+                //Separate and categorize end-points by doc version
                 options.DocInclusionPredicate((docName, apiDesc) =>
                 {
                     if (!apiDesc.TryGetMethodInfo(out var methodInfo)) return false;
@@ -143,7 +147,7 @@ namespace WebFramework.Swagger
             });
         }
 
-        public static void UseSwaggerAndUI(this IApplicationBuilder app)
+        public static void UseSwaggerAndUi(this IApplicationBuilder app)
         {
             Assert.NotNull(app, nameof(app));
 

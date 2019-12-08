@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using MyApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Data.Contracts;
@@ -66,7 +67,7 @@ namespace MyApi.Controllers.v1
                 return NotFound();
 
             await _userManager.UpdateSecurityStampAsync(user);
-            //await _userRepository.UpdateSecuirtyStampAsync(user, cancellationToken);
+            //await _userRepository.UpdateSecurityStampAsync(user, cancellationToken);
 
             return user;
         }
@@ -77,9 +78,9 @@ namespace MyApi.Controllers.v1
         /// <param name="tokenRequest">The information of token request</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost("[action]")]
         [AllowAnonymous]
         [HasAnonymousFilter]
+        [HttpPost("[action]")]
         public virtual async Task<ActionResult> Token([FromForm]TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             if (!tokenRequest.Grant_type.Equals("password", StringComparison.OrdinalIgnoreCase))
@@ -98,7 +99,49 @@ namespace MyApi.Controllers.v1
             //    throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
             var jwt = await _jwtService.GenerateAsync(user);
+
             return new JsonResult(jwt);
+        }
+
+        [AllowAnonymous]
+        [HasAnonymousFilter]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshToken([FromForm]TokenRequest tokenRequest)
+        {
+            var refreshToken = tokenRequest.Refresh_token;
+
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return BadRequest("refreshToken is not set.");
+
+            var token = await _jwtService.FindTokenAsync(refreshToken);
+
+            if (token == null)
+                return Unauthorized();
+
+            var jwt = await _jwtService.GenerateAsync(token.User);
+
+            return new JsonResult(jwt);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]"), HttpPost("[action]")]
+        public async Task<bool> Logout()
+        {
+            if (!(User.Identity is ClaimsIdentity claimsIdentity))
+                return false;
+
+            var userIdValue = claimsIdentity.FindFirst(ClaimTypes.UserData)?.Value;
+
+            // The Jwt implementation does not support "revoke OAuth token" (logout) by design.
+            // Delete the user's tokens from the database (revoke its bearer token)
+            if (!string.IsNullOrWhiteSpace(userIdValue) && int.TryParse(userIdValue, out var userId))
+            {
+                await _jwtService.InvalidateUserTokensAsync(userId);
+            }
+
+            await _jwtService.DeleteExpiredTokensAsync();
+
+            return true;
         }
 
         [HttpPost]
