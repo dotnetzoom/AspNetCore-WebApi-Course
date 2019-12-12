@@ -1,7 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using AspNetCoreRateLimit;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
@@ -10,7 +14,7 @@ namespace MyApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             //Set default proxy
             //WebRequest.DefaultWebProxy = new WebProxy("http://127.0.0.1:8118", true) { UseDefaultCredentials = true };
@@ -19,7 +23,20 @@ namespace MyApi
             try
             {
                 logger.Debug("init main");
-                CreateHostBuilder(args).Build().Run();
+
+                var webHost = CreateHostBuilder(args).Build();
+
+                using var scope = webHost.Services.CreateScope();
+
+                var clientPolicyStore = scope.ServiceProvider.GetRequiredService<IClientPolicyStore>();
+
+                await clientPolicyStore.SeedAsync();
+
+                var ipPolicyStore = scope.ServiceProvider.GetRequiredService<IIpPolicyStore>();
+
+                await ipPolicyStore.SeedAsync();
+
+                await webHost.RunAsync();
             }
             catch (Exception ex)
             {
@@ -45,6 +62,17 @@ namespace MyApi
                         .UseIISIntegration()
                         //use in cmd mode, not iis express
                         //.UseKestrel(c => c.AddServerHeader = false)
+                        .ConfigureAppConfiguration((context, builder) =>
+                        {
+                            builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                            builder.AddEnvironmentVariables();
+                        })
+                        .ConfigureLogging((context, logging) =>
+                        {
+                            logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                            logging.AddConsole();
+                            logging.AddDebug();
+                        })
                         .UseStartup<Startup>();
                 });
     }

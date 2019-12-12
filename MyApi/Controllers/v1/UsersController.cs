@@ -103,10 +103,16 @@ namespace MyApi.Controllers.v1
             return new JsonResult(jwt);
         }
 
+        /// <summary>
+        /// This method is use for refresh token
+        /// </summary>
+        /// <param name="tokenRequest">The information of token request</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HasAnonymousFilter]
         [HttpPost("[action]")]
-        public async Task<IActionResult> RefreshToken([FromForm]TokenRequest tokenRequest)
+        public async Task<IActionResult> RefreshToken([FromForm]TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             var refreshToken = tokenRequest.Refresh_token;
 
@@ -123,6 +129,10 @@ namespace MyApi.Controllers.v1
             return new JsonResult(jwt);
         }
 
+        /// <summary>
+        /// This method is use to log out
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("[action]"), HttpPost("[action]")]
         public async Task<bool> Logout()
