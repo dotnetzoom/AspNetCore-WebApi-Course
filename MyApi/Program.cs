@@ -55,6 +55,11 @@ namespace MyApi
             Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureLogging(options => options.ClearProviders())
+                .ConfigureLogging(logger => {
+                    logger.AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);
+                    logger.ClearProviders();
+                    logger.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
                 .UseNLog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -62,17 +67,6 @@ namespace MyApi
                         .UseIISIntegration()
                         //use in cmd mode, not iis express
                         //.UseKestrel(c => c.AddServerHeader = false)
-                        .ConfigureAppConfiguration((context, builder) =>
-                        {
-                            builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                            builder.AddEnvironmentVariables();
-                        })
-                        .ConfigureLogging((context, logging) =>
-                        {
-                            logging.AddConfiguration(context.Configuration.GetSection("Logging"));
-                            logging.AddConsole();
-                            logging.AddDebug();
-                        })
                         .UseStartup<Startup>();
                 });
     }

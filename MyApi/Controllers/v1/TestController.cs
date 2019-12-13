@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Entities.User;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
@@ -114,7 +113,7 @@ namespace MyApi.Controllers.v1
 
 
         ///// <summary>
-        ///// Asign an address to user
+        ///// Assign an address to user
         ///// </summary>
         ///// <param name="addressDto">Address of user</param>
         ///// <remarks>Awesomeness!</remarks>

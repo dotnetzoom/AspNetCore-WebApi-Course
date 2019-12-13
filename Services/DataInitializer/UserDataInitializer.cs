@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Entities.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace Services.DataInitializer
 
             var user = new User
             {
-                Age = 25,
+                Birthday = DateTime.Now,
                 FullName = "محمد حسین کرمی",
                 Gender = GenderType.Male,
                 UserName = "mhkarami97",

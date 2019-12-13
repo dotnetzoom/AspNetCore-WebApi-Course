@@ -15,10 +15,8 @@ namespace Entities.User
             IsActive = true;
         }
         
-        [Required]
-        [StringLength(100)]
         public string FullName { get; set; }
-        public int Age { get; set; }
+        public DateTime Birthday { get; set; }
         public GenderType Gender { get; set; }
         public bool IsActive { get; set; }
         public DateTimeOffset? LastLoginDate { get; set; }
