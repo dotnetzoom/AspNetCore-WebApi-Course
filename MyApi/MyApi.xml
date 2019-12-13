@@ -24,19 +24,5 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:MyApi.Controllers.v1.UsersController.RefreshToken(MyApi.Models.TokenRequest,System.Threading.CancellationToken)">
-            <summary>
-            This method is use for refresh token
-            </summary>
-            <param name="tokenRequest">The information of token request</param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MyApi.Controllers.v1.UsersController.Logout">
-            <summary>
-            This method is use to log out
-            </summary>
-            <returns></returns>
-        </member>
     </members>
 </doc>

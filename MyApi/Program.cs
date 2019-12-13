@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AspNetCoreRateLimit;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -58,7 +58,7 @@ namespace MyApi
                 .ConfigureLogging(logger => {
                     logger.AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);
                     logger.ClearProviders();
-                    logger.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logger.SetMinimumLevel(LogLevel.Trace);
                 })
                 .UseNLog()
                 .ConfigureWebHostDefaults(webBuilder =>

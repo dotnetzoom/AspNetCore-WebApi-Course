@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Entities.Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Entities.Post
 {
-    public class Post : BaseEntity<int>
+    public class Post : BaseEntity<Guid>
     {
         public string Title { get; set; }
         public string Description { get; set; }
@@ -23,8 +21,6 @@ namespace Entities.Post
 
         public Category Category { get; set; }
         public User.User Author { get; set; }
-
-        public List<Tag> Tags { get; set; }
     }
 
     public class PostConfiguration : IEntityTypeConfiguration<Post>
@@ -33,8 +29,10 @@ namespace Entities.Post
         {
             builder.Property(p => p.Title).IsRequired().HasMaxLength(200);
             builder.Property(p => p.Description).IsRequired();
-            builder.HasOne(p => p.Category).WithMany(c => c.Posts).HasForeignKey(p => p.CategoryId);
-            builder.HasOne(p => p.Author).WithMany(c => c.Posts).HasForeignKey(p => p.AuthorId);
+            builder.HasOne(p => p.Category).WithMany(c => c.Posts).HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(p => p.Author).WithMany(c => c.Posts).HasForeignKey(p => p.AuthorId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
