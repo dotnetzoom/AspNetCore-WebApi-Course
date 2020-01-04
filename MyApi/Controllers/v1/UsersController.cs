@@ -20,6 +20,7 @@ using WebFramework.Filters;
 namespace MyApi.Controllers.v1
 {
     [ApiVersion("1")]
+    //[Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class UsersController : BaseController
     {
         private readonly IUserRepository _userRepository;
