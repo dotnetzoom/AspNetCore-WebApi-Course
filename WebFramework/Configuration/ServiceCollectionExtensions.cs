@@ -10,9 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -32,18 +30,20 @@ namespace WebFramework.Configuration
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options
-                    .UseSqlServer(configuration.GetConnectionString("SqlServer"))
+                    .UseSqlServer(configuration.GetConnectionString("SqlServer"));
                     //Tips
-                    .ConfigureWarnings(warning => warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                    //Automatic client evaluation is no longer supported. This event is no longer generated.
+                    //This line is no longer needed.
+                    //.ConfigureWarnings(warning => warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
             });
         }
 
         public static void AddMinimalMvc(this IServiceCollection services)
         {
-            //https://github.com/aspnet/Mvc/blob/release/2.2/src/Microsoft.AspNetCore.Mvc/MvcServiceCollectionExtensions.cs
-            services.AddMvcCore(options =>
+            //https://github.com/aspnet/AspNetCore/blob/0303c9e90b5b48b309a78c2ec9911db1812e6bf3/src/Mvc/Mvc/src/MvcServiceCollectionExtensions.cs
+            services.AddControllers(options =>
             {
-                options.Filters.Add(new AuthorizeFilter());
+                options.Filters.Add(new AuthorizeFilter()); //Apply AuthorizeFilter as global filter to all actions
 
                 //Like [ValidateAntiforgeryToken] attribute but dose not validatie for GET and HEAD http method
                 //You can ingore validate by using [IgnoreAntiforgeryToken] attribute
@@ -51,18 +51,49 @@ namespace WebFramework.Configuration
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
                 //options.UseYeKeModelBinder();
-            })
-            .AddApiExplorer()
-            .AddAuthorization()
-            .AddFormatterMappings()
-            .AddDataAnnotations()
-            .AddJsonFormatters(/*options =>
+            }).AddNewtonsoftJson(/*option =>
             {
-                options.Formatting = Newtonsoft.Json.Formatting.Indented;
-                options.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            }*/)
-            .AddCors()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                option.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                option.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            }*/);
+
+            #region Old way (We don't need Muhammad from ASP.NET Core 3.0 onwards)
+            ////https://github.com/aspnet/Mvc/blob/release/2.2/src/Microsoft.AspNetCore.Mvc/MvcServiceCollectionExtensions.cs
+            //services.AddMvcCore(options =>
+            //{
+            //    options.Filters.Add(new AuthorizeFilter());
+
+            //    //Like [ValidateAntiforgeryToken] attribute but dose not validatie for GET and HEAD http method
+            //    //You can ingore validate by using [IgnoreAntiforgeryToken] attribute
+            //    //Use this filter when use cookie 
+            //    //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
+            //    //options.UseYeKeModelBinder();
+            //})
+            //.AddApiExplorer()
+            //.AddAuthorization()
+            //.AddFormatterMappings()
+            //.AddDataAnnotations()
+            //.AddJsonOptions(option =>
+            //{
+            //    //option.JsonSerializerOptions
+            //})
+            //.AddNewtonsoftJson(/*option =>
+            //{
+            //    option.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+            //    option.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            //}*/)
+
+            ////Microsoft.AspNetCore.Mvc.Formatters.Json
+            ////.AddJsonFormatters(/*options =>
+            ////{
+            ////    options.Formatting = Newtonsoft.Json.Formatting.Indented;
+            ////    options.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            ////}*/)
+
+            //.AddCors()
+            //.SetCompatibilityVersion(CompatibilityVersion.Latest); //.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            #endregion
         }
 
         public static void AddElmah(this IServiceCollection services, IConfiguration configuration, SiteSettings siteSetting)
@@ -178,9 +209,9 @@ namespace WebFramework.Configuration
                 options.DefaultApiVersion = new ApiVersion(1, 0); //v1.0 == v1
                 options.ReportApiVersions = true;
 
-                ApiVersion.TryParse("1.0", out var version10);
-                ApiVersion.TryParse("1", out var version1);
-                var a = version10 == version1;
+                //ApiVersion.TryParse("1.0", out var version10);
+                //ApiVersion.TryParse("1", out var version1);
+                //var a = version10 == version1;
 
                 //options.ApiVersionReader = new QueryStringApiVersionReader("api-version");
                 // api/posts?api-version=1

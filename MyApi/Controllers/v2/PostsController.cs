@@ -1,10 +1,10 @@
-﻿using Data.Repositories;
+﻿using AutoMapper;
+using Data.Repositories;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using MyApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Api;
@@ -14,7 +14,8 @@ namespace MyApi.Controllers.v2
     [ApiVersion("2")]
     public class PostsController : v1.PostsController
     {
-        public PostsController(IRepository<Post> repository) : base(repository)
+        public PostsController(IRepository<Post> repository, IMapper mapper)
+            : base(repository, mapper)
         {
         }
 

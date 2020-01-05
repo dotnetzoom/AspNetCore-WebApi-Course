@@ -1,14 +1,13 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
+﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
 
 namespace WebFramework.Swagger
 {
     public class SetVersionInPaths : IDocumentFilter
     {
-        public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            var updatedPaths = new Dictionary<string, PathItem>();
+            var updatedPaths = new OpenApiPaths();
 
             foreach (var entry in swaggerDoc.Paths)
             {

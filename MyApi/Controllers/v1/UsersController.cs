@@ -14,11 +14,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Api;
-using WebFramework.Filters;
-using Common;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Swashbuckle.AspNetCore.Filters;
 
 namespace MyApi.Controllers.v1
 {
@@ -164,5 +160,6 @@ namespace MyApi.Controllers.v1
 
             return Ok();
         }
+
     }
 }

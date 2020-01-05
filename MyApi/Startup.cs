@@ -1,31 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
 using Common;
-using Data;
-using Data.Repositories;
 using ElmahCore.Mvc;
-using ElmahCore.Sql;
-using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MyApi.Models;
-using Services;
-using Services.DataInitializer;
-using Swashbuckle.AspNetCore.Swagger;
-using WebFramework;
 using WebFramework.Configuration;
 using WebFramework.CustomMapping;
 using WebFramework.Middlewares;
@@ -42,8 +22,6 @@ namespace MyApi
         {
             Configuration = configuration;
 
-            AutoMapperConfiguration.InitializeAutoMapper();
-
             _siteSetting = configuration.GetSection(nameof(SiteSettings)).Get<SiteSettings>();
         }
 
@@ -53,6 +31,7 @@ namespace MyApi
         {
             services.Configure<SiteSettings>(Configuration.GetSection(nameof(SiteSettings)));
 
+            services.InitializeAutoMapper();
 
             services.AddDbContext(Configuration);
 
@@ -72,7 +51,7 @@ namespace MyApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.IntializeDatabase();
 
@@ -80,15 +59,28 @@ namespace MyApi
 
             app.UseHsts(env);
 
-            app.UseElmah();
-
             app.UseHttpsRedirection();
+
+            app.UseElmah();
 
             app.UseSwaggerAndUI();
 
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseMvc();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            //app.UseCors();
+
+            app.UseEndpoints(config =>
+            {
+                config.MapControllers(); // Map attribute routing
+                //    .RequireAuthorization(); Apply AuthorizeFilter as global filter to all endpoints
+                //config.MapDefaultControllerRoute(); // Map default route {controller=Home}/{action=Index}/{id?}
+            });
+
+            //Using 'UseMvc' to configure MVC is not supported while using Endpoint Routing.
+            //To continue using 'UseMvc', please set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices'.
+            //app.UseMvc();
         }
     }
 }

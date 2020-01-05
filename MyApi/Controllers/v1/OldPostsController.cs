@@ -2,17 +2,14 @@
 using AutoMapper.QueryableExtensions;
 using Data.Repositories;
 using Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Api;
-using WebFramework.Filters;
 
 namespace MyApi.Controllers.v1
 {
@@ -20,10 +17,12 @@ namespace MyApi.Controllers.v1
     public class OldPostsController : BaseController
     {
         private readonly IRepository<Post> _repository;
+        private readonly IMapper _mapper;
 
-        public OldPostsController(IRepository<Post> repository)
+        public OldPostsController(IRepository<Post> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -50,7 +49,7 @@ namespace MyApi.Controllers.v1
             //}).ToListAsync(cancellationToken);
             #endregion
 
-            var list = await _repository.TableNoTracking.ProjectTo<PostSelectDto>()
+            var list = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
                 //.Where(postDto => postDto.Title.Contains("test") || postDto.CategoryName.Contains("test"))
                 .ToListAsync(cancellationToken);
 
@@ -60,7 +59,7 @@ namespace MyApi.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ApiResult<PostSelectDto>> Get(Guid id, CancellationToken cancellationToken)
         {
-            var dto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>()
+            var dto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
 
             //Post post = null; //Find from database by Id (include)
@@ -91,7 +90,7 @@ namespace MyApi.Controllers.v1
         public async Task<ApiResult<PostSelectDto>> Create(PostDto dto, CancellationToken cancellationToken)
         {
             //var model = Mapper.Map<Post>(dto);
-            var model = dto.ToEntity();
+            var model = dto.ToEntity(_mapper);
 
             #region old code
             //var model = new Post
@@ -136,7 +135,8 @@ namespace MyApi.Controllers.v1
             //}).SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
             #endregion
 
-            var resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>().SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
+            var resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
 
             return resultDto;
         }
@@ -156,7 +156,7 @@ namespace MyApi.Controllers.v1
             var model = await _repository.GetByIdAsync(cancellationToken, id);
 
             //Mapper.Map(dto, model);
-            model = dto.ToEntity(model);
+            model = dto.ToEntity(_mapper, model);
 
             #region old code
             //model.Title = dto.Title;
@@ -180,7 +180,8 @@ namespace MyApi.Controllers.v1
             //}).SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
             #endregion
 
-            var resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>().SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
+            var resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
 
             return resultDto;
         }

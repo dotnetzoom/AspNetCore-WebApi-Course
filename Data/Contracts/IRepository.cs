@@ -26,7 +26,7 @@ namespace Data.Repositories
         Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true);
         void Detach(TEntity entity);
         TEntity GetById(params object[] ids);
-        Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
+        ValueTask<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
         void LoadCollection<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> collectionProperty) where TProperty : class;
         Task LoadCollectionAsync<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> collectionProperty, CancellationToken cancellationToken) where TProperty : class;
         void LoadReference<TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> referenceProperty) where TProperty : class;

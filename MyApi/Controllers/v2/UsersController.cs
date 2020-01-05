@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Data.Repositories;
 using Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MyApi.Controllers.v1;
 using MyApi.Models;
 using Services;
-using Swashbuckle.AspNetCore.Filters;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v2

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +25,7 @@ namespace Data.Repositories
         }
 
         #region Async Method
-        public virtual Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
+        public virtual ValueTask<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
         {
             return Entities.FindAsync(ids, cancellationToken);
         }

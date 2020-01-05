@@ -35,7 +35,7 @@ namespace WebFramework.Api
 
         public static implicit operator ApiResult(BadRequestObjectResult result)
         {
-            var message = result.Value.ToString();
+            var message = result.Value?.ToString();
             if (result.Value is SerializableError errors)
             {
                 var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
@@ -91,7 +91,7 @@ namespace WebFramework.Api
 
         public static implicit operator ApiResult<TData>(BadRequestObjectResult result)
         {
-            var message = result.Value.ToString();
+            var message = result.Value?.ToString();
             if (result.Value is SerializableError errors)
             {
                 var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();

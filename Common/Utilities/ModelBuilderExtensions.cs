@@ -4,7 +4,6 @@ using Pluralize.NET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Common.Utilities
@@ -20,8 +19,8 @@ namespace Common.Utilities
             Pluralizer pluralizer = new Pluralizer();
             foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
             {
-                string tableName = entityType.Relational().TableName;
-                entityType.Relational().TableName = pluralizer.Singularize(tableName);
+                string tableName = entityType.GetTableName();
+                entityType.SetTableName(pluralizer.Singularize(tableName));
             }
         }
 
@@ -34,8 +33,8 @@ namespace Common.Utilities
             Pluralizer pluralizer = new Pluralizer();
             foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
             {
-                string tableName = entityType.Relational().TableName;
-                entityType.Relational().TableName = pluralizer.Pluralize(tableName);
+                string tableName = entityType.GetTableName();
+                entityType.SetTableName(pluralizer.Pluralize(tableName));
             }
         }
 
@@ -62,7 +61,7 @@ namespace Common.Utilities
             {
                 IMutableProperty property = entityType.GetProperties().SingleOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
                 if (property != null && property.ClrType == propertyType)
-                    property.Relational().DefaultValueSql = defaultValueSql;
+                    property.SetDefaultValueSql(defaultValueSql);
             }
         }
 

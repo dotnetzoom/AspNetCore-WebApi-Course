@@ -5,12 +5,8 @@ using MyApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
@@ -62,18 +58,18 @@ namespace MyApi.Controllers.v1
     #endregion
 
     [ApiVersion("1")]
+    [AllowAnonymous]
     public class TestController : BaseController
     {
         [HttpPost("[action]")]
-        [AllowAnonymous]
         public ActionResult UploadFile1(IFormFile file1)
         {
             return Ok();
         }
 
-        [AddSwaggerFileUploadButton]
+        //It doesn't work anymore in recent versions because of replacing Swashbuckle.AspNetCore.Examples with Swashbuckle.AspNetCore.Filters
+        //[AddSwaggerFileUploadButton]
         [HttpPost("[action]")]
-        [AllowAnonymous]
         public ActionResult UploadFile2()
         {
             var file = Request.Form.Files[0];
@@ -105,7 +101,6 @@ namespace MyApi.Controllers.v1
         #endregion
 
         [HttpPost("[action]")]
-        [AllowAnonymous]
         [SwaggerRequestExample(typeof(UserDto), typeof(CreateUserRequestExample))]
         [SwaggerResponseExample(200, typeof(CreateUserResponseExample))]
         [SwaggerResponse(200)]
@@ -115,7 +110,6 @@ namespace MyApi.Controllers.v1
             return Ok(userDto);
         }
 
-
         ///// <summary>
         ///// Asign an address to user
         ///// </summary>
@@ -124,47 +118,45 @@ namespace MyApi.Controllers.v1
         ///// <response code="200">Address added</response>
         ///// <response code="400">Address has missing/invalid values</response>
         ///// <response code="500">Oops! Can't create your Address right now</response>
-        [AllowAnonymous]
         [HttpPost("[action]")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         public ActionResult Address(AddressDto addressDto)
         {
             return Ok();
         }
     }
+}
 
-    public class CreateUserRequestExample : IExamplesProvider
+public class CreateUserRequestExample : IExamplesProvider<UserDto>
+{
+    public UserDto GetExamples()
     {
-        public object GetExamples()
+        return new UserDto
         {
-            return new UserDto
-            {
-                FullName = "محمدجواد ابراهیمی",
-                Age = 25,
-                UserName = "mjebrahimi",
-                Email = "admin@site.com",
-                Gender = Entities.GenderType.Male,
-                Password = "1234567"
-            };
-        }
+            FullName = "محمدجواد ابراهیمی",
+            Age = 25,
+            UserName = "mjebrahimi",
+            Email = "admin@site.com",
+            Gender = Entities.GenderType.Male,
+            Password = "1234567"
+        };
     }
+}
 
-    public class CreateUserResponseExample : IExamplesProvider
+public class CreateUserResponseExample : IExamplesProvider<UserDto>
+{
+    public UserDto GetExamples()
     {
-        public object GetExamples()
+        return new UserDto
         {
-            return new UserDto
-            {
-                FullName = "محمدجواد ابراهیمی",
-                Age = 25,
-                UserName = "mjebrahimi",
-                Email = "admin@site.com",
-                Gender = Entities.GenderType.Male,
-                Password = "1234567"
-            };
-        }
+            FullName = "محمدجواد ابراهیمی",
+            Age = 25,
+            UserName = "mjebrahimi",
+            Email = "admin@site.com",
+            Gender = Entities.GenderType.Male,
+            Password = "1234567"
+        };
     }
 }
