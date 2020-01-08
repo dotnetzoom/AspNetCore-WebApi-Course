@@ -3,6 +3,7 @@ using MyApi.Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data.Contracts;
 using Entities.Post;
 using WebFramework.Api;
@@ -13,7 +14,8 @@ namespace MyApi.Controllers.v2
     [ApiVersion("2")]
     public class PostsController : v1.PostsController
     {
-        public PostsController(IRepository<Post> repository) : base(repository)
+        public PostsController(IRepository<Post> repository, IMapper mapper)
+            : base(repository, mapper)
         {
         }
 
@@ -45,7 +47,7 @@ namespace MyApi.Controllers.v2
 
         public override async Task<ApiResult<PostSelectDto>> Get(int id, CancellationToken cancellationToken)
         {
-            if (id==0)
+            if (id == 0)
                 return NotFound();
             return await base.Get(id, cancellationToken);
         }

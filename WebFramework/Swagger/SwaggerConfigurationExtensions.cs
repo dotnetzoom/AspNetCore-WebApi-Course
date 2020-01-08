@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace WebFramework.Swagger
 {
@@ -20,9 +21,28 @@ namespace WebFramework.Swagger
         {
             Assert.NotNull(services, nameof(services));
 
+            #region AddSwaggerExamples
             //Add services to use Example Filters in swagger
-            //services.AddSwaggerExamples();
-            //services.AddSwaggerExamplesFromAssemblyOf<MyExample>();
+            //If you want to use the Request and Response example filters (and have called options.ExampleFilters() above), then you MUST also call
+            //This method to register all ExamplesProvider classes form the assembly
+            //services.AddSwaggerExamplesFromAssemblyOf<PersonRequestExample>();
+
+            //We call this method for by reflection with the Startup type of entry assembly (MyApi assembly)
+            var mainAssembly = Assembly.GetEntryAssembly(); // => MyApi project assembly
+            if (mainAssembly != null)
+            {
+                var mainType = mainAssembly.GetExportedTypes()[0];
+
+                const string methodName = nameof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions.AddSwaggerExamplesFromAssemblyOf);
+                var method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetMethod(methodName);
+                if (method != null)
+                {
+                    MethodInfo generic = method.MakeGenericMethod(mainType);
+                    generic.Invoke(null, new[] { services });
+                }
+            }
+
+            #endregion
 
             //Add services and configuration to use swagger
             services.AddSwaggerGen(options =>
@@ -59,7 +79,7 @@ namespace WebFramework.Swagger
                 //options.IgnoreObsoleteActions();
                 //options.IgnoreObsoleteProperties();
 
-                //options.ExampleFilters();
+                options.ExampleFilters();
 
                 #region Filters
                 //Enable to use [SwaggerRequestExample] & [SwaggerResponseExample]
@@ -84,24 +104,23 @@ namespace WebFramework.Swagger
                 //    {"Bearer", new string[] { }}
                 //});
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //OAuth2Scheme
+                options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
                 {
+                    //Scheme = "Bearer",
+                    //In = ParameterLocation.Header,
                     Type = SecuritySchemeType.OAuth2,
-                    Scheme = "Bearer",
-                    Description =
-                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345deface\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
                     Flows = new OpenApiOAuthFlows
                     {
                         Password = new OpenApiOAuthFlow
                         {
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "readAccess", "Access read operations" },
-                                { "writeAccess", "Access write operations" }
-                            },
-                            TokenUrl = new Uri("https://localhost:44339/api/v1/users/Token")
+                            TokenUrl = new Uri("https://localhost:5001/api/v1/users/Token"),
+                            //AuthorizationUrl = new Uri("https://localhost:5001/api/v1/users/Token")
+                            //Scopes = new Dictionary<string, string>
+                            //{
+                            //    { "readAccess", "Access read operations" },
+                            //    { "writeAccess", "Access write operations" }
+                            //}
                         }
                     }
                 });
@@ -109,16 +128,7 @@ namespace WebFramework.Swagger
 
                 #region Add UnAuthorized to Response
                 //Add 401 response and security requirements (Lock icon) to actions that need authorization
-                var securityScheme = new OpenApiSecurityScheme
-                {
-                    Scheme = "Bearer",
-                    Description =
-                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345deface\"",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.OAuth2,
-                    In = ParameterLocation.Header
-                };
-                options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, securityScheme);
+                options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, "OAuth2");
                 #endregion
 
                 #region Versioning
@@ -194,6 +204,33 @@ namespace WebFramework.Swagger
 
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
                 options.SwaggerEndpoint("/swagger/v2/swagger.json", "V2 Docs");
+            });
+
+            //ReDoc UI middleware. ReDoc UI is an alternative to swagger-ui
+            app.UseReDoc(options =>
+            {
+                options.SpecUrl("/swagger/v1/swagger.json");
+                //options.SpecUrl("/swagger/v2/swagger.json");
+
+                #region Customizing
+                //By default, the ReDoc UI will be exposed at "/api-docs"
+                //options.RoutePrefix = "docs";
+                //options.DocumentTitle = "My API Docs";
+
+                options.EnableUntrustedSpec();
+                options.ScrollYOffset(10);
+                options.HideHostname();
+                options.HideDownloadButton();
+                options.ExpandResponses("200,201");
+                options.RequiredPropsFirst();
+                options.NoAutoAuth();
+                options.PathInMiddlePanel();
+                options.HideLoading();
+                options.NativeScrollbars();
+                options.DisableSearch();
+                options.OnlyRequiredInSamples();
+                options.SortPropsAlphabetically();
+                #endregion
             });
         }
     }

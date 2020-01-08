@@ -12,24 +12,24 @@ namespace WebFramework.Api
         [Display(Name = "ردیف")]
         public TKey Id { get; set; }
 
-        public TEntity ToEntity()
+        public TEntity ToEntity(IMapper mapper)
         {
-            return Mapper.Map<TEntity>(CastToDerivedClass(this));
-        }
-        
-        public TEntity ToEntity(TEntity entity)
-        {
-            return Mapper.Map(CastToDerivedClass(this), entity);
+            return mapper.Map<TEntity>(CastToDerivedClass(mapper, this));
         }
 
-        public static TDto FromEntity(TEntity model)
+        public TEntity ToEntity(IMapper mapper, TEntity entity)
         {
-            return Mapper.Map<TDto>(model);
+            return mapper.Map(CastToDerivedClass(mapper, this), entity);
         }
 
-        protected TDto CastToDerivedClass(BaseDto<TDto, TEntity, TKey> baseInstance)
+        public static TDto FromEntity(IMapper mapper, TEntity model)
         {
-            return Mapper.Map<TDto>(baseInstance);
+            return mapper.Map<TDto>(model);
+        }
+
+        protected TDto CastToDerivedClass(IMapper mapper, BaseDto<TDto, TEntity, TKey> baseInstance)
+        {
+            return mapper.Map<TDto>(baseInstance);
         }
 
         public void CreateMappings(Profile profile)

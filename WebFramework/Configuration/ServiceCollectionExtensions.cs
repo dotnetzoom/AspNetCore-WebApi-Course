@@ -20,7 +20,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebFramework.Configuration
@@ -33,16 +32,29 @@ namespace WebFramework.Configuration
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options
-                    .UseSqlServer(configuration.GetConnectionString("SqlServer"))
-                    //Tips
-                    .ConfigureWarnings(warning => warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                    .UseSqlServer(configuration.GetConnectionString("SqlServer"));
+                //Tips
+                //.ConfigureWarnings(warning => warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
             });
         }
 
         public static void AddMinimalMvc(this IServiceCollection services)
         {
-            services.AddControllers(op => op.Filters.Add(new AuthorizeFilter()))
-                .AddNewtonsoftJson();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter()); //Apply AuthorizeFilter as global filter to all actions
+
+                //Like [ValidateAntiforgeryToken] attribute but dose not validate for GET and HEAD http method
+                //You can ignore validate by using [IgnoreAntiforgeryToken] attribute
+                //Use this filter when use cookie 
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
+                //options.UseYeKeModelBinder();
+            }).AddNewtonsoftJson(/*option =>
+            {
+                option.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                option.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            }*/);
 
             //services.AddMvcCore(options =>
             //{

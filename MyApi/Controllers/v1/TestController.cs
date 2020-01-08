@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Entities.User;
+using Swashbuckle.AspNetCore.Filters;
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
@@ -57,10 +59,10 @@ namespace MyApi.Controllers.v1
     #endregion
 
     [ApiVersion("1")]
+    [AllowAnonymous]
     public class TestController : BaseController
     {
         [HttpPost("[action]")]
-        [AllowAnonymous]
         public ActionResult UploadFile1(IFormFile file1)
         {
             return Ok();
@@ -69,13 +71,11 @@ namespace MyApi.Controllers.v1
         [System.Obsolete]
         //[AddSwaggerFileUploadButton]
         [HttpPost("[action]")]
-        [AllowAnonymous]
         public ActionResult UploadFile2()
         {
             //var file = Request.Form.Files[0];
             return Ok();
         }
-
 
         #region Action Annotations
         //Specific request content type
@@ -101,16 +101,14 @@ namespace MyApi.Controllers.v1
         #endregion
 
         [HttpPost("[action]")]
-        [AllowAnonymous]
-        //[SwaggerRequestExample(typeof(UserDto), typeof(CreateUserRequestExample))]
-        //[SwaggerResponseExample(200, typeof(CreateUserResponseExample))]
+        [SwaggerRequestExample(typeof(UserDto), typeof(CreateUserRequestExample))]
+        [SwaggerResponseExample(200, typeof(CreateUserResponseExample))]
         [SwaggerResponse(200)]
         [SwaggerResponse(StatusCodes.Status406NotAcceptable)]
         public ActionResult<UserDto> CreateUser(UserDto userDto)
         {
             return Ok(userDto);
         }
-
 
         ///// <summary>
         ///// Assign an address to user
@@ -120,7 +118,6 @@ namespace MyApi.Controllers.v1
         ///// <response code="200">Address added</response>
         ///// <response code="400">Address has missing/invalid values</response>
         ///// <response code="500">Oops! Can't create your Address right now</response>
-        [AllowAnonymous]
         [HttpPost("[action]")]
         [Consumes("application/json")]
         [Produces("application/json")]
@@ -131,36 +128,34 @@ namespace MyApi.Controllers.v1
             return Ok();
         }
     }
+}
 
-    //public class CreateUserRequestExample : IExamplesProvider<object>
-    //{
-    //    public object GetExamples()
-    //    {
-    //        return new UserDto
-    //        {
-    //            FullName = "محمد حسین کرمی",
-    //            Age = 23,
-    //            UserName = "mhkarami97",
-    //            Email = "mhkarami1997@gmail.com",
-    //            Gender = GenderType.Male,
-    //            Password = "1234567"
-    //        };
-    //    }
-    //}
+public class CreateUserRequestExample : IExamplesProvider<object>
+{
+    public object GetExamples()
+    {
+        return new UserDto
+        {
+            FullName = "محمد حسین کرمی",
+            UserName = "mhkarami97",
+            Email = "mhkarami1997@gmail.com",
+            Gender = GenderType.Male,
+            Password = "1234567"
+        };
+    }
+}
 
-    //public class CreateUserResponseExample : IExamplesProvider<object>
-    //{
-    //    public object GetExamples()
-    //    {
-    //        return new UserDto
-    //        {
-    //            FullName = "محمد حسین کرمی",
-    //            Age = 23,
-    //            UserName = "mhkarami97",
-    //            Email = "mhkarami1997@gmail.com",
-    //            Gender = GenderType.Male,
-    //            Password = "1234567"
-    //        };
-    //    }
-    //}
+public class CreateUserResponseExample : IExamplesProvider<object>
+{
+    public object GetExamples()
+    {
+        return new UserDto
+        {
+            FullName = "محمد حسین کرمی",
+            UserName = "mhkarami97",
+            Email = "mhkarami1997@gmail.com",
+            Gender = GenderType.Male,
+            Password = "1234567"
+        };
+    }
 }

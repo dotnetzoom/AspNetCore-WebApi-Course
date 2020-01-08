@@ -34,12 +34,14 @@ namespace WebFramework.Api
 
         public static implicit operator ApiResult(BadRequestObjectResult result)
         {
-            var message = result.Value.ToString();
-            if (result.Value is SerializableError errors)
-            {
-                var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
-                message = string.Join(" | ", errorMessages);
-            }
+            var message = result.Value?.ToString();
+
+            if (!(result.Value is SerializableError errors))
+                return new ApiResult(false, ApiResultStatusCode.BadRequest, message);
+
+            var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
+            message = string.Join(" | ", errorMessages);
+
             return new ApiResult(false, ApiResultStatusCode.BadRequest, message);
         }
 
@@ -90,12 +92,14 @@ namespace WebFramework.Api
 
         public static implicit operator ApiResult<TData>(BadRequestObjectResult result)
         {
-            var message = result.Value.ToString();
-            if (result.Value is SerializableError errors)
-            {
-                var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
-                message = string.Join(" | ", errorMessages);
-            }
+            var message = result.Value?.ToString();
+
+            if (!(result.Value is SerializableError errors))
+                return new ApiResult<TData>(false, ApiResultStatusCode.BadRequest, null, message);
+
+            var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
+            message = string.Join(" | ", errorMessages);
+
             return new ApiResult<TData>(false, ApiResultStatusCode.BadRequest, null, message);
         }
 

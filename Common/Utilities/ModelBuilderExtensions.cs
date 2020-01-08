@@ -9,16 +9,16 @@ namespace Common.Utilities
     public static class ModelBuilderExtensions
     {
         /// <summary>
-        /// Singularizin table name like Posts to Post or People to Person
+        /// Singularization table name like Posts to Post or People to Person
         /// </summary>
         /// <param name="modelBuilder"></param>
         public static void AddSingularizingTableNameConvention(this ModelBuilder modelBuilder)
         {
-            var pluralizer = new Pluralizer();
+            var pluralize = new Pluralizer();
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
-                entityType.SetTableName(pluralizer.Singularize(tableName));
+                entityType.SetTableName(pluralize.Singularize(tableName));
             }
         }
 
@@ -28,11 +28,11 @@ namespace Common.Utilities
         /// <param name="modelBuilder"></param>
         public static void AddPluralizingTableNameConvention(this ModelBuilder modelBuilder)
         {
-            var pluralizer = new Pluralizer();
+            var pluralize = new Pluralizer();
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
-                entityType.SetTableName(pluralizer.Singularize(tableName));
+                entityType.SetTableName(pluralize.Singularize(tableName));
             }
         }
 
@@ -46,7 +46,7 @@ namespace Common.Utilities
         }
 
         /// <summary>
-        /// Set DefaultValueSql for sepecific property name and type
+        /// Set DefaultValueSql for specific property name and type
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <param name="propertyName">Name of property wants to set DefaultValueSql for</param>
@@ -76,7 +76,7 @@ namespace Common.Utilities
         }
 
         /// <summary>
-        /// Dynamicaly load all IEntityTypeConfiguration with Reflection
+        /// Dynamical load all IEntityTypeConfiguration with Reflection
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <param name="assemblies">Assemblies contains Entities</param>
@@ -89,11 +89,11 @@ namespace Common.Utilities
 
             foreach (var type in types)
             {
-                foreach (var iface in type.GetInterfaces())
+                foreach (var face in type.GetInterfaces())
                 {
-                    if (iface.IsConstructedGenericType && iface.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
+                    if (face.IsConstructedGenericType && face.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
                     {
-                        var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(iface.GenericTypeArguments[0]);
+                        var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(face.GenericTypeArguments[0]);
                         applyConcreteMethod.Invoke(modelBuilder, new[] { Activator.CreateInstance(type) });
                     }
                 }
@@ -101,14 +101,14 @@ namespace Common.Utilities
         }
 
         /// <summary>
-        /// Dynamicaly register all Entities that inherit from specific BaseType
+        /// Dynamical register all Entities that inherit from specific BaseType
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <param name="assemblies">Assemblies contains Entities</param>
-        public static void RegisterAllEntities<BaseType>(this ModelBuilder modelBuilder, params Assembly[] assemblies)
+        public static void RegisterAllEntities<TBaseType>(this ModelBuilder modelBuilder, params Assembly[] assemblies)
         {
             var types = assemblies.SelectMany(a => a.GetExportedTypes())
-                .Where(c => c.IsClass && !c.IsAbstract && c.IsPublic && typeof(BaseType).IsAssignableFrom(c));
+                .Where(c => c.IsClass && !c.IsAbstract && c.IsPublic && typeof(TBaseType).IsAssignableFrom(c));
 
             foreach (var type in types)
                 modelBuilder.Entity(type);

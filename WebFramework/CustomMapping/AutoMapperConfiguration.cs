@@ -2,20 +2,37 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebFramework.CustomMapping
 {
     public static class AutoMapperConfiguration
     {
-        public static void InitializeAutoMapper()
+        public static void InitializeAutoMapper(this IServiceCollection services, params Assembly[] assemblies)
         {
-            Mapper.Initialize(config =>
+            //With AutoMapper Instance, you need to call AddAutoMapper services and pass assemblies that contains auto-mapper Profile class
+            //services.AddAutoMapper(assembly1, assembly2, assembly3);
+            //See http://docs.automapper.org/en/stable/Configuration.html
+            //And https://code-maze.com/automapper-net-core/
+
+            services.AddAutoMapper(config =>
             {
                 config.AddCustomMappingProfile();
-            });
+                config.Advanced.BeforeSeal(configProvince =>
+                {
+                    configProvince.CompileMappings();
+                });
+            }, assemblies);
 
-            //Compile mapping after configuration to boost map speed
-            Mapper.Configuration.CompileMappings();
+            #region Deprecated (Use AutoMapper Instance instead)
+            //Mapper.Initialize(config =>
+            //{
+            //    config.AddCustomMappingProfile();
+            //});
+
+            ////Compile mapping after configuration to boost map speed
+            //Mapper.Configuration.CompileMappings();
+            #endregion
         }
 
         public static void AddCustomMappingProfile(this IMapperConfigurationExpression config)

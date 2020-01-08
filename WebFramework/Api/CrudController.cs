@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data.Contracts;
 using Entities.Common;
 
@@ -17,19 +18,21 @@ namespace WebFramework.Api
         where TSelectDto : BaseDto<TSelectDto, TEntity, TKey>, new()
         where TEntity : BaseEntity<TKey>, new()
     {
-        private readonly IRepository<TEntity> _repository;
+        protected readonly IRepository<TEntity> Repository;
+        protected readonly IMapper Mapper;
 
-        public CrudController(IRepository<TEntity> repository)
+        public CrudController(IRepository<TEntity> repository, IMapper mapper)
         {
-            _repository = repository;
+            Repository = repository;
+            Mapper = mapper;
         }
 
         [HttpGet]
         public virtual async Task<ActionResult<List<TSelectDto>>> Get(CancellationToken cancellationToken)
         {
-            var list = await _repository.TableNoTracking
+            var list = await Repository.TableNoTracking
                 .Where(a => !a.Status.Equals(2))
-                .ProjectTo<TSelectDto>()
+                .ProjectTo<TSelectDto>(Mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             return Ok(list);
@@ -38,10 +41,10 @@ namespace WebFramework.Api
         [HttpGet("{id:guid}")]
         public virtual async Task<ApiResult<TSelectDto>> Get(TKey id, CancellationToken cancellationToken)
         {
-            var dto = await _repository.TableNoTracking
+            var dto = await Repository.TableNoTracking
                 .Where(a => !a.Status.Equals(2))
                 .OrderByDescending(a => a.Version)
-                .ProjectTo<TSelectDto>()
+                .ProjectTo<TSelectDto>(Mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(p => p.Id.Equals(id), cancellationToken);
 
             if (dto == null)
@@ -53,14 +56,14 @@ namespace WebFramework.Api
         [HttpPost]
         public virtual async Task<ApiResult<TSelectDto>> Create(TDto dto, CancellationToken cancellationToken)
         {
-            var model = dto.ToEntity();
+            var model = dto.ToEntity(Mapper);
 
             model.Status = 0;
             model.Version = 1;
 
-            await _repository.AddAsync(model, cancellationToken);
+            await Repository.AddAsync(model, cancellationToken);
 
-            var resultDto = await _repository.TableNoTracking.ProjectTo<TSelectDto>().SingleOrDefaultAsync(p => p.Id.Equals(model.Id), cancellationToken);
+            var resultDto = await Repository.TableNoTracking.ProjectTo<TSelectDto>(Mapper.ConfigurationProvider).SingleOrDefaultAsync(p => p.Id.Equals(model.Id), cancellationToken);
 
             return resultDto;
         }
@@ -68,31 +71,31 @@ namespace WebFramework.Api
         [HttpPut]
         public virtual async Task<ApiResult<TSelectDto>> Update(TKey id, TDto dto, CancellationToken cancellationToken)
         {
-            var model = await _repository.Table.Where(a => a.Id.Equals(id)).OrderByDescending(a => a.Version).FirstAsync(cancellationToken);
+            var model = await Repository.Table.Where(a => a.Id.Equals(id)).OrderByDescending(a => a.Version).FirstAsync(cancellationToken);
 
-            var newModel = dto.ToEntity();
+            var newModel = dto.ToEntity(Mapper);
 
             newModel.Version = model.Version + 1;
             newModel.Status = 0;
             model.Status = 1;
 
-            await _repository.UpdateAsync(model, cancellationToken);
+            await Repository.UpdateAsync(model, cancellationToken);
 
-            await _repository.AddAsync(newModel, cancellationToken);
+            await Repository.AddAsync(newModel, cancellationToken);
 
-            var resultDto = await _repository.TableNoTracking.ProjectTo<TSelectDto>().SingleOrDefaultAsync(p => p.Id.Equals(newModel.Id), cancellationToken);
+            var resultDto = await Repository.TableNoTracking.ProjectTo<TSelectDto>(Mapper.ConfigurationProvider).SingleOrDefaultAsync(p => p.Id.Equals(newModel.Id), cancellationToken);
 
             return resultDto;
         }
 
-        [HttpDelete("{id:guid}")]
+        [HttpDelete("{id:int}")]
         public virtual async Task<ApiResult> Delete(TKey id, CancellationToken cancellationToken)
         {
-            var model = await _repository.Table.Where(a => a.Id.Equals(id)).OrderByDescending(a => a.Version).FirstAsync(cancellationToken);
+            var model = await Repository.Table.Where(a => a.Id.Equals(id)).OrderByDescending(a => a.Version).FirstAsync(cancellationToken);
 
             model.Status = 2;
 
-            await _repository.UpdateAsync(model, cancellationToken);
+            await Repository.UpdateAsync(model, cancellationToken);
 
             return Ok();
         }
@@ -103,8 +106,8 @@ namespace WebFramework.Api
         where TSelectDto : BaseDto<TSelectDto, TEntity, int>, new()
         where TEntity : BaseEntity<int>, new()
     {
-        public CrudController(IRepository<TEntity> repository)
-            : base(repository)
+        public CrudController(IRepository<TEntity> repository, IMapper mapper)
+            : base(repository, mapper)
         {
         }
     }
@@ -113,8 +116,8 @@ namespace WebFramework.Api
         where TDto : BaseDto<TDto, TEntity, int>, new()
         where TEntity : BaseEntity<int>, new()
     {
-        public CrudController(IRepository<TEntity> repository)
-            : base(repository)
+        public CrudController(IRepository<TEntity> repository, IMapper mapper)
+            : base(repository, mapper)
         {
         }
     }
