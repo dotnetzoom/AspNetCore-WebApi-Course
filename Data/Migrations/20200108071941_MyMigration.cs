@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class ApiMigration : Migration
+    public partial class MyMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,10 +31,10 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(maxLength: 100, nullable: false),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 100, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(maxLength: 100, nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
@@ -43,8 +43,8 @@ namespace Data.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FullName = table.Column<string>(maxLength: 100, nullable: false),
-                    Age = table.Column<int>(nullable: false),
+                    FullName = table.Column<string>(nullable: true),
+                    Birthday = table.Column<DateTime>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     LastLoginDate = table.Column<DateTimeOffset>(nullable: true)
@@ -60,7 +60,9 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Version = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     ParentCategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -186,6 +188,8 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Version = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     AccessTokenHash = table.Column<string>(nullable: true),
                     AccessTokenExpiresDateTime = table.Column<DateTimeOffset>(nullable: false),
@@ -208,28 +212,45 @@ namespace Data.Migrations
                 name: "Post",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    Title = table.Column<string>(maxLength: 200, nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Version = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(maxLength: 300, nullable: false),
+                    Address = table.Column<string>(maxLength: 200, nullable: false),
                     Description = table.Column<string>(nullable: false),
+                    ShortDescription = table.Column<string>(maxLength: 800, nullable: false),
+                    Time = table.Column<DateTime>(nullable: false),
+                    TimeToRead = table.Column<DateTime>(nullable: false),
+                    Image = table.Column<string>(maxLength: 300, nullable: false),
+                    View = table.Column<int>(nullable: false),
+                    Rank = table.Column<int>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
-                    AuthorId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Post", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Post_AspNetUser_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "AspNetUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Post_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Post_AspNetUser_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Role_Name",
+                table: "AspNetRole",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -244,6 +265,12 @@ namespace Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "AspNetUser",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUser",
                 column: "NormalizedEmail");
@@ -254,6 +281,13 @@ namespace Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Phone",
+                table: "AspNetUser",
+                column: "PhoneNumber",
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaim_UserId",
@@ -273,17 +307,44 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Category_ParentCategoryId",
                 table: "Category",
-                column: "ParentCategoryId");
+                column: "ParentCategoryId",
+                unique: true,
+                filter: "[ParentCategoryId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_AuthorId",
+                name: "IX_Post_Address",
                 table: "Post",
-                column: "AuthorId");
+                column: "Address",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_CategoryId",
                 table: "Post",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Post_Rank",
+                table: "Post",
+                column: "Rank",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Post_Type",
+                table: "Post",
+                column: "Type",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Post_UserId",
+                table: "Post",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Post_View",
+                table: "Post",
+                column: "View",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserToken_UserId",

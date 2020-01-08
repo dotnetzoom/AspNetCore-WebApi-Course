@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,19 +23,19 @@ namespace MyApi.Controllers.v2
         }
 
         [NonAction]
-        public override Task<ApiResult> Delete(Guid id, CancellationToken cancellationToken)
+        public override Task<ApiResult> Delete(int id, CancellationToken cancellationToken)
         {
             return base.Delete(id, cancellationToken);
         }
 
-        public async override Task<ActionResult<List<PostSelectDto>>> Get(CancellationToken cancellationToken)
+        public override async Task<ActionResult<List<PostSelectDto>>> Get(CancellationToken cancellationToken)
         {
             return await Task.FromResult(new List<PostSelectDto>
             {
                 new PostSelectDto
                 {
                      FullTitle = "FullTitle",
-                     AuthorFullName =  "AuthorFullName",
+                     UserFullName =  "AuthorFullName",
                      CategoryName = "CategoryName",
                      Description = "Description",
                      Title = "Title",
@@ -44,9 +43,9 @@ namespace MyApi.Controllers.v2
             });
         }
 
-        public async override Task<ApiResult<PostSelectDto>> Get(Guid id, CancellationToken cancellationToken)
+        public override async Task<ApiResult<PostSelectDto>> Get(int id, CancellationToken cancellationToken)
         {
-            if (Guid.Empty == id)
+            if (id==0)
                 return NotFound();
             return await base.Get(id, cancellationToken);
         }
@@ -57,7 +56,7 @@ namespace MyApi.Controllers.v2
             return Content("This is test");
         }
 
-        public override Task<ApiResult<PostSelectDto>> Update(Guid id, PostDto dto, CancellationToken cancellationToken)
+        public override Task<ApiResult<PostSelectDto>> Update(int id, PostDto dto, CancellationToken cancellationToken)
         {
             return base.Update(id, dto, cancellationToken);
         }

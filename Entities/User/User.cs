@@ -29,6 +29,11 @@ namespace Entities.User
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(p => p.UserName).IsRequired().HasMaxLength(100);
+            builder.Property(p => p.Email).IsRequired().HasMaxLength(100);
+            builder.Property(p => p.PasswordHash).IsRequired().HasMaxLength(100);
+
+            builder.HasIndex(a => a.Email).HasName("IX_User_Email").IsUnique();
+            builder.HasIndex(a => a.PhoneNumber).HasName("IX_User_Phone").IsUnique();
         }
     }
 

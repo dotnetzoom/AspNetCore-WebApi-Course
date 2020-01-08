@@ -53,8 +53,8 @@ namespace MyApi.Controllers.v1
             return Ok(list);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<ApiResult<PostSelectDto>> Get(Guid id, CancellationToken cancellationToken)
+        [HttpGet("{id:int}")]
+        public async Task<ApiResult<PostSelectDto>> Get(int id, CancellationToken cancellationToken)
         {
             var dto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>()
                 .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
