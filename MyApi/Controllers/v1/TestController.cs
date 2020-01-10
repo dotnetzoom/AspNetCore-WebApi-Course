@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using Entities.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Entities.User;
 using Swashbuckle.AspNetCore.Filters;
 using WebFramework.Api;
 
@@ -36,26 +36,26 @@ namespace MyApi.Controllers.v1
         public int Discount { get; set; }
     }
 
-    ///// <summary>
-    ///// Retrieves a specific product by unique id
-    ///// </summary>
-    ///// <param name="param1">Parameter 1 description</param>
-    ///// <param name="param2">Parameter 2 description</param>
-    ///// <param name="param3">Parameter 2 description</param>
-    ///// <remarks>Awesomeness!</remarks>
-    ///// <response code="200">Product created</response>
-    ///// <response code="400">Product has missing/invalid values</response>
-    ///// <response code="500">Oops! Can't create your product right now</response>
-    //[HttpGet("Test")]
-    //public ActionResult Test(/*
-    //        IFormFile file, ...
-    //        [FromQuery] Address address, ...
-    //        [FromForm] parameter, ...
-    //        [FromBody] parameter, ...
-    //        [Required] parameter, ... */)
-    //{
-    //    throw new NotImplementedException();
-    //}
+///// <summary>
+///// Retrieves a specific product by unique id
+///// </summary>
+///// <param name="param1">Parameter 1 description</param>
+///// <param name="param2">Parameter 2 description</param>
+///// <param name="param3">Parameter 2 description</param>
+///// <remarks>Awesomeness!</remarks>
+///// <response code="200">Product created</response>
+///// <response code="400">Product has missing/invalid values</response>
+///// <response code="500">Oops! Can't create your product right now</response>
+//[HttpGet("Test")]
+//public ActionResult Test(/*
+//        IFormFile file, ...
+//        [FromQuery] Address address, ...
+//        [FromForm] parameter, ...
+//        [FromBody] parameter, ...
+//        [Required] parameter, ... */)
+//{
+//    throw new NotImplementedException();
+//}
     #endregion
 
     [ApiVersion("1")]
@@ -128,34 +128,34 @@ namespace MyApi.Controllers.v1
             return Ok();
         }
     }
-}
 
-public class CreateUserRequestExample : IExamplesProvider<object>
-{
-    public object GetExamples()
+    public class CreateUserRequestExample : IExamplesProvider<object>
     {
-        return new UserDto
+        public object GetExamples()
         {
-            FullName = "محمد حسین کرمی",
-            UserName = "mhkarami97",
-            Email = "mhkarami1997@gmail.com",
-            Gender = GenderType.Male,
-            Password = "1234567"
-        };
+            return new UserDto
+            {
+                FullName = "محمد حسین کرمی",
+                UserName = "mhkarami97",
+                Email = "mhkarami1997@gmail.com",
+                Gender = GenderType.Male,
+                Password = "1234567"
+            };
+        }
     }
-}
 
-public class CreateUserResponseExample : IExamplesProvider<object>
-{
-    public object GetExamples()
+    public class CreateUserResponseExample : IExamplesProvider<object>
     {
-        return new UserDto
+        public object GetExamples()
         {
-            FullName = "محمد حسین کرمی",
-            UserName = "mhkarami97",
-            Email = "mhkarami1997@gmail.com",
-            Gender = GenderType.Male,
-            Password = "1234567"
-        };
+            return new UserDto
+            {
+                FullName = "محمد حسین کرمی",
+                UserName = "mhkarami97",
+                Email = "mhkarami1997@gmail.com",
+                Gender = GenderType.Male,
+                Password = "1234567"
+            };
+        }
     }
 }

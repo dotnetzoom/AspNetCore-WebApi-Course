@@ -24,7 +24,8 @@ namespace Services.DataInitializer
             var user = new User
             {
                 Birthday = DateTime.Now,
-                FullName = "محمد حسین کرمی",
+                FirstName = "mohammad",
+                LastName = "karami",
                 Gender = GenderType.Male,
                 UserName = "mhkarami97",
                 Email = "mhkarami1997@gmail.com"

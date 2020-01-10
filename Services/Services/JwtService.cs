@@ -20,10 +20,10 @@ namespace Services.Services
     {
         private readonly SiteSettings _siteSetting;
         private readonly SignInManager<User> _signInManager;
-        private readonly IRepository<UserToken> _repository;
+        private readonly IRepository<UserTokenHandler> _repository;
         private readonly ISecurityService _securityService;
 
-        public JwtService(IOptions<SiteSettings> settings, SignInManager<User> signInManager, IRepository<UserToken> repository, ISecurityService securityService)
+        public JwtService(IOptions<SiteSettings> settings, SignInManager<User> signInManager, IRepository<UserTokenHandler> repository, ISecurityService securityService)
         {
             _siteSetting = settings.Value;
             _signInManager = signInManager;
@@ -76,7 +76,7 @@ namespace Services.Services
             return new AccessToken(accessToken, refreshToken, expires);
         }
 
-        public async Task AddUserTokenAsync(UserToken userToken)
+        public async Task AddUserTokenAsync(UserTokenHandler userToken)
         {
             if (!_siteSetting.JwtSettings.AllowMultipleLoginsFromTheSameUser)
             {
@@ -104,7 +104,7 @@ namespace Services.Services
         {
             var now = DateTimeOffset.UtcNow;
 
-            var token = new UserToken
+            var token = new UserTokenHandler
             {
                 UserId = user.Id,
                 // Refresh token handles should be treated as secrets and should be stored hashed
@@ -138,7 +138,7 @@ namespace Services.Services
                 });
         }
 
-        public Task<UserToken> FindTokenAsync(string refreshTokenValue)
+        public Task<UserTokenHandler> FindTokenAsync(string refreshTokenValue)
         {
             if (string.IsNullOrWhiteSpace(refreshTokenValue))
                 return null;

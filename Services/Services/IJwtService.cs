@@ -13,9 +13,9 @@ namespace Services.Services
 
         Task DeleteTokensWithSameRefreshTokenSourceAsync(string refreshTokenIdHashSource);
 
-        Task AddUserTokenAsync(UserToken userToken);
+        Task AddUserTokenAsync(UserTokenHandler userToken);
 
-        Task<UserToken> FindTokenAsync(string refreshTokenValue);
+        Task<UserTokenHandler> FindTokenAsync(string refreshTokenValue);
 
         string GetRefreshTokenSerial(string refreshTokenValue);
     }

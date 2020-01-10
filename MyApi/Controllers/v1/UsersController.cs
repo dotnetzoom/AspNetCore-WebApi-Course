@@ -160,7 +160,8 @@ namespace MyApi.Controllers.v1
             var user = new User
             {
                 Birthday = DateTime.Now,
-                FullName = userDto.FullName,
+                FirstName = userDto.FullName,
+                LastName = userDto.FullName,
                 Gender = userDto.Gender,
                 UserName = userDto.UserName,
                 Email = userDto.Email
@@ -181,7 +182,8 @@ namespace MyApi.Controllers.v1
 
             updateUser.UserName = user.UserName;
             updateUser.PasswordHash = user.PasswordHash;
-            updateUser.FullName = user.FullName;
+            updateUser.FirstName = user.FirstName;
+            updateUser.LastName=user.LastName;
             updateUser.Birthday = user.Birthday;
             updateUser.Gender = user.Gender;
             updateUser.IsActive = user.IsActive;
