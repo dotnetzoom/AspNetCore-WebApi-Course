@@ -4,9 +4,13 @@ using System.Threading;
 using System.Reflection;
 using System.Threading.Tasks;
 using Entities.Common;
+using Entities.Identity.Configurations;
+using Entities.Identity.Settings;
 using Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace Data
 {
@@ -37,6 +41,8 @@ namespace Data
             modelBuilder.AddRestrictDeleteBehaviorConvention();
             modelBuilder.AddSequentialGuidForIdConvention();
             modelBuilder.AddPluralizingTableNameConvention();
+
+            modelBuilder.AddCustomIdentityMappings(this.GetService<IOptionsSnapshot<SiteSettings>>()?.Value);
         }
 
         public override int SaveChanges()

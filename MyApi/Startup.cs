@@ -2,6 +2,7 @@
 using AspNetCoreRateLimit;
 using Autofac;
 using Common;
+using Common.WebToolkit;
 using WebFramework.Swagger;
 using WebFramework.Middlewares;
 using WebFramework.Configuration;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OwaspHeaders.Core.Extensions;
+using WebFramework.Configuration.Identity;
 
 namespace MyApi
 {
@@ -43,7 +45,10 @@ namespace MyApi
 
             services.AddDbContext(Configuration);
 
-            services.AddCustomIdentity(_siteSetting.IdentitySettings);
+            //services.AddCustomIdentity(_siteSetting.IdentitySettings);
+
+            // Adds all of the ASP.NET Core Identity related services and configurations at once.
+            services.AddCustomIdentityServices();
 
             services.AddMinimalMvc();
 
@@ -105,6 +110,8 @@ namespace MyApi
             app.UseHsts();
 
             //app.UseElmah();
+
+            app.UseContentSecurityPolicy();
 
             app.UseHttpsRedirection();
 

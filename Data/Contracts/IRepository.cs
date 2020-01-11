@@ -36,5 +36,11 @@ namespace Data.Contracts
         Task UpdateAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true);
         void UpdateRange(IEnumerable<TEntity> entities, bool saveNow = true);
         Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true);
+        void BeginTransaction();
+        void RollbackTransaction();
+        void CommitTransaction();
+        void Dispose();
+        void ExecuteSqlInterpolatedCommand(FormattableString query);
+        void ExecuteSqlRawCommand(string query, params object[] parameters);
     }
 }

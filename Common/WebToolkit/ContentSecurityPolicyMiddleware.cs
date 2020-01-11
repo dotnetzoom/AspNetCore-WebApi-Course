@@ -21,10 +21,10 @@ namespace Common.WebToolkit
         {
             _next = next;
             _configuration = configuration;
-            _contentSecurityPolicyValue = getContentSecurityPolicyValue();
+            _contentSecurityPolicyValue = GetContentSecurityPolicyValue();
         }
 
-        private string getContentSecurityPolicyValue()
+        private string GetContentSecurityPolicyValue()
         {
             var contentSecurityPolicyErrorLogUri = _configuration["ContentSecurityPolicyErrorLogUri"];
             if (string.IsNullOrWhiteSpace(contentSecurityPolicyErrorLogUri))

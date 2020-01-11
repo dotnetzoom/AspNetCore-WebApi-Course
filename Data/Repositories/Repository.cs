@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Data.Contracts;
 using Entities.Common;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Data.Repositories
 {
@@ -15,6 +16,7 @@ namespace Data.Repositories
         where TEntity : class, IEntity
     {
         protected readonly ApplicationDbContext DbContext;
+        private IDbContextTransaction _transaction;
         public DbSet<TEntity> Entities { get; }
         public virtual IQueryable<TEntity> Table => Entities;
         public virtual IQueryable<TEntity> TableNoTracking => Entities.AsNoTracking();
@@ -200,6 +202,53 @@ namespace Data.Repositories
         {
             return DbContext.Entry(entity).Property(propertyName).CurrentValue;
         }
+        #endregion
+
+        #region SqlRaw
+
+        public void ExecuteSqlInterpolatedCommand(FormattableString query)
+        {
+            DbContext.Database.ExecuteSqlInterpolated(query);
+        }
+
+        public void ExecuteSqlRawCommand(string query, params object[] parameters)
+        {
+            DbContext.Database.ExecuteSqlRaw(query, parameters);
+        }
+
+        #endregion
+
+        #region Transaction
+
+        public void BeginTransaction()
+        {
+            _transaction = DbContext.Database.BeginTransaction();
+        }
+
+        public void RollbackTransaction()
+        {
+            if (_transaction == null)
+            {
+                throw new NullReferenceException("Please call `BeginTransaction()` method first.");
+            }
+            _transaction.Rollback();
+        }
+
+        public void CommitTransaction()
+        {
+            if (_transaction == null)
+            {
+                throw new NullReferenceException("Please call `BeginTransaction()` method first.");
+            }
+            _transaction.Commit();
+        }
+
+        public void Dispose()
+        {
+            _transaction?.Dispose();
+            DbContext.Dispose();
+        }
+
         #endregion
     }
 }
