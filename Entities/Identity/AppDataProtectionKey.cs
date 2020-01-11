@@ -1,6 +1,8 @@
+using Entities.Common;
+
 namespace Entities.Identity
 {
-    public class AppDataProtectionKey
+    public class AppDataProtectionKey: IEntity
     {
         public int Id { get; set; }
         public string FriendlyName { get; set; }

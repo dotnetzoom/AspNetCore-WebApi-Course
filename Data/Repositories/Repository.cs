@@ -195,6 +195,11 @@ namespace Data.Repositories
             if (!reference.IsLoaded)
                 reference.Load();
         }
+
+        public object GetShadowPropertyValue(object entity, string propertyName)
+        {
+            return DbContext.Entry(entity).Property(propertyName).CurrentValue;
+        }
         #endregion
     }
 }

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using System.Threading;
+using Data.Contracts;
 using Entities.AuditableEntity;
 using Entities.Identity.Settings;
 using Entities.User;
@@ -16,17 +18,17 @@ namespace Services.Identity
         private readonly int _changePasswordReminderDays;
         private readonly int _notAllowedPreviouslyUsedPasswords;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IUnitOfWork _uow;
-        private readonly DbSet<UserUsedPassword> _userUsedPasswords;
+        private readonly IRepository<UserUsedPassword> _repository;
+        //private readonly DbSet<UserUsedPassword> _userUsedPasswords;
 
         public UsedPasswordsService(
-            IUnitOfWork uow,
+            IRepository<UserUsedPassword> repository,
             IPasswordHasher<User> passwordHasher,
             IOptionsSnapshot<SiteSettings> configurationRoot)
         {
-            _uow = uow ?? throw new ArgumentNullException(nameof(_uow));
+            _repository = repository ?? throw new ArgumentNullException(nameof(_repository));
 
-            _userUsedPasswords = _uow.Set<UserUsedPassword>() ?? throw new ArgumentNullException(nameof(_userUsedPasswords));
+            //_userUsedPasswords = _repository.Set<UserUsedPassword>() ?? throw new ArgumentNullException(nameof(_userUsedPasswords));
             _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(_passwordHasher));
             if (configurationRoot == null) throw new ArgumentNullException(nameof(configurationRoot));
             var configurationRootValue = configurationRoot.Value;
@@ -37,18 +39,20 @@ namespace Services.Identity
 
         public async Task AddToUsedPasswordsListAsync(User user)
         {
-            await _userUsedPasswords.AddAsync(new UserUsedPassword
+            var token=new CancellationToken();
+
+            await _repository.AddAsync(new UserUsedPassword
             {
                 UserId = user.Id,
                 HashedPassword = user.PasswordHash
-            });
-            await _uow.SaveChangesAsync();
+            }, token);
+            //await _repository.SaveChangesAsync();
         }
 
         public async Task<DateTime?> GetLastUserPasswordChangeDateAsync(int userId)
         {
             var lastPasswordHistory =
-                await _userUsedPasswords//.AsNoTracking() --> removes shadow properties
+                await _repository.Table//.AsNoTracking() --> removes shadow properties
                                         .OrderByDescending(userUsedPassword => userUsedPassword.Id)
                                         .FirstOrDefaultAsync(userUsedPassword => userUsedPassword.UserId == userId);
             if (lastPasswordHistory == null)
@@ -56,7 +60,7 @@ namespace Services.Identity
                 return null;
             }
 
-            var createdDateValue = _uow.GetShadowPropertyValue(lastPasswordHistory, AuditableShadowProperties.CreatedDateTime);
+            var createdDateValue = _repository.GetShadowPropertyValue(lastPasswordHistory, AuditableShadowProperties.CreatedDateTime);
             return createdDateValue == null ?
                       (DateTime?)null :
                       DateTime.SpecifyKind((DateTime)createdDateValue, DateTimeKind.Utc);
@@ -85,8 +89,7 @@ namespace Services.Identity
             }
 
             var userId = user.Id;
-            var usedPasswords = await _userUsedPasswords
-                                .AsNoTracking()
+            var usedPasswords = await _repository.TableNoTracking
                                 .Where(userUsedPassword => userUsedPassword.UserId == userId)
                                 .OrderByDescending(userUsedPassword => userUsedPassword.Id)
                                 .Select(userUsedPassword => userUsedPassword.HashedPassword)

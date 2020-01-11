@@ -12,15 +12,15 @@ namespace Services.Identity
         RoleStore<Role, ApplicationDbContext, int, UserRole, RoleClaim>,
         IApplicationRoleStore
     {
-        private readonly IUnitOfWork _uow;
+        private readonly ApplicationDbContext _context;
         private readonly IdentityErrorDescriber _describer;
 
         public ApplicationRoleStore(
-            IUnitOfWork uow,
+            ApplicationDbContext context,
             IdentityErrorDescriber describer)
-            : base((ApplicationDbContext)uow, describer)
+            : base(context, describer)
         {
-            _uow = uow ?? throw new ArgumentNullException(nameof(_uow));
+            _context = context ?? throw new ArgumentNullException(nameof(_context));
             _describer = describer ?? throw new ArgumentNullException(nameof(_describer));
         }
 

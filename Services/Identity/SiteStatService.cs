@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System;
+using Data.Contracts;
 using DNTPersianUtils.Core;
 using Entities.Identity;
 using Entities.User;
@@ -13,24 +14,24 @@ namespace Services.Identity
 {
     public class SiteStatService : ISiteStatService
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IUserRepository _repository;
         private readonly IApplicationUserManager _userManager;
-        private readonly DbSet<User> _users;
+        //private readonly DbSet<User> _users;
 
         public SiteStatService(
             IApplicationUserManager userManager,
-            IUnitOfWork uow)
+            IUserRepository repository)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(_userManager));
-            _uow = uow ?? throw new ArgumentNullException(nameof(_uow));
-            _users = uow.Set<User>();
+            _repository = repository ?? throw new ArgumentNullException(nameof(_repository));
+            //_users = repository.Set<User>();
         }
 
         public Task<List<User>> GetOnlineUsersListAsync(int numbersToTake, int minutesToTake)
         {
             var now = DateTime.UtcNow;
             var minutes = now.AddMinutes(-minutesToTake);
-            return _users.AsNoTracking()
+            return _repository.TableNoTracking
                          .Where(user => user.LastVisitDateTime != null && user.LastVisitDateTime.Value <= now
                                         && user.LastVisitDateTime.Value >= minutes)
                          .OrderByDescending(user => user.LastVisitDateTime)
@@ -43,7 +44,7 @@ namespace Services.Identity
             var now = DateTime.UtcNow;
             var day = now.Day;
             var month = now.Month;
-            return _users.AsNoTracking()
+            return _repository.TableNoTracking
                          .Where(user => user.Birthday != null && user.IsActive
                                         && user.Birthday.Value.Day == day
                                         && user.Birthday.Value.Month == month)
@@ -52,7 +53,7 @@ namespace Services.Identity
 
         public async Task<AgeStatViewModel> GetUsersAverageAge()
         {
-            var users = await _users.AsNoTracking()
+            var users = await _repository.TableNoTracking
                                     .Where(x => x.Birthday != null && x.IsActive)
                                     .OrderBy(x => x.Birthday)
                                     .ToListAsync();

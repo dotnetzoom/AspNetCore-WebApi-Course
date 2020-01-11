@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System;
 using Common.Utilities;
 using Data;
+using Data.Contracts;
 using DNTCommon.Web.Core;
 using Entities.Identity;
 using Entities.User;
@@ -23,17 +24,16 @@ namespace Services.Identity
         IApplicationUserManager
     {
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly IUnitOfWork _uow;
+        private readonly IUserRepository _repository;
         private readonly IUsedPasswordsService _usedPasswordsService;
         private readonly IdentityErrorDescriber _errors;
         private readonly ILookupNormalizer _keyNormalizer;
         private readonly ILogger<ApplicationUserManager> _logger;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IOptions<IdentityOptions> _optionsAccessor;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IEnumerable<IPasswordValidator<User>> _passwordValidators;
         private readonly IServiceProvider _services;
-        private readonly DbSet<User> _users;
-        private readonly DbSet<Role> _roles;
         private readonly IApplicationUserStore _userStore;
         private readonly IEnumerable<IUserValidator<User>> _userValidators;
         private User _currentUserInScope;
@@ -49,8 +49,8 @@ namespace Services.Identity
             IServiceProvider services,
             ILogger<ApplicationUserManager> logger,
             IHttpContextAccessor contextAccessor,
-            IUnitOfWork uow,
-            IUsedPasswordsService usedPasswordsService)
+            IUserRepository repository,
+            IUsedPasswordsService usedPasswordsService, RoleManager<Role> roleManager)
             : base(
                 (UserStore<User, Role, ApplicationDbContext, int, UserClaim, UserRole, UserLogin, UserToken, RoleClaim>)store,
                   optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
@@ -65,10 +65,11 @@ namespace Services.Identity
             _services = services ?? throw new ArgumentNullException(nameof(_services));
             _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
             _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(_contextAccessor));
-            _uow = uow ?? throw new ArgumentNullException(nameof(_uow));
+            _repository = repository ?? throw new ArgumentNullException(nameof(_repository));
             _usedPasswordsService = usedPasswordsService ?? throw new ArgumentNullException(nameof(_usedPasswordsService));
-            _users = uow.Set<User>();
-            _roles = uow.Set<Role>();
+            _roleManager = roleManager;
+            //_users = repository.Set<User>();
+            //_roles = repository.Set<Role>();
         }
 
         #region BaseClass
@@ -129,12 +130,12 @@ namespace Services.Identity
 
         public User FindById(int userId)
         {
-            return _users.Find(userId);
+            return _repository.TableNoTracking.Single(a => a.Id.Equals(userId));
         }
 
         public Task<User> FindByIdIncludeUserRolesAsync(int userId)
         {
-            return _users.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id == userId);
+            return _repository.TableNoTracking.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id == userId);
         }
 
         public Task<List<User>> GetAllUsersAsync()
@@ -226,7 +227,7 @@ namespace Services.Identity
         public async Task<PagedUsersListViewModel> GetPagedUsersListAsync(SearchUsersViewModel model, int pageNumber)
         {
             var skipRecords = pageNumber * model.MaxNumberOfRows;
-            var query = _users.Include(x => x.Roles).AsNoTracking();
+            var query = _repository.TableNoTracking.Include(x => x.Roles).AsNoTracking();
 
             if (!model.ShowAllUsers)
             {
@@ -294,7 +295,7 @@ namespace Services.Identity
                     TotalItems = await query.CountAsync()
                 },
                 Users = await query.Skip(skipRecords).Take(model.MaxNumberOfRows).ToListAsync(),
-                Roles = await _roles.ToListAsync()
+                Roles = await _roleManager.Roles.ToListAsync()
             };
         }
 
@@ -304,7 +305,7 @@ namespace Services.Identity
             bool showAllUsers)
         {
             var skipRecords = pageNumber * recordsPerPage;
-            var query = _users.Include(x => x.Roles).AsNoTracking();
+            var query = _repository.TableNoTracking.Include(x => x.Roles).AsNoTracking();
 
             if (!showAllUsers)
             {
@@ -328,7 +329,7 @@ namespace Services.Identity
                     TotalItems = await query.CountAsync()
                 },
                 Users = await query.Skip(skipRecords).Take(recordsPerPage).ToListAsync(),
-                Roles = await _roles.ToListAsync()
+                Roles = await _roleManager.Roles.ToListAsync()
             };
         }
 

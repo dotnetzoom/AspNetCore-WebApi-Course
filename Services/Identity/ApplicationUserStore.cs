@@ -14,15 +14,15 @@ namespace Services.Identity
         UserStore<User, Role, ApplicationDbContext, int, UserClaim, UserRole, UserLogin, UserToken, RoleClaim>,
         IApplicationUserStore
     {
-        private readonly IUnitOfWork _uow;
+        private readonly ApplicationDbContext _context;
         private readonly IdentityErrorDescriber _describer;
 
         public ApplicationUserStore(
-            IUnitOfWork uow,
+            ApplicationDbContext context,
             IdentityErrorDescriber describer)
-            : base((ApplicationDbContext)uow, describer)
+            : base(context, describer)
         {
-            _uow = uow ?? throw new ArgumentNullException(nameof(_uow));
+            _context = context ?? throw new ArgumentNullException(nameof(_context));
             _describer = describer ?? throw new ArgumentNullException(nameof(_describer));
         }
 
@@ -81,11 +81,6 @@ namespace Services.Identity
             return base.FindTokenAsync(user, loginProvider, name, cancellationToken);
         }
 
-        public Task RemoveUserTokenAsync(UserToken token)
-        {
-            throw new NotImplementedException();
-        }
-
         Task<User> IApplicationUserStore.FindUserAsync(int userId, CancellationToken cancellationToken)
         {
             return base.FindUserAsync(userId, cancellationToken);
@@ -99,11 +94,6 @@ namespace Services.Identity
         Task<UserLogin> IApplicationUserStore.FindUserLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             return base.FindUserLoginAsync(loginProvider, providerKey, cancellationToken);
-        }
-
-        public Task<UserToken> FindTokenAsync(User user, string loginProvider, string name, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
 
         Task<UserRole> IApplicationUserStore.FindUserRoleAsync(int userId, int roleId, CancellationToken cancellationToken)

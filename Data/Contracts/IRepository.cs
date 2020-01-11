@@ -25,6 +25,7 @@ namespace Data.Contracts
         void DeleteRange(IEnumerable<TEntity> entities, bool saveNow = true);
         Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken, bool saveNow = true);
         void Detach(TEntity entity);
+        object GetShadowPropertyValue(object entity, string propertyName);
         TEntity GetById(params object[] ids);
         ValueTask<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids);
         void LoadCollection<TProperty>(TEntity entity, Expression<Func<TEntity, IEnumerable<TProperty>>> collectionProperty) where TProperty : class;

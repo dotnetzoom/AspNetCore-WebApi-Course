@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System;
 using Common.Utilities;
 using Data;
+using Data.Contracts;
 using Entities.Identity;
 using Entities.User;
 using Services.Contracts.Identity;
@@ -20,13 +21,13 @@ namespace Services.Identity
         IApplicationRoleManager
     {
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly IUnitOfWork _uow;
+        private readonly IUserRepository _repository;
         private readonly IdentityErrorDescriber _errors;
         private readonly ILookupNormalizer _keyNormalizer;
         private readonly ILogger<ApplicationRoleManager> _logger;
         private readonly IEnumerable<IRoleValidator<Role>> _roleValidators;
         private readonly IApplicationRoleStore _store;
-        private readonly DbSet<User> _users;
+        //private readonly DbSet<User> _users;
 
         public ApplicationRoleManager(
             IApplicationRoleStore store,
@@ -35,7 +36,7 @@ namespace Services.Identity
             IdentityErrorDescriber errors,
             ILogger<ApplicationRoleManager> logger,
             IHttpContextAccessor contextAccessor,
-            IUnitOfWork uow) :
+            IUserRepository repository) :
             base((RoleStore<Role, ApplicationDbContext, int, UserRole, RoleClaim>)store, roleValidators, keyNormalizer, errors, logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(_store));
@@ -44,8 +45,8 @@ namespace Services.Identity
             _errors = errors ?? throw new ArgumentNullException(nameof(_errors));
             _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
             _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(_contextAccessor));
-            _uow = uow ?? throw new ArgumentNullException(nameof(_uow));
-            _users = _uow.Set<User>();
+            _repository = repository ?? throw new ArgumentNullException(nameof(_repository));
+            //_users = _repository.Set<User>();
         }
 
         #region BaseClass
@@ -97,9 +98,8 @@ namespace Services.Identity
                                    where role.Id == roleId
                                    from user in role.Users
                                    select user.UserId;
-            var query = _users.Include(user => user.Roles)
-                              .Where(user => roleUserIdsQuery.Contains(user.Id))
-                         .AsNoTracking();
+            var query = _repository.TableNoTracking.Include(user => user.Roles)
+                              .Where(user => roleUserIdsQuery.Contains(user.Id));
 
             if (!showAllUsers)
             {
@@ -133,7 +133,7 @@ namespace Services.Identity
                                    where role.Name == roleName
                                    from user in role.Users
                                    select user.UserId;
-            return _users.Where(applicationUser => roleUserIdsQuery.Contains(applicationUser.Id))
+            return _repository.TableNoTracking.Where(applicationUser => roleUserIdsQuery.Contains(applicationUser.Id))
                          .ToList();
         }
 

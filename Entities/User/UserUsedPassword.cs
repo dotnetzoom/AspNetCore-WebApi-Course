@@ -1,7 +1,9 @@
 ﻿using Entities.AuditableEntity;
+using Entities.Common;
+
 namespace Entities.User
 {
-    public class UserUsedPassword : IAuditableEntity
+    public class UserUsedPassword : IEntity, IAuditableEntity
     {
         public int Id { get; set; }
 

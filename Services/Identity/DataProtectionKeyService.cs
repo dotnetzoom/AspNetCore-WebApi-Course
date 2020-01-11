@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Linq;
+using Data.Contracts;
 using DNTCommon.Web.Core;
 using Entities.Identity;
 using Microsoft.AspNetCore.DataProtection.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Services.Contracts.Identity;
 
 namespace Services.Identity
 {
@@ -25,9 +24,9 @@ namespace Services.Identity
 
         public IReadOnlyCollection<XElement> GetAllElements()
         {
-            return _serviceProvider.RunScopedService<ReadOnlyCollection<XElement>, IUnitOfWork>(context =>
+            return _serviceProvider.RunScopedService<ReadOnlyCollection<XElement>, IRepository<AppDataProtectionKey>>(context =>
               {
-                  var dataProtectionKeys = context.Set<AppDataProtectionKey>().AsNoTracking();
+                  var dataProtectionKeys = context.TableNoTracking;
                   var logger = _logger;
                   return dataProtectionKeys.Select(key => TryParseKeyXml(key.XmlData, logger)).ToList().AsReadOnly();
               });
@@ -50,10 +49,10 @@ namespace Services.Identity
         {
             // We need a separate context to call its SaveChanges several times,
             // without using the current request's context and changing its internal state.
-            _serviceProvider.RunScopedService<IUnitOfWork>(context =>
+            _serviceProvider.RunScopedService<IRepository<AppDataProtectionKey>>(context =>
             {
-                var dataProtectionKeys = context.Set<AppDataProtectionKey>();
-                var entity = dataProtectionKeys.SingleOrDefault(k => k.FriendlyName == friendlyName);
+                var dataProtectionKeys = context;
+                var entity = dataProtectionKeys.Table.SingleOrDefault(k => k.FriendlyName == friendlyName);
                 if (entity != null)
                 {
                     entity.XmlData = element.ToString();
@@ -67,7 +66,7 @@ namespace Services.Identity
                         XmlData = element.ToString(SaveOptions.DisableFormatting)
                     });
                 }
-                context.SaveChanges();
+                //context.SaveChanges();
             });
         }
     }
