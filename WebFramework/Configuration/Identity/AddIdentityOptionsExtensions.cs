@@ -37,11 +37,11 @@ namespace WebFramework.Configuration.Identity
               .AddDefaultTokenProviders()
               .AddTokenProvider<ConfirmEmailDataProtectorTokenProvider<User>>(EmailConfirmationTokenProviderName);
 
-            // services.ConfigureApplicationCookie(identityOptionsCookies =>
-            // {
-            //     var provider = services.BuildServiceProvider();
-            //     SetApplicationCookieOptions(provider, identityOptionsCookies, siteSettings);
-            // });
+            services.ConfigureApplicationCookie(identityOptionsCookies =>
+            {
+                var provider = services.BuildServiceProvider();
+                SetApplicationCookieOptions(provider, identityOptionsCookies, siteSettings);
+            });
 
             services.EnableImmediateLogout();
 
