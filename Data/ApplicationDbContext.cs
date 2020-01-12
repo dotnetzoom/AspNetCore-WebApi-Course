@@ -42,7 +42,7 @@ namespace Data
             modelBuilder.AddSequentialGuidForIdConvention();
             modelBuilder.AddPluralizingTableNameConvention();
 
-            modelBuilder.AddCustomIdentityMappings(this.GetService<IOptionsSnapshot<SiteSettings>>()?.Value);
+            modelBuilder.AddCustomIdentityMappings(this.GetService<IOptionsSnapshot<IdentitySiteSettings>>()?.Value);
         }
 
         public override int SaveChanges()

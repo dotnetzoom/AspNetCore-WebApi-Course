@@ -24,7 +24,7 @@ namespace Services.Identity
         public UsedPasswordsService(
             IRepository<UserUsedPassword> repository,
             IPasswordHasher<User> passwordHasher,
-            IOptionsSnapshot<SiteSettings> configurationRoot)
+            IOptionsSnapshot<IdentitySiteSettings> configurationRoot)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(_repository));
 

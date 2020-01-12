@@ -17,7 +17,7 @@ namespace Services.Identity
 
         public CustomPasswordValidator(
             IdentityErrorDescriber errors,// How to use CustomIdentityErrorDescriber
-            IOptionsSnapshot<SiteSettings> configurationRoot,
+            IOptionsSnapshot<IdentitySiteSettings> configurationRoot,
             IUsedPasswordsService usedPasswordsService) : base(errors)
         {
             _usedPasswordsService = usedPasswordsService ?? throw new ArgumentNullException(nameof(_usedPasswordsService));

@@ -14,12 +14,12 @@ namespace Services.Identity
     {
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly IOptionsSnapshot<SiteSettings> _siteSettings;
+        private readonly IOptionsSnapshot<IdentitySiteSettings> _siteSettings;
 
         public UsersPhotoService(
             IHttpContextAccessor contextAccessor,
             IWebHostEnvironment hostingEnvironment,
-            IOptionsSnapshot<SiteSettings> siteSettings)
+            IOptionsSnapshot<IdentitySiteSettings> siteSettings)
         {
             _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(_contextAccessor));
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(_hostingEnvironment));

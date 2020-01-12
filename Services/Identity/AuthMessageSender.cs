@@ -9,11 +9,11 @@ namespace Services.Identity
 {
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        private readonly IOptionsSnapshot<SiteSettings> _smtpConfig;
+        private readonly IOptionsSnapshot<IdentitySiteSettings> _smtpConfig;
         private readonly IWebMailService _webMailService;
 
         public AuthMessageSender(
-            IOptionsSnapshot<SiteSettings> smtpConfig,
+            IOptionsSnapshot<IdentitySiteSettings> smtpConfig,
             IWebMailService webMailService)
         {
             _smtpConfig = smtpConfig ?? throw new ArgumentNullException(nameof(_smtpConfig));

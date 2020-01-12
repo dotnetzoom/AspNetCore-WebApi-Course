@@ -22,9 +22,9 @@ namespace MyApi.Controllers.v1
         private readonly IApplicationUserManager _userManager;
         private readonly IApplicationSignInManager _signInManager;
         private readonly IPasswordValidator<User> _passwordValidator;
-        private readonly IOptionsSnapshot<SiteSettings> _siteOptions;
+        private readonly IOptionsSnapshot<IdentitySiteSettings> _siteOptions;
 
-        public PasswordsController(IApplicationUserManager userManager, IEmailSender emailSender, IOptionsSnapshot<SiteSettings> siteOptions, IPasswordValidator<User> passwordValidator, IApplicationSignInManager signInManager)
+        public PasswordsController(IApplicationUserManager userManager, IEmailSender emailSender, IOptionsSnapshot<IdentitySiteSettings> siteOptions, IPasswordValidator<User> passwordValidator, IApplicationSignInManager signInManager)
         {
             _userManager = userManager;
             _emailSender = emailSender;

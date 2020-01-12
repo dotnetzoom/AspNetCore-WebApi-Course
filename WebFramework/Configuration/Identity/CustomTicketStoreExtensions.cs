@@ -9,7 +9,7 @@ namespace WebFramework.Configuration.Identity
     public static class CustomTicketStoreExtensions
     {
         public static IServiceCollection AddCustomTicketStore(
-            this IServiceCollection services, SiteSettings siteSettings)
+            this IServiceCollection services, IdentitySiteSettings siteSettings)
         {
             // To manage large identity cookies
             var cookieOptions = siteSettings.CookieOptions;

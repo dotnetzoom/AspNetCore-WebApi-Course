@@ -5,7 +5,7 @@ namespace Entities.Identity.Configurations
 {
     public static class IdentityMappings
     {
-        public static void AddCustomIdentityMappings(this ModelBuilder modelBuilder, SiteSettings siteSettings)
+        public static void AddCustomIdentityMappings(this ModelBuilder modelBuilder, IdentitySiteSettings siteSettings)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(IdentityMappings).Assembly);
 

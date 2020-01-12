@@ -20,13 +20,13 @@ namespace MyApi.Controllers.v1
         private readonly ILogger<TwoFactorController> _logger;
         private readonly IApplicationSignInManager _signInManager;
         private readonly IApplicationUserManager _userManager;
-        private readonly IOptionsSnapshot<SiteSettings> _siteOptions;
+        private readonly IOptionsSnapshot<IdentitySiteSettings> _siteOptions;
 
         public TwoFactorController(
             IApplicationUserManager userManager,
             IApplicationSignInManager signInManager,
             IEmailSender emailSender,
-            IOptionsSnapshot<SiteSettings> siteOptions,
+            IOptionsSnapshot<IdentitySiteSettings> siteOptions,
             ILogger<TwoFactorController> logger)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(_userManager));

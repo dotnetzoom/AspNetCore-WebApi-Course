@@ -1,4 +1,5 @@
 ﻿using System;
+using Entities.Common;
 
 namespace Entities.Identity
 {

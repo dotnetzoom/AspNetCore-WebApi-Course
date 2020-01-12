@@ -3,6 +3,7 @@ using AspNetCoreRateLimit;
 using Autofac;
 using Common;
 using Common.WebToolkit;
+using Entities.Identity.Settings;
 using WebFramework.Swagger;
 using WebFramework.Middlewares;
 using WebFramework.Configuration;
@@ -20,6 +21,7 @@ namespace MyApi
     public class Startup
     {
         private readonly SiteSettings _siteSetting;
+        private readonly IdentitySiteSettings _identitySiteSettings;
 
         public IConfiguration Configuration { get; }
 
@@ -34,6 +36,7 @@ namespace MyApi
             Configuration = builder.Build();
 
             _siteSetting = Configuration.GetSection(nameof(SiteSettings)).Get<SiteSettings>();
+            _identitySiteSettings = Configuration.GetSection(nameof(IdentitySiteSettings)).Get<IdentitySiteSettings>();
         }
 
         [Obsolete]
@@ -48,7 +51,7 @@ namespace MyApi
             //services.AddCustomIdentity(_siteSetting.IdentitySettings);
 
             // Adds all of the ASP.NET Core Identity related services and configurations at once.
-            services.AddCustomIdentityServices();
+            services.AddCustomIdentityServices(_identitySiteSettings);
 
             services.AddMinimalMvc();
 

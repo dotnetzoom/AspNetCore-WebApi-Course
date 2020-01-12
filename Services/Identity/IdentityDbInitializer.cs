@@ -17,7 +17,7 @@ namespace Services.Identity
 {
     public class IdentityDbInitializer : IIdentityDbInitializer
     {
-        private readonly IOptionsSnapshot<SiteSettings> _adminUserSeedOptions;
+        private readonly IOptionsSnapshot<IdentitySiteSettings> _adminUserSeedOptions;
         private readonly IApplicationUserManager _applicationUserManager;
         private readonly ILogger<IdentityDbInitializer> _logger;
         private readonly IApplicationRoleManager _roleManager;
@@ -27,7 +27,7 @@ namespace Services.Identity
             IApplicationUserManager applicationUserManager,
             IServiceScopeFactory scopeFactory,
             IApplicationRoleManager roleManager,
-            IOptionsSnapshot<SiteSettings> adminUserSeedOptions,
+            IOptionsSnapshot<IdentitySiteSettings> adminUserSeedOptions,
             ILogger<IdentityDbInitializer> logger
             )
         {

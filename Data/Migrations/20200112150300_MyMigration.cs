@@ -7,8 +7,25 @@ namespace Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "dbo");
+
             migrationBuilder.CreateTable(
-                name: "AspNetRole",
+                name: "AppDataProtectionKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FriendlyName = table.Column<string>(nullable: true),
+                    XmlData = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppDataProtectionKeys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -16,15 +33,15 @@ namespace Data.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(maxLength: 100, nullable: false)
+                    Description = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRole", x => x.Id);
+                    table.PrimaryKey("PK_AppRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUser",
+                name: "AppUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -43,15 +60,20 @@ namespace Data.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FullName = table.Column<string>(nullable: true),
-                    Birthday = table.Column<DateTime>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    PhotoFileName = table.Column<string>(maxLength: 450, nullable: true),
+                    Birthday = table.Column<DateTime>(nullable: true),
                     Gender = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    LastLoginDate = table.Column<DateTimeOffset>(nullable: true)
+                    LastLoginDate = table.Column<DateTimeOffset>(nullable: true),
+                    LastVisitDateTime = table.Column<DateTime>(nullable: true),
+                    IsEmailPublic = table.Column<bool>(nullable: false),
+                    Location = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUser", x => x.Id);
+                    table.PrimaryKey("PK_AppUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,12 +94,27 @@ namespace Data.Migrations
                         name: "FK_Category_Category_ParentCategoryId",
                         column: x => x.ParentCategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaim",
+                name: "AppSqlCache",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 449, nullable: false),
+                    Value = table.Column<byte[]>(nullable: false),
+                    ExpiresAtTime = table.Column<DateTimeOffset>(nullable: false),
+                    SlidingExpirationInSeconds = table.Column<long>(nullable: true),
+                    AbsoluteExpiration = table.Column<DateTimeOffset>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppSqlCache", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -88,17 +125,17 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaim", x => x.Id);
+                    table.PrimaryKey("PK_AppRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaim_AspNetRole_RoleId",
+                        name: "FK_AppRoleClaims_AppRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRole",
+                        principalTable: "AppRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserClaim",
+                name: "AppUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -109,17 +146,17 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserClaim", x => x.Id);
+                    table.PrimaryKey("PK_AppUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaim_AspNetUser_UserId",
+                        name: "FK_AppUserClaims_AppUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUser",
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserLogin",
+                name: "AppUserLogins",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
@@ -129,17 +166,17 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogin", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_AppUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogin_AspNetUser_UserId",
+                        name: "FK_AppUserLogins_AppUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUser",
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRole",
+                name: "AppUserRoles",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
@@ -147,23 +184,23 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRole", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AppUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRole_AspNetRole_RoleId",
+                        name: "FK_AppUserRoles_AppRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRole",
+                        principalTable: "AppRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRole_AspNetUser_UserId",
+                        name: "FK_AppUserRoles_AppUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUser",
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserToken",
+                name: "AppUserTokens",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
@@ -173,17 +210,37 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserToken", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_AppUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserToken_AspNetUser_UserId",
+                        name: "FK_AppUserTokens_AppUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUser",
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserToken",
+                name: "AppUserUsedPasswords",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HashedPassword = table.Column<string>(maxLength: 450, nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserUsedPasswords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUserUsedPasswords_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTokenHandler",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -199,11 +256,11 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserToken", x => x.Id);
+                    table.PrimaryKey("PK_UserTokenHandler", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserToken_AspNetUser_UserId",
+                        name: "FK_UserTokenHandler_AppUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUser",
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -237,79 +294,89 @@ namespace Data.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Post_AspNetUser_UserId",
+                        name: "FK_Post_AppUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUser",
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppDataProtectionKeys_FriendlyName",
+                table: "AppDataProtectionKeys",
+                column: "FriendlyName",
+                unique: true,
+                filter: "[FriendlyName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppRoleClaims_RoleId",
+                table: "AppRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Role_Name",
-                table: "AspNetRole",
+                table: "AppRoles",
                 column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                table: "AspNetRole",
+                table: "AppRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaim_RoleId",
-                table: "AspNetRoleClaim",
+                name: "IX_AppUserClaims_UserId",
+                table: "AppUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserLogins_UserId",
+                table: "AppUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserRoles_RoleId",
+                table: "AppUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Email",
-                table: "AspNetUser",
+                table: "AppUsers",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "AspNetUser",
+                table: "AppUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "AspNetUser",
+                table: "AppUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Phone",
-                table: "AspNetUser",
+                table: "AppUsers",
                 column: "PhoneNumber",
                 unique: true,
                 filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaim_UserId",
-                table: "AspNetUserClaim",
+                name: "IX_AppUserUsedPasswords_UserId",
+                table: "AppUserUsedPasswords",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogin_UserId",
-                table: "AspNetUserLogin",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRole_RoleId",
-                table: "AspNetUserRole",
-                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Category_ParentCategoryId",
                 table: "Category",
-                column: "ParentCategoryId",
-                unique: true,
-                filter: "[ParentCategoryId] IS NOT NULL");
+                column: "ParentCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_Address",
@@ -347,42 +414,58 @@ namespace Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserToken_UserId",
-                table: "UserToken",
+                name: "IX_UserTokenHandler_UserId",
+                table: "UserTokenHandler",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "Index_ExpiresAtTime",
+                schema: "dbo",
+                table: "AppSqlCache",
+                column: "ExpiresAtTime");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaim");
+                name: "AppDataProtectionKeys");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaim");
+                name: "AppRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogin");
+                name: "AppUserClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRole");
+                name: "AppUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserToken");
+                name: "AppUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AppUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AppUserUsedPasswords");
 
             migrationBuilder.DropTable(
                 name: "Post");
 
             migrationBuilder.DropTable(
-                name: "UserToken");
+                name: "UserTokenHandler");
 
             migrationBuilder.DropTable(
-                name: "AspNetRole");
+                name: "AppSqlCache",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "AppRoles");
 
             migrationBuilder.DropTable(
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "AspNetUser");
+                name: "AppUsers");
         }
     }
 }

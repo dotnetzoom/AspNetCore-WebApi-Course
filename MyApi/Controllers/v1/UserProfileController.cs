@@ -27,7 +27,7 @@ namespace MyApi.Controllers.v1
         private readonly IProtectionProviderService _protectionProviderService;
         private readonly IApplicationRoleManager _roleManager;
         private readonly IApplicationSignInManager _signInManager;
-        private readonly IOptionsSnapshot<SiteSettings> _siteOptions;
+        private readonly IOptionsSnapshot<IdentitySiteSettings> _siteOptions;
         private readonly IUsedPasswordsService _usedPasswordsService;
         private readonly IApplicationUserManager _userManager;
         private readonly IUsersPhotoService _usersPhotoService;
@@ -42,7 +42,7 @@ namespace MyApi.Controllers.v1
             IUserValidator<User> userValidator,
             IUsedPasswordsService usedPasswordsService,
             IUsersPhotoService usersPhotoService,
-            IOptionsSnapshot<SiteSettings> siteOptions,
+            IOptionsSnapshot<IdentitySiteSettings> siteOptions,
             IEmailSender emailSender,
             ILogger<UserProfileController> logger)
         {

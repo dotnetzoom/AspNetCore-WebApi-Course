@@ -16,7 +16,7 @@ namespace Services.Identity
 
         public CustomUserValidator(
             IdentityErrorDescriber errors,// How to use CustomIdentityErrorDescriber
-            IOptionsSnapshot<SiteSettings> configurationRoot
+            IOptionsSnapshot<IdentitySiteSettings> configurationRoot
             ) : base(errors)
         {
             if (configurationRoot == null) throw new ArgumentNullException(nameof(configurationRoot));

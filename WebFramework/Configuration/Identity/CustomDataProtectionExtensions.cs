@@ -14,7 +14,7 @@ namespace WebFramework.Configuration.Identity
     public static class CustomDataProtectionExtensions
     {
         public static IServiceCollection AddCustomDataProtection(
-            this IServiceCollection services, SiteSettings siteSettings)
+            this IServiceCollection services, IdentitySiteSettings siteSettings)
         {
             services.AddSingleton<IXmlRepository, DataProtectionKeyService>();
             services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(serviceProvider =>
@@ -37,7 +37,7 @@ namespace WebFramework.Configuration.Identity
             return services;
         }
 
-        private static X509Certificate2 LoadCertificateFromFile(SiteSettings siteSettings)
+        private static X509Certificate2 LoadCertificateFromFile(IdentitySiteSettings siteSettings)
         {
             // NOTE:
             // You should check out the identity of your application pool and make sure

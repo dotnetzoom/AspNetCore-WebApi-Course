@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Entities.Identity.Settings
 {
-    public class SiteSettings
+    public class IdentitySiteSettings
     {
         public AdminUserSeed AdminUserSeed { get; set; }
         public Logging Logging { get; set; }

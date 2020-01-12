@@ -15,7 +15,7 @@ namespace WebFramework.Configuration.Identity
         public const string EmailConfirmationTokenProviderName = "ConfirmEmail";
 
         public static IServiceCollection AddIdentityOptions(
-            this IServiceCollection services, SiteSettings siteSettings)
+            this IServiceCollection services, IdentitySiteSettings siteSettings)
         {
             if (siteSettings == null) throw new ArgumentNullException(nameof(siteSettings));
 
@@ -48,7 +48,7 @@ namespace WebFramework.Configuration.Identity
             return services;
         }
 
-        private static void AddConfirmEmailDataProtectorTokenOptions(this IServiceCollection services, SiteSettings siteSettings)
+        private static void AddConfirmEmailDataProtectorTokenOptions(this IServiceCollection services, IdentitySiteSettings siteSettings)
         {
             services.Configure<IdentityOptions>(options =>
             {
@@ -71,7 +71,7 @@ namespace WebFramework.Configuration.Identity
             });
         }
 
-        private static void SetApplicationCookieOptions(IServiceProvider provider, CookieAuthenticationOptions identityOptionsCookies, SiteSettings siteSettings)
+        private static void SetApplicationCookieOptions(IServiceProvider provider, CookieAuthenticationOptions identityOptionsCookies, IdentitySiteSettings siteSettings)
         {
             identityOptionsCookies.Cookie.Name = siteSettings.CookieOptions.CookieName;
             identityOptionsCookies.Cookie.HttpOnly = true;
@@ -92,14 +92,14 @@ namespace WebFramework.Configuration.Identity
             }
         }
 
-        private static void SetLockoutOptions(LockoutOptions identityOptionsLockout, SiteSettings siteSettings)
+        private static void SetLockoutOptions(LockoutOptions identityOptionsLockout, IdentitySiteSettings siteSettings)
         {
             identityOptionsLockout.AllowedForNewUsers = siteSettings.LockoutOptions.AllowedForNewUsers;
             identityOptionsLockout.DefaultLockoutTimeSpan = siteSettings.LockoutOptions.DefaultLockoutTimeSpan;
             identityOptionsLockout.MaxFailedAccessAttempts = siteSettings.LockoutOptions.MaxFailedAccessAttempts;
         }
 
-        private static void SetPasswordOptions(PasswordOptions identityOptionsPassword, SiteSettings siteSettings)
+        private static void SetPasswordOptions(PasswordOptions identityOptionsPassword, IdentitySiteSettings siteSettings)
         {
             identityOptionsPassword.RequireDigit = siteSettings.PasswordOptions.RequireDigit;
             identityOptionsPassword.RequireLowercase = siteSettings.PasswordOptions.RequireLowercase;
@@ -108,7 +108,7 @@ namespace WebFramework.Configuration.Identity
             identityOptionsPassword.RequiredLength = siteSettings.PasswordOptions.RequiredLength;
         }
 
-        private static void SetSignInOptions(SignInOptions identityOptionsSignIn, SiteSettings siteSettings)
+        private static void SetSignInOptions(SignInOptions identityOptionsSignIn, IdentitySiteSettings siteSettings)
         {
             identityOptionsSignIn.RequireConfirmedEmail = siteSettings.EnableEmailConfirmation;
         }

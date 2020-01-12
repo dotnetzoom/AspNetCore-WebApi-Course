@@ -6,9 +6,11 @@ namespace Entities.Identity.Configurations
 {
     public class AppSqlCacheConfiguration : IEntityTypeConfiguration<AppSqlCache>
     {
-        private readonly SiteSettings _siteSettings;
+        private readonly IdentitySiteSettings _siteSettings;
+        
+        public AppSqlCacheConfiguration(){}
 
-        public AppSqlCacheConfiguration(SiteSettings siteSettings)
+        public AppSqlCacheConfiguration(IdentitySiteSettings siteSettings)
         {
             _siteSettings = siteSettings;
         }
@@ -16,8 +18,9 @@ namespace Entities.Identity.Configurations
         public void Configure(EntityTypeBuilder<AppSqlCache> builder)
         {
             // For Microsoft.Extensions.Caching.SqlServer
-            var cacheOptions = _siteSettings.CookieOptions.DistributedSqlServerCacheOptions;
-            builder.ToTable(cacheOptions.TableName, cacheOptions.SchemaName);
+            //var cacheOptions = _siteSettings.CookieOptions.DistributedSqlServerCacheOptions;
+            //builder.ToTable(cacheOptions.TableName, cacheOptions.SchemaName);
+            builder.ToTable("AppSqlCache", "dbo");
             builder.HasIndex(e => e.ExpiresAtTime).HasName("Index_ExpiresAtTime");
             builder.Property(e => e.Id).HasMaxLength(449);
             builder.Property(e => e.Value).IsRequired();

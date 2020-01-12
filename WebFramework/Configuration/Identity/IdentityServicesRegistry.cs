@@ -10,21 +10,21 @@ namespace WebFramework.Configuration.Identity
         /// <summary>
         /// Adds all of the ASP.NET Core Identity related services and configurations at once.
         /// </summary>
-        public static void AddCustomIdentityServices(this IServiceCollection services)
+        public static void AddCustomIdentityServices(this IServiceCollection services,IdentitySiteSettings identitySiteSettings)
         {
-            var siteSettings = GetSiteSettings(services);
-            services.AddIdentityOptions(siteSettings);
-            services.AddConfiguredDbContext(siteSettings);
+            //var siteSettings = GetSiteSettings(services);
+            services.AddIdentityOptions(identitySiteSettings);
+            services.AddConfiguredDbContext(identitySiteSettings);
             services.AddCustomServices();
-            services.AddCustomTicketStore(siteSettings);
+            services.AddCustomTicketStore(identitySiteSettings);
             services.AddDynamicPermissions();
-            services.AddCustomDataProtection(siteSettings);
+            services.AddCustomDataProtection(identitySiteSettings);
         }
 
-        public static SiteSettings GetSiteSettings(this IServiceCollection services)
+        public static IdentitySiteSettings GetSiteSettings(this IServiceCollection services)
         {
             var provider = services.BuildServiceProvider();
-            var siteSettingsOptions = provider.GetRequiredService<IOptionsSnapshot<SiteSettings>>();
+            var siteSettingsOptions = provider.GetRequiredService<IOptionsSnapshot<IdentitySiteSettings>>();
             var siteSettings = siteSettingsOptions.Value;
             if (siteSettings == null) throw new ArgumentNullException(nameof(siteSettings));
             return siteSettings;

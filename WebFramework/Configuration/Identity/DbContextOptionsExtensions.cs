@@ -8,7 +8,7 @@ namespace WebFramework.Configuration.Identity
     public static class DbContextOptionsExtensions
     {
         public static IServiceCollection AddConfiguredDbContext(
-            this IServiceCollection serviceCollection, SiteSettings siteSettings)
+            this IServiceCollection serviceCollection, IdentitySiteSettings siteSettings)
         {
             switch (siteSettings.ActiveDatabase)
             {
