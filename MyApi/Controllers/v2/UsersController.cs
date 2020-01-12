@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyApi.Models;
+using Services.Contracts.Identity;
 using Services.Services;
 using WebFramework.Api;
 // ReSharper disable RedundantOverriddenMember
@@ -20,10 +21,11 @@ namespace MyApi.Controllers.v2
         public UsersController(IUserRepository userRepository,
             ILogger<v1.UsersController> logger,
             IJwtService jwtService,
-            UserManager<User> userManager,
+            IApplicationUserManager userManager,
             RoleManager<Role> roleManager,
-            SignInManager<User> signInManager)
-            : base(userRepository, logger, jwtService, userManager, roleManager, signInManager)
+            SignInManager<User> signInManager,
+            ISiteStatService siteStatService)
+            : base(userRepository, logger, jwtService, userManager, roleManager, signInManager, siteStatService)
         {
         }
 

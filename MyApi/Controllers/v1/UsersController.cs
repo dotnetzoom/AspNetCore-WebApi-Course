@@ -11,9 +11,11 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Data.Contracts;
+using Entities.Identity;
 using Entities.User;
 using WebFramework.Api;
 using Microsoft.AspNetCore.Identity;
+using Services.Contracts.Identity;
 using Services.Services;
 using WebFramework.Filters;
 
@@ -23,15 +25,16 @@ namespace MyApi.Controllers.v1
     //[Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class UsersController : BaseController
     {
+        private readonly ISiteStatService _siteStatService;
         private readonly IUserRepository _userRepository;
         private readonly ILogger<UsersController> _logger;
         private readonly IJwtService _jwtService;
-        private readonly UserManager<User> _userManager;
+        private readonly IApplicationUserManager _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
         public UsersController(IUserRepository userRepository, ILogger<UsersController> logger, IJwtService jwtService,
-            UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager)
+            IApplicationUserManager userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, ISiteStatService siteStatService)
         {
             _userRepository = userRepository;
             _logger = logger;
@@ -39,6 +42,7 @@ namespace MyApi.Controllers.v1
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _siteStatService = siteStatService;
         }
 
         [HttpGet]
@@ -183,7 +187,7 @@ namespace MyApi.Controllers.v1
             updateUser.UserName = user.UserName;
             updateUser.PasswordHash = user.PasswordHash;
             updateUser.FirstName = user.FirstName;
-            updateUser.LastName=user.LastName;
+            updateUser.LastName = user.LastName;
             updateUser.Birthday = user.Birthday;
             updateUser.Gender = user.Gender;
             updateUser.IsActive = user.IsActive;
@@ -202,5 +206,43 @@ namespace MyApi.Controllers.v1
 
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<ApiResult<TodayBirthDaysViewModel>> TodayBirthDays()
+        {
+            var usersList = await _siteStatService.GetTodayBirthdayListAsync();
+            var usersAverageAge = await _siteStatService.GetUsersAverageAge();
+
+            return new TodayBirthDaysViewModel
+            {
+                Users = usersList,
+                AgeStat = usersAverageAge
+            };
+        }
+
+        [HttpPost]
+        public async Task<ApiResult<OnlineUsersViewModel>> OnlineUsers(int numbersToTake, int minutesToTake, bool showMoreItemsLink)
+        {
+            var usersList = await _siteStatService.GetOnlineUsersListAsync(numbersToTake, minutesToTake);
+
+            return new OnlineUsersViewModel
+            {
+                MinutesToTake = minutesToTake,
+                NumbersToTake = numbersToTake,
+                ShowMoreItemsLink = showMoreItemsLink,
+                Users = usersList
+            };
+        }
+
+        public async Task<ApiResult<FileContentResult>> EmailToImage(int? id)
+        {
+            if (!id.HasValue)
+                return NotFound();
+
+            var fileContents = await _userManager.GetEmailImageAsync(id);
+
+            return new FileContentResult(fileContents, "image/png");
+        }
+
     }
 }

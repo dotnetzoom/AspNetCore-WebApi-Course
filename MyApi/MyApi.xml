@@ -16,6 +16,11 @@
             </summary>
             <example>Seattle</example>
         </member>
+        <member name="M:MyApi.Controllers.v1.UserProfileController.ValidateUsername(System.String,System.String,System.String)">
+            <summary>
+            For [Remote] validation
+            </summary>
+        </member>
         <member name="M:MyApi.Controllers.v1.UsersController.Token(MyApi.Models.TokenRequest,System.Threading.CancellationToken)">
             <summary>
             This method generate JWT Token
