@@ -207,7 +207,7 @@ namespace MyApi.Controllers.v1
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<ApiResult<TodayBirthDaysViewModel>> TodayBirthDays()
         {
             var usersList = await _siteStatService.GetTodayBirthdayListAsync();
@@ -220,7 +220,7 @@ namespace MyApi.Controllers.v1
             };
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<ApiResult<OnlineUsersViewModel>> OnlineUsers(int numbersToTake, int minutesToTake, bool showMoreItemsLink)
         {
             var usersList = await _siteStatService.GetOnlineUsersListAsync(numbersToTake, minutesToTake);
@@ -234,6 +234,7 @@ namespace MyApi.Controllers.v1
             };
         }
 
+        [HttpGet("{id:int}")]
         public async Task<ApiResult<FileContentResult>> EmailToImage(int? id)
         {
             if (!id.HasValue)

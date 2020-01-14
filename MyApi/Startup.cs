@@ -44,6 +44,8 @@ namespace MyApi
         {
             services.Configure<SiteSettings>(Configuration.GetSection(nameof(SiteSettings)));
 
+            services.Configure<IdentitySiteSettings>(Configuration.GetSection(nameof(IdentitySiteSettings)));
+
             services.InitializeAutoMapper();
 
             services.AddDbContext(Configuration);

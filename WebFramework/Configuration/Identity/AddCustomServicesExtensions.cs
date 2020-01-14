@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using Data;
+using Entities.Identity.Settings;
 using Entities.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

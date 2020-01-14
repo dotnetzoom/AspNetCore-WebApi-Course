@@ -33,7 +33,7 @@ namespace MyApi.Controllers.v1
             _signInManager = signInManager;
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<ApiResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -71,7 +71,7 @@ namespace MyApi.Controllers.v1
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<ApiResult> ForgotPassword(ForgotPasswordViewModel model)
         {

@@ -27,11 +27,14 @@ namespace Services.DataInitializer
                 FirstName = "mohammad",
                 LastName = "karami",
                 Gender = GenderType.Male,
-                UserName = "mhkarami97",
-                Email = "mhkarami1997@gmail.com"
+                UserName = "mhkarami",
+                Email = "mhkarami1997@gmail.com",
+                Location = " ",
+                IsEmailPublic = false,
+                IsActive = true
             };
 
-            _userManager.CreateAsync(user, "123456").GetAwaiter().GetResult();
+            var t= _userManager.CreateAsync(user, "5L252c!7g$6bPV").GetAwaiter().GetResult();
 
             // var result = _roleManager.FindByNameAsync("Admin");
             // var result1 = _roleManager.FindByNameAsync("User");

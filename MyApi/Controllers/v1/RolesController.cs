@@ -35,7 +35,7 @@ namespace MyApi.Controllers.v1
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(_roleManager));
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
         public virtual async Task<ActionResult<List<User>>> Get(CancellationToken cancellationToken)
         {
@@ -71,7 +71,7 @@ namespace MyApi.Controllers.v1
             };
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<ActionResult> AddOrUpdate(DynamicRoleClaimsManagerViewModel model)
         {

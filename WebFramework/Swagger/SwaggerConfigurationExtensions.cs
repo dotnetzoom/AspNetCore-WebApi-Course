@@ -46,6 +46,8 @@ namespace WebFramework.Swagger
             //Add services and configuration to use swagger
             services.AddSwaggerGen(options =>
             {
+                options.ResolveConflictingActions (apiDescriptions => apiDescriptions.First ());
+
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -169,6 +171,8 @@ namespace WebFramework.Swagger
             //Swagger middleware for generate UI from swagger.json
             app.UseSwaggerUI(options =>
             {
+                string swaggerJsonBasePath = string.IsNullOrWhiteSpace(options.RoutePrefix) ? "." : "..";
+
                 #region Customizing
                 //// Display
                 //options.DefaultModelExpandDepth(2);
@@ -201,8 +205,8 @@ namespace WebFramework.Swagger
                 //options.OAuthAdditionalQueryStringParams(new Dictionary<string, string> { { "foo", "bar" }}); 
                 options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
 
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1 Docs");
-                options.SwaggerEndpoint("/swagger/v2/swagger.json", "V2 Docs");
+                options.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "V1 Docs");
+                options.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v2/swagger.json", "V2 Docs");
             });
 
             //ReDoc UI middleware. ReDoc UI is an alternative to swagger-ui
