@@ -15,7 +15,7 @@ namespace WebFramework.Configuration.Identity
             //var siteSettings = GetSiteSettings(services);
             services.AddIdentityOptions(identitySiteSettings);
             services.AddConfiguredDbContext(identitySiteSettings);
-            services.AddCustomServices();
+            //services.AddCustomServices();
             services.AddCustomTicketStore(identitySiteSettings);
             services.AddDynamicPermissions();
             services.AddCustomDataProtection(identitySiteSettings);

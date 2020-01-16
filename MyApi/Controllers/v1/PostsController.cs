@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
 using MyApi.Models;
 using Data.Contracts;
 using Entities.Post;
@@ -13,6 +16,11 @@ namespace MyApi.Controllers.v1
         public PostsController(IRepository<Post> repository, IMapper mapper)
             : base(repository, mapper)
         {
+        }
+
+        public override Task<ActionResult<List<PostSelectDto>>> Get(CancellationToken cancellationToken)
+        {
+            return base.Get(cancellationToken);
         }
     }
 }

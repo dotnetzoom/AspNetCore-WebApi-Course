@@ -3,6 +3,7 @@ using AspNetCoreRateLimit;
 using Autofac;
 using Common;
 using Common.WebToolkit;
+using DNTCommon.Web.Core;
 using Entities.Identity.Settings;
 using WebFramework.Swagger;
 using WebFramework.Middlewares;
@@ -56,6 +57,9 @@ namespace MyApi
             services.AddCustomIdentityServices(_identitySiteSettings);
 
             services.AddMinimalMvc();
+
+            services.AddDNTCommonWeb();
+            services.AddCloudscribePagination();
 
             services.AddJwtAuthentication(_siteSetting.JwtSettings);
 

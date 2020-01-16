@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using Data;
-using Entities.Identity.Settings;
 using Entities.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +16,7 @@ namespace WebFramework.Configuration.Identity
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddScoped<IPrincipal>(provider =>
                 provider.GetRequiredService<IHttpContextAccessor>()?.HttpContext?.User ?? ClaimsPrincipal.Current);
 
