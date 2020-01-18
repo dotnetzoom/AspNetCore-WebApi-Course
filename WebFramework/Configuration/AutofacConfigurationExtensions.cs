@@ -30,7 +30,7 @@ namespace WebFramework.Configuration
 
             containerBuilder.RegisterType<HttpContextAccessor>()
                 .As<IHttpContextAccessor>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             // containerBuilder.RegisterType<IHttpContextAccessor>()
             //     .As<IPrincipal>()
@@ -38,115 +38,115 @@ namespace WebFramework.Configuration
 
             containerBuilder.RegisterType<CustomNormalizer>()
                 .As<ILookupNormalizer>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<HttpContextAccessor>()
                 .As<IHttpContextAccessor>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomSecurityStampValidator>()
                 .As<ISecurityStampValidator>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomSecurityStampValidator>()
                 .As<SecurityStampValidator<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomPasswordValidator>()
                 .As<IPasswordValidator<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomPasswordValidator>()
                 .As<PasswordValidator<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomUserValidator>()
                 .As<IUserValidator<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomUserValidator>()
                 .As<UserValidator<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationClaimsPrincipalFactory>()
                 .As<IUserClaimsPrincipalFactory<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationClaimsPrincipalFactory>()
                 .As<UserClaimsPrincipalFactory<User, Role>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<CustomIdentityErrorDescriber>()
                 .As<IdentityErrorDescriber>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationUserStore>()
                 .As<IApplicationUserStore>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationUserStore>()
                 .As<UserStore<User, Role, ApplicationDbContext, int, UserClaim, UserRole, UserLogin, UserToken, RoleClaim>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationUserManager>()
                 .As<IApplicationUserManager>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationUserManager>()
                 .As<UserManager<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationRoleManager>()
                 .As<IApplicationRoleManager>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationRoleManager>()
                 .As<RoleManager<Role>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationSignInManager>()
                 .As<IApplicationSignInManager>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationSignInManager>()
                 .As<SignInManager<User>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationRoleStore>()
                 .As<IApplicationRoleStore>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<ApplicationRoleStore>()
                 .As<RoleStore<Role, ApplicationDbContext, int, UserRole, RoleClaim>>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<AuthMessageSender>()
                 .As<IEmailSender>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<AuthMessageSender>()
                 .As<ISmsSender>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<IdentityDbInitializer>()
                 .As<IIdentityDbInitializer>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<UsedPasswordsService>()
                 .As<IUsedPasswordsService>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<SiteStatService>()
                 .As<ISiteStatService>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<UsersPhotoService>()
                 .As<IUsersPhotoService>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<SecurityTrimmingService>()
                 .As<ISecurityTrimmingService>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
 
             // containerBuilder.RegisterType<AppLogItemsService>()
             //     .As<IAppLogItemsService>()
