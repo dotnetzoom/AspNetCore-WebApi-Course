@@ -16,6 +16,7 @@ namespace Entities
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
+            builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.Property(p => p.Name).IsRequired().HasMaxLength(50);
         }
     }

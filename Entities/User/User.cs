@@ -29,6 +29,7 @@ namespace Entities
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.Property(p => p.UserName).IsRequired().HasMaxLength(100);
         }
     }
