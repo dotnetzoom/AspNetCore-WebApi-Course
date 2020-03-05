@@ -32,7 +32,8 @@ namespace WebFramework.Swagger
             var mainType = mainAssembly.GetExportedTypes()[0];
 
             var methodName = nameof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions.AddSwaggerExamplesFromAssemblyOf);
-            MethodInfo method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetMethod(methodName);
+            //MethodInfo method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetMethod(methodName);
+            MethodInfo method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetRuntimeMethods().FirstOrDefault(x => x.Name == methodName && x.IsGenericMethod);
             MethodInfo generic = method.MakeGenericMethod(mainType);
             generic.Invoke(null, new[] { services });
             #endregion
