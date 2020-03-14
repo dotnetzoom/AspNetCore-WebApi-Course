@@ -1,6 +1,6 @@
 <div dir="ltr">
 
-## 🥇Professional REST API design with ASP.NET Core and WebAPI
+# 🥇Professional REST API design with ASP.NET Core and WebAPI
 
 This project is an example of lightweight and extensible infrastructure for building RESTful Web API with ASP.NET Core.
 
@@ -10,13 +10,13 @@ This example contains a number of tricks and techniques that is the result of ma
 
 If you want a total deep dive on REST, API security, ASP.NET Core and much more, check out my [Course](http://beyamooz.com/project-based-aspnet/%D8%AF%D9%88%D8%B1%D9%87-api-%D9%86%D9%88%DB%8C%D8%B3%DB%8C-%D8%A7%D8%B5%D9%88%D9%84%DB%8C-%D9%88-%D8%AD%D8%B1%D9%81%D9%87-%D8%A7%DB%8C-%D8%AF%D8%B1-asp-net-core).
 
-### Testing it out
+## Testing it out
 1. Clone or download this repository
 2. Build the solution using command line with `dotnet build`
 3. Go to **MyApi** directory and run project using command line with `dotnet run`
 4. Browse to this url https://localhost:5001/swagger to see SwaggerUI page
 
-### Techniques and Features
+## Techniques and Features
 - JWT Authentication
 - Secure JWT using Encryption (JWE)
 - Logging to File, Console and Database using Elmah & NLog
