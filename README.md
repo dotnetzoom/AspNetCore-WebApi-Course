@@ -1,6 +1,6 @@
 <div dir="ltr">
 
-# 🥇Professional REST API design with ASP.NET Core and WebAPI
+# 🥇Professional REST API design with ASP.NET Core WebAPI
 
 This project is an example of lightweight and extensible infrastructure for building RESTful Web API with ASP.NET Core.
 
@@ -19,16 +19,16 @@ If you want a total deep dive on REST, API security, ASP.NET Core and much more,
 ## Techniques and Features
 - JWT Authentication
 - Secure JWT using Encryption (JWE)
-- Logging to File, Console and Database using Elmah & NLog
-- Logging to sentry.io (Log Management System)
+- Logging to File, Console and Database using [Elmah](https://github.com/ElmahCore/ElmahCore) & [NLog](https://github.com/NLog/NLog.Web)
+- Logging to [sentry.io](sentry.io) (Log Management System)
 - Exception Handling using Custom Middleware
 - Automatic Validation
 - Standard API Resulting
-- Dependency Injection using Autofac
-- Map resources using AutoMapper
+- Dependency Injection using [Autofac (Ioc Container)](https://github.com/autofac/Autofac)
+- Map resources using [AutoMapper](https://github.com/AutoMapper/AutoMapper)
 - Async/Await Best Practices
 - Versioning Management
-- Using Swagger (Swashbuckle)
+- Using [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) (Swashbuckle)
 - Auto Document Generator for Swagger
 - Integrate Swagger and Versioning
 - Integrate Swagger and JWT/OAuth Authentication
@@ -64,7 +64,7 @@ If you like this project, learn something or you are using it in your applicatio
     - **NLog** : استفاده از [NLog](https://github.com/NLog/NLog.Web) برای لاگ خطا ها در File و Console
     - **Custom Middleware** : نوشتن یک میدلویر سفارشی جهت لاگ تمامی خطا (Exception) ها
     - **Custom Exception** : نوشتن Exception برای مدیریت ساده تر خطا ها
-    - **Sentry** : ثبت خطا ها در سیستم مدیریت لاگ [sentry.io]() (مناسب برای پروژه های بزرگ)
+    - **Sentry** : ثبت خطا ها در سیستم مدیریت لاگ [sentry.io](sentry.io) (مناسب برای پروژه های بزرگ)
   - **تزریق وابستگی (Dependency Injection**)
     - **ASP.NET Core IOC Container** : استفاده از Ioc container داخلی Asp Core
     - **Autofac** : استفاده از محبوب ترین کتابخانه [Autofac (Ioc Container)](https://github.com/autofac/Autofac)
@@ -81,7 +81,7 @@ If you like this project, learn something or you are using it in your applicatio
     - **Clean String** : اصلاح و یک دست سازی حروف "ی" و "ک" عربی به فارسی و encoding اعداد فارسی در DbContext به صورت خودکار به هنگام SaveChanges
   - **Versioning** : نسخه بندی و مدیریت نسخه های پروژه + سفارشی سازی و ایجاد یک معماری حرفه ای
   - **ابزار (Swashbuckle) Swagger**
-    - **Swagger UI** : ساخت یک ظاهر شکیل به همراه داکیومنت Aciton ها و Controller های پروژه و امکان تست API ها توسط [Swagger](http://sentry.io) UI
+    - **Swagger UI** : ساخت یک ظاهر شکیل به همراه داکیومنت Aciton ها و Controller های پروژه و امکان تست API ها توسط [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) UI
     - **Versioning** : یکپارچه سازی اصولی Swagger با سیستم نسخه گذاری (Versioning)
     - **JWT Authentication** : یکپارچه سازی Swagger با سیستم احراز هویت بر اساس Jwt
     - **OAuth Authentication** : یکپارچه سازی Swagger با سیستم احراز هویت بر اساس OAuth
