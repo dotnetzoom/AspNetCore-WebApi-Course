@@ -34,6 +34,9 @@ If you want a total deep dive on REST, API security, ASP.NET Core and much more,
 - Integrate Swagger and JWT/OAuth Authentication
 - Best Practices for Performance and Security
 
+## Give a Star! ⭐️
+If you like this project, learn something or you are using it in your applications, please give it a star. Thanks!
+
 </div>
 
 ---
