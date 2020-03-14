@@ -4,7 +4,9 @@
 
 This project is an example of lightweight and extensible infrastructure for building RESTful Web API with ASP.NET Core.
 
-This example contains a number of tricks and techniques which I've learned while building APIs in ASP.NET Core.
+This example contains a number of tricks and techniques that is the result of many years of my experience in WebAPI/RESTful programming in ASP.NET Core
+
+**This project was updated to ASPNETCore 3.1.2 (See [ChangeLog](/CHANGELOG.md) for more)**
 
 If you want a total deep dive on REST, API security, ASP.NET Core and much more, check out my [Course](http://beyamooz.com/project-based-aspnet/%D8%AF%D9%88%D8%B1%D9%87-api-%D9%86%D9%88%DB%8C%D8%B3%DB%8C-%D8%A7%D8%B5%D9%88%D9%84%DB%8C-%D9%88-%D8%AD%D8%B1%D9%81%D9%87-%D8%A7%DB%8C-%D8%AF%D8%B1-asp-net-core).
 
@@ -42,9 +44,11 @@ If you want a total deep dive on REST, API security, ASP.NET Core and much more,
 
 در این دوره همه نکات مهم و پرکاربرد در API نویسی اصولی و حرفه ای در ASP.NET Core بررسی شده اند.
 
-## تکنولوژی، ابزار ها و قابلیت ها
 در این دوره سعی شده بهترین و محبوب ترین تکنولوژی ها، کتابخانه ها و ابزار ها داخل پروژه استفاده بشه. همچنین Best Practice های پرفرمنسی و امنیتی بعلاوه تکنیک های پرکاربرد را بررسی و در قالب یک معماری حرفه ای و اصولی استفاده می کنیم.
 
+**این پروژه به نسخه ASPNETCore 3.1.2 بروز رسانی شد (برای اطلاعات بیشتر، تغییرات را در [ChangeLog](/CHANGELOG.md) مشاهده کنید)**
+
+## تکنولوژی، ابزار ها و قابلیت ها
   - **لایه بندی اصولی پروژه (Project Layering and Architecture)** : در این دوره لایه بندی اصولی یک پروژه را از ابتدا شروع و هر بخش را بررسی می کنیم. همچنین مباحث Repository و UOW رو هم بررسی می کنیم.
   - **احراز هویت (Authentication)**
     - **ASP.NET Core Identity** : احراز هویت توسط Identity + سفارشی سازی
