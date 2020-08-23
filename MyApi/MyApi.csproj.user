@@ -6,5 +6,16 @@
   <PropertyGroup>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
     <ShowAllFiles>false</ShowAllFiles>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <RevDeBugCompilerPath>c:\users\ebrahimi\appdata\local\microsoft\visualstudio\16.0_0a2fca5c\extensions\bazl1bqd.pxh\tmcc\</RevDeBugCompilerPath>
+    <CustomAfterMicrosoftCommonTargets>c:\users\ebrahimi\appdata\local\microsoft\visualstudio\16.0_0a2fca5c\extensions\bazl1bqd.pxh\tmcc\RevDeBug.ImportAfter.targets</CustomAfterMicrosoftCommonTargets>
+    <RevDeBugActive>false</RevDeBugActive>
+    <SaveMetadataAsync>true</SaveMetadataAsync>
+    <RevDeBugDisableNuget>true</RevDeBugDisableNuget>
+    <RevDeBugMetadataPath>C:\Users\Ebrahimi\Documents\RevDeBug\MyApi\Metadata\\</RevDeBugMetadataPath>
+    <RevDeBugStateStorageType>Continuous</RevDeBugStateStorageType>
+    <PublishWithRevDeBug>false</PublishWithRevDeBug>
+    <RecorderAddress>127.0.0.1</RecorderAddress>
+    <RecorderTCPPort>42742</RecorderTCPPort>
   </PropertyGroup>
 </Project>
