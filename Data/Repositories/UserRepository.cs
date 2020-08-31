@@ -23,7 +23,7 @@ namespace Data.Repositories
             return Table.Where(p => p.UserName == username && p.PasswordHash == passwordHash).SingleOrDefaultAsync(cancellationToken);
         }
 
-        public Task UpdateSecuirtyStampAsync(User user, CancellationToken cancellationToken)
+        public Task UpdateSecurityStampAsync(User user, CancellationToken cancellationToken)
         {
             //user.SecurityStamp = Guid.NewGuid();
             return UpdateAsync(user, cancellationToken);

@@ -65,7 +65,7 @@ namespace MyApi.Controllers.v1
                 return NotFound();
 
             await userManager.UpdateSecurityStampAsync(user);
-            //await userRepository.UpdateSecuirtyStampAsync(user, cancellationToken);
+            //await userRepository.UpdateSecurityStampAsync(user, cancellationToken);
 
             return user;
         }
