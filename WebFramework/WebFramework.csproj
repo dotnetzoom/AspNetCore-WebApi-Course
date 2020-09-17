@@ -20,7 +20,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.6.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.1.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="5.6.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="5.6.1" />
   </ItemGroup>
   
   <ItemGroup>
