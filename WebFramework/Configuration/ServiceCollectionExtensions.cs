@@ -31,10 +31,10 @@ namespace WebFramework.Configuration
             {
                 options
                     .UseSqlServer(configuration.GetConnectionString("SqlServer"));
-                    //Tips
-                    //Automatic client evaluation is no longer supported. This event is no longer generated.
-                    //This line is no longer needed.
-                    //.ConfigureWarnings(warning => warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                //Tips
+                //Automatic client evaluation is no longer supported. This event is no longer generated.
+                //This line is no longer needed.
+                //.ConfigureWarnings(warning => warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
             });
         }
 
