@@ -45,7 +45,7 @@ If you like this project, learn something or you are using it in your applicatio
 
 # 🥇پروژه دوره API نویسی اصولی و حرفه ای در ASP.NET Core
 
-در این دوره همه نکات مهم و پرکاربرد در API نویسی اصولی و حرفه ای در ASP.NET Core بررسی شده اند.
+[در این دوره همه نکات مهم و پرکاربرد در API نویسی اصولی و حرفه ای در ASP.NET Core بررسی شده اند.](http://beyamooz.com/project-based-aspnet/%D8%AF%D9%88%D8%B1%D9%87-api-%D9%86%D9%88%DB%8C%D8%B3%DB%8C-%D8%A7%D8%B5%D9%88%D9%84%DB%8C-%D9%88-%D8%AD%D8%B1%D9%81%D9%87-%D8%A7%DB%8C-%D8%AF%D8%B1-asp-net-core)
 
 در این دوره سعی شده بهترین و محبوب ترین تکنولوژی ها، کتابخانه ها و ابزار ها داخل پروژه استفاده بشه. همچنین Best Practice های پرفرمنسی و امنیتی بعلاوه تکنیک های پرکاربرد را بررسی و در قالب یک معماری حرفه ای و اصولی استفاده می کنیم.
 
