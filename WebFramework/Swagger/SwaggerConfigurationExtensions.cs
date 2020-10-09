@@ -127,8 +127,8 @@ namespace WebFramework.Swagger
                     {
                         Password = new OpenApiOAuthFlow
                         {
-                            TokenUrl = new Uri("https://localhost:5001/api/v1/users/Token"),
-                            //AuthorizationUrl = new Uri("https://localhost:5001/api/v1/users/Token")
+                            TokenUrl = new Uri("/api/v1/users/Token", UriKind.Relative),
+                            //AuthorizationUrl = new Uri("/api/v1/users/Token", UriKind.Relative)
                             //Scopes = new Dictionary<string, string>
                             //{
                             //    { "readAccess", "Access read operations" },

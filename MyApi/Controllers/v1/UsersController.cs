@@ -78,7 +78,7 @@ namespace MyApi.Controllers.v1
         /// <returns></returns>
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult> Token([FromForm]TokenRequest tokenRequest, CancellationToken cancellationToken)
+        public virtual async Task<ActionResult> Token([FromForm] TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             if (!tokenRequest.grant_type.Equals("password", StringComparison.OrdinalIgnoreCase))
                 throw new Exception("OAuth flow is not password.");
