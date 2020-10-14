@@ -11,17 +11,21 @@ namespace WebFramework.Configuration
 {
     public static class ApplicationBuilderExtensions
     {
-        public static void UseHsts(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static IApplicationBuilder UseHsts(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             Assert.NotNull(app, nameof(app));
             Assert.NotNull(env, nameof(env));
 
             if (!env.IsDevelopment())
                 app.UseHsts();
+
+            return app;
         }
 
-        public static void IntializeDatabase(this IApplicationBuilder app)
+        public static IApplicationBuilder IntializeDatabase(this IApplicationBuilder app)
         {
+            Assert.NotNull(app, nameof(app));
+
             //Use C# 8 using variables
             using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>(); //Service locator
@@ -34,6 +38,8 @@ namespace WebFramework.Configuration
             var dataInitializers = scope.ServiceProvider.GetServices<IDataInitializer>();
             foreach (var dataInitializer in dataInitializers)
                 dataInitializer.InitializeData();
+
+            return app;
         }
     }
 }

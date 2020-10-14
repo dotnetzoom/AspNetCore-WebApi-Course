@@ -1,5 +1,8 @@
-﻿using Common.Utilities;
+﻿using Common;
+using Common.Utilities;
+using ElmahCore.Mvc;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -31,7 +34,7 @@ namespace WebFramework.Swagger
             var mainAssembly = Assembly.GetEntryAssembly(); // => MyApi project assembly
             var mainType = mainAssembly.GetExportedTypes()[0];
 
-            var methodName = nameof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions.AddSwaggerExamplesFromAssemblyOf);
+            const string methodName = nameof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions.AddSwaggerExamplesFromAssemblyOf);
             //MethodInfo method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetMethod(methodName);
             MethodInfo method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetRuntimeMethods().FirstOrDefault(x => x.Name == methodName && x.IsGenericMethod);
             MethodInfo generic = method.MakeGenericMethod(mainType);
@@ -49,21 +52,15 @@ namespace WebFramework.Swagger
 
                 #region DescribeAllEnumsAsStrings
                 //This method was Deprecated. 
-                options.DescribeAllEnumsAsStrings();
+                //options.DescribeAllEnumsAsStrings();
 
                 //You can specify an enum to convert to/from string, uisng :
                 //[JsonConverter(typeof(StringEnumConverter))]
                 //public virtual MyEnums MyEnum { get; set; }
 
                 //Or can apply the StringEnumConverter to all enums globaly, using :
-                //SerializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-                //OR
-                //JsonConvert.DefaultSettings = () =>
-                //{
-                //    var settings = new JsonSerializerSettings();
-                //    settings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
-                //    return settings;
-                //};
+                //Used in ServiceCollectionExtensions.AddMinimalMvc
+                //.AddNewtonsoftJson(option => option.SerializerSettings.Converters.Add(new StringEnumConverter()));
                 #endregion
 
                 //options.DescribeAllParametersInCamelCase();
@@ -155,7 +152,7 @@ namespace WebFramework.Swagger
                         .GetCustomAttributes<ApiVersionAttribute>(true)
                         .SelectMany(attr => attr.Versions);
 
-                    return versions.Any(v => $"v{v.ToString()}" == docName);
+                    return versions.Any(v => $"v{v}" == docName);
                 });
                 #endregion
 
@@ -165,17 +162,35 @@ namespace WebFramework.Swagger
             });
         }
 
-        public static void UseSwaggerAndUI(this IApplicationBuilder app)
+        public static IApplicationBuilder UseElmahCore(this IApplicationBuilder app, SiteSettings siteSettings)
+        {
+            Assert.NotNull(app, nameof(app));
+            Assert.NotNull(siteSettings, nameof(siteSettings));
+
+            app.UseWhen(context => context.Request.Path.StartsWithSegments(siteSettings.ElmahPath, StringComparison.OrdinalIgnoreCase), appBuilder =>
+            {
+                appBuilder.Use((ctx, next) =>
+                {
+                    ctx.Features.Get<IHttpBodyControlFeature>().AllowSynchronousIO = true;
+                    return next();
+                });
+            });
+            app.UseElmah();
+
+            return app;
+        }
+
+        public static IApplicationBuilder UseSwaggerAndUI(this IApplicationBuilder app)
         {
             Assert.NotNull(app, nameof(app));
 
             //More info : https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
             //Swagger middleware for generate "Open API Documentation" in swagger.json
-            app.UseSwagger(options =>
+            app.UseSwagger(/*options =>
             {
-                //options.RouteTemplate = "api-docs/{documentName}/swagger.json";
-            });
+                options.RouteTemplate = "api-docs/{documentName}/swagger.json";
+            }*/);
 
             //Swagger middleware for generate UI from swagger.json
             app.UseSwaggerUI(options =>
@@ -234,6 +249,8 @@ namespace WebFramework.Swagger
                 options.SortPropsAlphabetically();
                 #endregion
             });
+
+            return app;
         }
     }
 }

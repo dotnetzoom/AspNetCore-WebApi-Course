@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Linq;
 using System.Net;
@@ -51,13 +53,16 @@ namespace WebFramework.Configuration
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
                 //options.UseYeKeModelBinder();
-            }).AddNewtonsoftJson(/*option =>
+            }).AddNewtonsoftJson(option =>
             {
-                option.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                option.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            }*/);
+                option.SerializerSettings.Converters.Add(new StringEnumConverter());
+                option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //option.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                //option.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
+            services.AddSwaggerGenNewtonsoftSupport();
 
-            #region Old way (We don't need Muhammad from ASP.NET Core 3.0 onwards)
+            #region Old way (We don't need this from ASP.NET Core 3.0 onwards)
             ////https://github.com/aspnet/Mvc/blob/release/2.2/src/Microsoft.AspNetCore.Mvc/MvcServiceCollectionExtensions.cs
             //services.AddMvcCore(options =>
             //{
@@ -96,16 +101,13 @@ namespace WebFramework.Configuration
             #endregion
         }
 
-        public static void AddElmah(this IServiceCollection services, IConfiguration configuration, SiteSettings siteSetting)
+        public static void AddElmahCore(this IServiceCollection services, IConfiguration configuration, SiteSettings siteSetting)
         {
             services.AddElmah<SqlErrorLog>(options =>
             {
                 options.Path = siteSetting.ElmahPath;
                 options.ConnectionString = configuration.GetConnectionString("Elmah");
-                //options.CheckPermissionAction = httpContext =>
-                //{
-                //    return httpContext.User.Identity.IsAuthenticated;
-                //};
+                //options.CheckPermissionAction = httpContext => httpContext.User.Identity.IsAuthenticated;
             });
         }
 

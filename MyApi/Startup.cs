@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Autofac;
 using Common;
-using ElmahCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +23,8 @@ namespace MyApi
             _siteSetting = configuration.GetSection(nameof(SiteSettings)).Get<SiteSettings>();
         }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SiteSettings>(Configuration.GetSection(nameof(SiteSettings)));
 
@@ -39,7 +36,7 @@ namespace MyApi
 
             services.AddMinimalMvc();
 
-            services.AddElmah(Configuration, _siteSetting);
+            services.AddElmahCore(Configuration, _siteSetting);
 
             services.AddJwtAuthentication(_siteSetting.JwtSettings);
 
@@ -47,7 +44,17 @@ namespace MyApi
 
             services.AddSwagger();
 
-            return services.BuildAutofacServiceProvider();
+            // Don't create a ContainerBuilder for Autofac here, and don't call builder.Populate()
+            // That happens in the AutofacServiceProviderFactory for you.
+        }
+
+        // ConfigureContainer is where you can register things directly with Autofac. 
+        // This runs after ConfigureServices so the things ere will override registrations made in ConfigureServices.
+        // Don't build the container; that gets done for you by the factory.
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            //Register Services to Autofac ContainerBuilder
+            builder.AddServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,7 +68,7 @@ namespace MyApi
 
             app.UseHttpsRedirection();
 
-            app.UseElmah();
+            app.UseElmahCore(_siteSetting);
 
             app.UseSwaggerAndUI();
 
@@ -69,7 +76,9 @@ namespace MyApi
 
             app.UseAuthentication();
             app.UseAuthorization();
-            //app.UseCors();
+
+            //Use this config just in Develoment (not in Production)
+            //app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseEndpoints(config =>
             {

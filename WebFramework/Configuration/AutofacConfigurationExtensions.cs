@@ -1,12 +1,9 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Common;
 using Data;
 using Data.Repositories;
 using Entities;
-using Microsoft.Extensions.DependencyInjection;
 using Services;
-using System;
 
 namespace WebFramework.Configuration
 {
@@ -38,16 +35,17 @@ namespace WebFramework.Configuration
                 .SingleInstance();
         }
 
-        public static IServiceProvider BuildAutofacServiceProvider(this IServiceCollection services)
-        {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.Populate(services);
-
-            //Register Services to Autofac ContainerBuilder
-            containerBuilder.AddServices();
-
-            var container = containerBuilder.Build();
-            return new AutofacServiceProvider(container);
-        }
+        //We don't need this since Autofac updates for ASP.NET Core 3.0+ Generic Hosting
+        //public static IServiceProvider BuildAutofacServiceProvider(this IServiceCollection services)
+        //{
+        //    var containerBuilder = new ContainerBuilder();
+        //    containerBuilder.Populate(services);
+        //
+        //    //Register Services to Autofac ContainerBuilder
+        //    containerBuilder.AddServices();
+        //
+        //    var container = containerBuilder.Build();
+        //    return new AutofacServiceProvider(container);
+        //}
     }
 }

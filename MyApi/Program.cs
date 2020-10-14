@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
-using Microsoft.AspNetCore;
+using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Config;
@@ -13,7 +15,7 @@ namespace MyApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             #region Sentry/NLog
 
@@ -52,7 +54,7 @@ namespace MyApi
             try
             {
                 logger.Debug("init main");
-                CreateWebHostBuilder(args).Build().Run();
+                await CreateHostBuilder(args).Build().RunAsync();
             }
             catch (Exception ex)
             {
@@ -68,11 +70,17 @@ namespace MyApi
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureLogging(options => options.ClearProviders())
                 .UseNLog()
-                .UseStartup<Startup>();
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    //webBuilder.ConfigureLogging(options => options.ClearProviders());
+                    //webBuilder.UseNLog();
+                    webBuilder.UseStartup<Startup>();
+                });
 
         private static void UsingCodeConfiguration()
         {
