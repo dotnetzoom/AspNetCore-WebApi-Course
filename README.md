@@ -50,6 +50,7 @@ If you like this project, learn something or you are using it in your applicatio
 **توجه:**
 - **برنچ master این مخزن همواره به آخرین نسخه ASP.NET Core (به همراه تمام Dependency هایش) بروز رسانی شده و خواهد شد**
 - **جهت دسترسی به کد اولیه پروژه که با ASP.NET Core 2.1 در هنگام تهیه دوره نوشته بود [به این برنچ مراجعه کنید](https://github.com/dotnetzoom/AspNetCore-WebApi-Course/tree/AspNetCore2.1)**
+- **جهت دسترسی به کد پروژه در ورژن ASP.NET Core 3.1  [به این برنچ مراجعه کنید](https://github.com/dotnetzoom/AspNetCore-WebApi-Course/tree/AspNetCore3.1)**
 - **همچنین جهت اطلاعات بیشتر از تغییرات که به هنگام Upgrade پروژه از نسخه 2.1 به 3.1 انجام شد، میتونین به قسمت [ChangeLog](https://github.com/dotnetzoom/AspNetCore-WebApi-Course/blob/master/CHANGELOG.md) مراجعه کنید**
 
 ## تکنولوژی، ابزار ها و قابلیت ها
