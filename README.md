@@ -48,7 +48,7 @@ If you like this project, learn something or you are using it in your applicatio
 در این دوره سعی شده بهترین و محبوب ترین تکنولوژی ها، کتابخانه ها و ابزار ها داخل پروژه استفاده بشه. همچنین Best Practice های پرفرمنسی و امنیتی بعلاوه تکنیک های پرکاربرد را بررسی و در قالب یک معماری حرفه ای و اصولی استفاده می کنیم.
 
 **توجه:**
-- **برنچ master این مخزن همواره به آخرین نسخه ASP.NET Core (به همراه تمام Dependency هایش) بروز رسانی شده و خواهد شد**
+- **برنچ master این مخزن همواره به آخرین نسخه ASP.NET Core (به همراه تمام Dependency هایش) بروز رسانی شده و خواهد شد (در حال حاضر ASP.NET Core 5.0 می باشد)**
 - **جهت دسترسی به کد اولیه پروژه که با ASP.NET Core 2.1 در هنگام تهیه دوره نوشته بود [به این برنچ مراجعه کنید](https://github.com/dotnetzoom/AspNetCore-WebApi-Course/tree/AspNetCore2.1)**
 - **جهت دسترسی به کد پروژه در ورژن ASP.NET Core 3.1  [به این برنچ مراجعه کنید](https://github.com/dotnetzoom/AspNetCore-WebApi-Course/tree/AspNetCore3.1)**
 - **همچنین جهت اطلاعات بیشتر از تغییرات که به هنگام Upgrade پروژه از نسخه 2.1 به 3.1 انجام شد، میتونین به قسمت [ChangeLog](https://github.com/dotnetzoom/AspNetCore-WebApi-Course/blob/master/CHANGELOG.md) مراجعه کنید**
