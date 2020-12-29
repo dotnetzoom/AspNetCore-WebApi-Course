@@ -7,13 +7,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities
 {
-    public class User : IdentityUser<int>, IEntity
+    public class User : IdentityUser<int>, IEntity<int>
     {
         public User()
         {
             IsActive = true;
         }
-        
+
         [Required]
         [StringLength(100)]
         public string FullName { get; set; }

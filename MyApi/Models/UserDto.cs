@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using WebFramework.Api;
 
 namespace MyApi.Models
 {
-    public class UserDto : IValidatableObject
+    public class UserDto : BaseDto<UserDto, User>, IValidatableObject
     {
         [Required]
         [StringLength(100)]
