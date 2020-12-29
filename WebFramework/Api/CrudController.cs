@@ -14,7 +14,7 @@ namespace WebFramework.Api
     public class CrudController<TDto, TSelectDto, TEntity, TKey> : BaseController
         where TDto : BaseDto<TDto, TEntity, TKey>, new()
         where TSelectDto : BaseDto<TSelectDto, TEntity, TKey>, new()
-        where TEntity : BaseEntity<TKey>, new()
+        where TEntity : class, IEntity<TKey>, new()
     {
         protected readonly IRepository<TEntity> Repository;
         protected readonly IMapper Mapper;
@@ -88,7 +88,7 @@ namespace WebFramework.Api
     public class CrudController<TDto, TSelectDto, TEntity> : CrudController<TDto, TSelectDto, TEntity, int>
         where TDto : BaseDto<TDto, TEntity, int>, new()
         where TSelectDto : BaseDto<TSelectDto, TEntity, int>, new()
-        where TEntity : BaseEntity<int>, new()
+        where TEntity : class, IEntity<int>, new()
     {
         public CrudController(IRepository<TEntity> repository, IMapper mapper)
             : base(repository, mapper)
@@ -98,7 +98,7 @@ namespace WebFramework.Api
 
     public class CrudController<TDto, TEntity> : CrudController<TDto, TDto, TEntity, int>
         where TDto : BaseDto<TDto, TEntity, int>, new()
-        where TEntity : BaseEntity<int>, new()
+        where TEntity : class, IEntity<int>, new()
     {
         public CrudController(IRepository<TEntity> repository, IMapper mapper)
             : base(repository, mapper)
