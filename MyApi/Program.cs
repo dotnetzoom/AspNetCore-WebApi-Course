@@ -97,7 +97,7 @@ namespace MyApi
 
                 // If DSN is not set, the SDK will look for an environment variable called SENTRY_DSN. If
                 // nothing is found, SDK is disabled.
-                options.Dsn = new Dsn("https://a48f67497c814561aca2c66fa5ee37fc:a5af1a051d6f4f09bdd82472d5c2629d@sentry.io/1340240");
+                options.Dsn = "https://a48f67497c814561aca2c66fa5ee37fc:a5af1a051d6f4f09bdd82472d5c2629d@sentry.io/1340240";
 
                 options.AttachStacktrace = true;
                 options.SendDefaultPii = true; // Send Personal Identifiable information like the username of the user logged in to the device
