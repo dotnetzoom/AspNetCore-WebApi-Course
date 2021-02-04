@@ -20,7 +20,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.10.0" />
-    <PackageReference Include="Sentry.NLog" Version="3.0.2" />
+    <PackageReference Include="Sentry.NLog" Version="3.0.3" />
   </ItemGroup>
 
   <ItemGroup>
