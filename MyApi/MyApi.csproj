@@ -6,16 +6,6 @@
     <DocumentationFile>MyApi.xml</DocumentationFile>
   </PropertyGroup>
 
-  <!--<ItemGroup>
-    <Content Include="MyApi.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
-  <!--<ItemGroup>
-    <Content Include="**\*.xml" Exclude="bin\**\*;obj\**\*"
-      CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>-->
-
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
