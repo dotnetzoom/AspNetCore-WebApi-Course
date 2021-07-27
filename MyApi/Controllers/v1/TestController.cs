@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using MyApi.Models;
+
 using Newtonsoft.Json;
+
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
+
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
@@ -72,7 +77,7 @@ namespace MyApi.Controllers.v1
         [HttpPost("[action]")]
         public ActionResult UploadFile2()
         {
-            var file = Request.Form.Files[0];
+            IFormFile file = Request.Form.Files[0];
             return Ok();
         }
 

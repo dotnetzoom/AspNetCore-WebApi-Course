@@ -1,6 +1,7 @@
-﻿using System.Threading;
+﻿using Entities;
+
+using System.Threading;
 using System.Threading.Tasks;
-using Entities;
 
 namespace Data.Repositories
 {

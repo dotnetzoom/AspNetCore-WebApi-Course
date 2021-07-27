@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Data.Repositories;
+﻿using Data.Repositories;
+
 using Entities;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using MyApi.Models;
+
 using Services;
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v2

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -42,13 +44,13 @@ namespace WebFramework.CustomMapping
 
         public static void AddCustomMappingProfile(this IMapperConfigurationExpression config, params Assembly[] assemblies)
         {
-            var allTypes = assemblies.SelectMany(a => a.ExportedTypes);
+            System.Collections.Generic.IEnumerable<Type> allTypes = assemblies.SelectMany(a => a.ExportedTypes);
 
-            var list = allTypes.Where(type => type.IsClass && !type.IsAbstract &&
+            System.Collections.Generic.IEnumerable<IHaveCustomMapping> list = allTypes.Where(type => type.IsClass && !type.IsAbstract &&
                 type.GetInterfaces().Contains(typeof(IHaveCustomMapping)))
                 .Select(type => (IHaveCustomMapping)Activator.CreateInstance(type));
 
-            var profile = new CustomMappingProfile(list);
+            CustomMappingProfile profile = new CustomMappingProfile(list);
 
             config.AddProfile(profile);
         }

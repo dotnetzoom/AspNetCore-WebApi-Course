@@ -1,20 +1,28 @@
 ﻿using Common.Exceptions;
+
 using Data.Repositories;
+
 using ElmahCore;
+
 using Entities;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
 using MyApi.Models;
+
 using Services;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WebFramework.Api;
-using Microsoft.AspNetCore.Identity;
 
 namespace MyApi.Controllers.v1
 {
@@ -50,19 +58,21 @@ namespace MyApi.Controllers.v1
             //var phone = HttpContext.User.Identity.FindFirstValue(ClaimTypes.MobilePhone);
             //var role = HttpContext.User.Identity.FindFirstValue(ClaimTypes.Role);
 
-            var users = await userRepository.TableNoTracking.ToListAsync(cancellationToken);
+            List<User> users = await userRepository.TableNoTracking.ToListAsync(cancellationToken);
             return Ok(users);
         }
 
         [HttpGet("{id:int}")]
         public virtual async Task<ApiResult<User>> Get(int id, CancellationToken cancellationToken)
         {
-            var user2 = await userManager.FindByIdAsync(id.ToString());
-            var role = await roleManager.FindByNameAsync("Admin");
+            User user2 = await userManager.FindByIdAsync(id.ToString());
+            Role role = await roleManager.FindByNameAsync("Admin");
 
-            var user = await userRepository.GetByIdAsync(cancellationToken, id);
+            User user = await userRepository.GetByIdAsync(cancellationToken, id);
             if (user == null)
+            {
                 return NotFound();
+            }
 
             await userManager.UpdateSecurityStampAsync(user);
             //await userRepository.UpdateSecurityStampAsync(user, cancellationToken);
@@ -81,22 +91,28 @@ namespace MyApi.Controllers.v1
         public virtual async Task<ActionResult> Token([FromForm] TokenRequest tokenRequest, CancellationToken cancellationToken)
         {
             if (!tokenRequest.grant_type.Equals("password", StringComparison.OrdinalIgnoreCase))
+            {
                 throw new Exception("OAuth flow is not password.");
+            }
 
             //var user = await userRepository.GetByUserAndPass(username, password, cancellationToken);
-            var user = await userManager.FindByNameAsync(tokenRequest.username);
+            User user = await userManager.FindByNameAsync(tokenRequest.username);
             if (user == null)
+            {
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
+            }
 
-            var isPasswordValid = await userManager.CheckPasswordAsync(user, tokenRequest.password);
+            bool isPasswordValid = await userManager.CheckPasswordAsync(user, tokenRequest.password);
             if (!isPasswordValid)
+            {
                 throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
+            }
 
 
             //if (user == null)
             //    throw new BadRequestException("نام کاربری یا رمز عبور اشتباه است");
 
-            var jwt = await jwtService.GenerateAsync(user);
+            AccessToken jwt = await jwtService.GenerateAsync(user);
             return new JsonResult(jwt);
         }
 
@@ -112,7 +128,7 @@ namespace MyApi.Controllers.v1
             //    return BadRequest("نام کاربری تکراری است");
 
 
-            var user = new User
+            User user = new User
             {
                 Age = userDto.Age,
                 FullName = userDto.FullName,
@@ -120,15 +136,15 @@ namespace MyApi.Controllers.v1
                 UserName = userDto.UserName,
                 Email = userDto.Email
             };
-            var result = await userManager.CreateAsync(user, userDto.Password);
+            IdentityResult result = await userManager.CreateAsync(user, userDto.Password);
 
-            var result2 = await roleManager.CreateAsync(new Role
+            IdentityResult result2 = await roleManager.CreateAsync(new Role
             {
                 Name = "Admin",
                 Description = "admin role"
             });
 
-            var result3 = await userManager.AddToRoleAsync(user, "Admin");
+            IdentityResult result3 = await userManager.AddToRoleAsync(user, "Admin");
 
             //await userRepository.AddAsync(user, userDto.Password, cancellationToken);
             return user;
@@ -137,7 +153,7 @@ namespace MyApi.Controllers.v1
         [HttpPut]
         public virtual async Task<ApiResult> Update(int id, User user, CancellationToken cancellationToken)
         {
-            var updateUser = await userRepository.GetByIdAsync(cancellationToken, id);
+            User updateUser = await userRepository.GetByIdAsync(cancellationToken, id);
 
             updateUser.UserName = user.UserName;
             updateUser.PasswordHash = user.PasswordHash;
@@ -155,7 +171,7 @@ namespace MyApi.Controllers.v1
         [HttpDelete]
         public virtual async Task<ApiResult> Delete(int id, CancellationToken cancellationToken)
         {
-            var user = await userRepository.GetByIdAsync(cancellationToken, id);
+            User user = await userRepository.GetByIdAsync(cancellationToken, id);
             await userRepository.DeleteAsync(user, cancellationToken);
 
             return Ok();

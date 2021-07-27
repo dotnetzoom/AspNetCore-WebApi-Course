@@ -1,14 +1,20 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
 using Data.Repositories;
+
 using Entities;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using MyApi.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
@@ -49,7 +55,7 @@ namespace MyApi.Controllers.v1
             //}).ToListAsync(cancellationToken);
             #endregion
 
-            var list = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
+            List<PostSelectDto> list = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
                 //.Where(postDto => postDto.Title.Contains("test") || postDto.CategoryName.Contains("test"))
                 .ToListAsync(cancellationToken);
 
@@ -59,14 +65,16 @@ namespace MyApi.Controllers.v1
         [HttpGet("{id:guid}")]
         public async Task<ApiResult<PostSelectDto>> Get(Guid id, CancellationToken cancellationToken)
         {
-            var dto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
+            PostSelectDto dto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
 
             //Post post = null; //Find from database by Id (include)
             //var resultDto = PostDto.FromEntity(post);
 
             if (dto == null)
+            {
                 return NotFound();
+            }
 
             //dto.Category = "My custom value, not from mapping!";
 
@@ -90,7 +98,7 @@ namespace MyApi.Controllers.v1
         public async Task<ApiResult<PostSelectDto>> Create(PostDto dto, CancellationToken cancellationToken)
         {
             //var model = Mapper.Map<Post>(dto);
-            var model = dto.ToEntity(_mapper);
+            Post model = dto.ToEntity(_mapper);
 
             #region old code
             //var model = new Post
@@ -135,7 +143,7 @@ namespace MyApi.Controllers.v1
             //}).SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
             #endregion
 
-            var resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
+            PostSelectDto resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
 
             return resultDto;
@@ -153,7 +161,7 @@ namespace MyApi.Controllers.v1
             //var postDto = PostDto.FromEntity(model); // Entity => DTO
 
 
-            var model = await _repository.GetByIdAsync(cancellationToken, id);
+            Post model = await _repository.GetByIdAsync(cancellationToken, id);
 
             //Mapper.Map(dto, model);
             model = dto.ToEntity(_mapper, model);
@@ -180,7 +188,7 @@ namespace MyApi.Controllers.v1
             //}).SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
             #endregion
 
-            var resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
+            PostSelectDto resultDto = await _repository.TableNoTracking.ProjectTo<PostSelectDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(p => p.Id == model.Id, cancellationToken);
 
             return resultDto;
@@ -189,7 +197,7 @@ namespace MyApi.Controllers.v1
         [HttpDelete("{id:guid}")]
         public async Task<ApiResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            var model = await _repository.GetByIdAsync(cancellationToken, id);
+            Post model = await _repository.GetByIdAsync(cancellationToken, id);
             await _repository.DeleteAsync(model, cancellationToken);
 
             return Ok();

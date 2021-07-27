@@ -1,4 +1,5 @@
 ﻿using Common.Utilities;
+
 using System;
 using System.Globalization;
 using System.Security.Claims;
@@ -15,7 +16,7 @@ namespace Common
 
         public static string FindFirstValue(this IIdentity identity, string claimType)
         {
-            var claimsIdentity = identity as ClaimsIdentity;
+            ClaimsIdentity claimsIdentity = identity as ClaimsIdentity;
             return claimsIdentity?.FindFirstValue(claimType);
         }
 
@@ -26,7 +27,7 @@ namespace Common
 
         public static T GetUserId<T>(this IIdentity identity) where T : IConvertible
         {
-            var userId = identity?.GetUserId();
+            string userId = identity?.GetUserId();
             return userId.HasValue()
                 ? (T)Convert.ChangeType(userId, typeof(T), CultureInfo.InvariantCulture)
                 : default(T);

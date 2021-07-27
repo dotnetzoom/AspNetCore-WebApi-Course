@@ -1,6 +1,8 @@
 ﻿using Entities;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using System.Linq;
 
 namespace Services.DataInitializer
@@ -24,7 +26,7 @@ namespace Services.DataInitializer
             }
             if (!userManager.Users.AsNoTracking().Any(p => p.UserName == "Admin"))
             {
-                var user = new User
+                User user = new User
                 {
                     Age = 25,
                     FullName = "محمد جوادابراهیمی",

@@ -1,17 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Common;
+using Common.Exceptions;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Common;
 using System.Net;
-using Common.Exceptions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+
 using WebFramework.Api;
-using Microsoft.Extensions.Hosting;
 
 namespace WebFramework.Middlewares
 {
@@ -56,7 +60,7 @@ namespace WebFramework.Middlewares
 
                 if (_env.IsDevelopment())
                 {
-                    var dic = new Dictionary<string, string>
+                    Dictionary<string, string> dic = new Dictionary<string, string>
                     {
                         ["Exception"] = exception.Message,
                         ["StackTrace"] = exception.StackTrace,
@@ -67,7 +71,9 @@ namespace WebFramework.Middlewares
                         dic.Add("InnerException.StackTrace", exception.InnerException.StackTrace);
                     }
                     if (exception.AdditionalData != null)
+                    {
                         dic.Add("AdditionalData", JsonConvert.SerializeObject(exception.AdditionalData));
+                    }
 
                     message = JsonConvert.SerializeObject(dic);
                 }
@@ -95,7 +101,7 @@ namespace WebFramework.Middlewares
 
                 if (_env.IsDevelopment())
                 {
-                    var dic = new Dictionary<string, string>
+                    Dictionary<string, string> dic = new Dictionary<string, string>
                     {
                         ["Exception"] = exception.Message,
                         ["StackTrace"] = exception.StackTrace,
@@ -108,10 +114,12 @@ namespace WebFramework.Middlewares
             async Task WriteToResponseAsync()
             {
                 if (context.Response.HasStarted)
+                {
                     throw new InvalidOperationException("The response has already started, the http status code middleware will not be executed.");
+                }
 
-                var result = new ApiResult(false, apiStatusCode, message);
-                var json = JsonConvert.SerializeObject(result);
+                ApiResult result = new ApiResult(false, apiStatusCode, message);
+                string json = JsonConvert.SerializeObject(result);
 
                 context.Response.StatusCode = (int)httpStatusCode;
                 context.Response.ContentType = "application/json";
@@ -125,13 +133,15 @@ namespace WebFramework.Middlewares
 
                 if (_env.IsDevelopment())
                 {
-                    var dic = new Dictionary<string, string>
+                    Dictionary<string, string> dic = new Dictionary<string, string>
                     {
                         ["Exception"] = exception.Message,
                         ["StackTrace"] = exception.StackTrace
                     };
                     if (exception is SecurityTokenExpiredException tokenException)
+                    {
                         dic.Add("Expires", tokenException.Expires.ToString());
+                    }
 
                     message = JsonConvert.SerializeObject(dic);
                 }

@@ -1,7 +1,10 @@
 ﻿using Common.Utilities;
+
 using Entities;
+
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -10,7 +13,7 @@ using System.Threading.Tasks;
 namespace Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, int>
-        //DbContext
+    //DbContext
     {
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
@@ -28,7 +31,7 @@ namespace Data
         {
             base.OnModelCreating(modelBuilder);
 
-            var entitiesAssembly = typeof(IEntity).Assembly;
+            Assembly entitiesAssembly = typeof(IEntity).Assembly;
 
             modelBuilder.RegisterAllEntities<IEntity>(entitiesAssembly);
             modelBuilder.RegisterEntityTypeConfiguration(entitiesAssembly);
@@ -63,26 +66,31 @@ namespace Data
 
         private void _cleanString()
         {
-            var changedEntities = ChangeTracker.Entries()
+            System.Collections.Generic.IEnumerable<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> changedEntities = ChangeTracker.Entries()
                 .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
-            foreach (var item in changedEntities)
+            foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry item in changedEntities)
             {
                 if (item.Entity == null)
+                {
                     continue;
+                }
 
-                var properties = item.Entity.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                System.Collections.Generic.IEnumerable<PropertyInfo> properties = item.Entity.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Where(p => p.CanRead && p.CanWrite && p.PropertyType == typeof(string));
 
-                foreach (var property in properties)
+                foreach (PropertyInfo property in properties)
                 {
-                    var propName = property.Name;
-                    var val = (string)property.GetValue(item.Entity, null);
+                    string propName = property.Name;
+                    string val = (string)property.GetValue(item.Entity, null);
 
                     if (val.HasValue())
                     {
-                        var newVal = val.Fa2En().FixPersianChars();
+                        string newVal = val.Fa2En().FixPersianChars();
                         if (newVal == val)
+                        {
                             continue;
+                        }
+
                         property.SetValue(item.Entity, newVal, null);
                     }
                 }

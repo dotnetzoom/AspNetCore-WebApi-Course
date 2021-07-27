@@ -1,14 +1,18 @@
 ﻿using Common;
 using Common.Utilities;
+
 using ElmahCore.Mvc;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+
 using System;
 using System.IO;
 using System.Linq;
@@ -31,8 +35,8 @@ namespace WebFramework.Swagger
             //services.AddSwaggerExamplesFromAssemblyOf<PersonRequestExample>();
 
             //We call this method for by reflection with the Startup type of entry assmebly (MyApi assembly)
-            var mainAssembly = Assembly.GetEntryAssembly(); // => MyApi project assembly
-            var mainType = mainAssembly.GetExportedTypes()[0];
+            Assembly mainAssembly = Assembly.GetEntryAssembly(); // => MyApi project assembly
+            Type mainType = mainAssembly.GetExportedTypes()[0];
 
             const string methodName = nameof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions.AddSwaggerExamplesFromAssemblyOf);
             //MethodInfo method = typeof(Swashbuckle.AspNetCore.Filters.ServiceCollectionExtensions).GetMethod(methodName);
@@ -44,7 +48,7 @@ namespace WebFramework.Swagger
             //Add services and configuration to use swagger
             services.AddSwaggerGen(options =>
             {
-                var xmlDocPath = Path.Combine(AppContext.BaseDirectory, "MyApi.xml");
+                string xmlDocPath = Path.Combine(AppContext.BaseDirectory, "MyApi.xml");
                 //show controller XML comments like summary
                 options.IncludeXmlComments(xmlDocPath, true);
 
@@ -146,9 +150,12 @@ namespace WebFramework.Swagger
                 //Seperate and categorize end-points by doc version
                 options.DocInclusionPredicate((docName, apiDesc) =>
                 {
-                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
+                    {
+                        return false;
+                    }
 
-                    var versions = methodInfo.DeclaringType
+                    System.Collections.Generic.IEnumerable<ApiVersion> versions = methodInfo.DeclaringType
                         .GetCustomAttributes<ApiVersionAttribute>(true)
                         .SelectMany(attr => attr.Versions);
 

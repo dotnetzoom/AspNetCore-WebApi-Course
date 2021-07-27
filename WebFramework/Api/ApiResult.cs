@@ -1,7 +1,10 @@
 ﻿using Common;
 using Common.Utilities;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Newtonsoft.Json;
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,10 +38,10 @@ namespace WebFramework.Api
 
         public static implicit operator ApiResult(BadRequestObjectResult result)
         {
-            var message = result.Value?.ToString();
+            string message = result.Value?.ToString();
             if (result.Value is SerializableError errors)
             {
-                var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
+                IEnumerable<string> errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
                 message = string.Join(" | ", errorMessages);
             }
             return new ApiResult(false, ApiResultStatusCode.BadRequest, message);
@@ -91,10 +94,10 @@ namespace WebFramework.Api
 
         public static implicit operator ApiResult<TData>(BadRequestObjectResult result)
         {
-            var message = result.Value?.ToString();
+            string message = result.Value?.ToString();
             if (result.Value is SerializableError errors)
             {
-                var errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
+                IEnumerable<string> errorMessages = errors.SelectMany(p => (string[])p.Value).Distinct();
                 message = string.Join(" | ", errorMessages);
             }
             return new ApiResult<TData>(false, ApiResultStatusCode.BadRequest, null, message);

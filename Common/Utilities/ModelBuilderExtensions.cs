@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+
 using Pluralize.NET;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +63,9 @@ namespace Common.Utilities
             {
                 IMutableProperty property = entityType.GetProperties().SingleOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
                 if (property != null && property.ClrType == propertyType)
+                {
                     property.SetDefaultValueSql(defaultValueSql);
+                }
             }
         }
 
@@ -75,7 +79,9 @@ namespace Common.Utilities
                 .SelectMany(t => t.GetForeignKeys())
                 .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
             foreach (IMutableForeignKey fk in cascadeFKs)
+            {
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
 
         /// <summary>
@@ -115,7 +121,9 @@ namespace Common.Utilities
                 .Where(c => c.IsClass && !c.IsAbstract && c.IsPublic && typeof(BaseType).IsAssignableFrom(c));
 
             foreach (Type type in types)
+            {
                 modelBuilder.Entity(type);
+            }
         }
     }
 }

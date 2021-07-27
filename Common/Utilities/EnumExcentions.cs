@@ -11,7 +11,9 @@ namespace Common.Utilities
         public static IEnumerable<T> GetEnumValues<T>(this T input) where T : struct
         {
             if (!typeof(T).IsEnum)
+            {
                 throw new NotSupportedException();
+            }
 
             return Enum.GetValues(input.GetType()).Cast<T>();
         }
@@ -19,24 +21,32 @@ namespace Common.Utilities
         public static IEnumerable<T> GetEnumFlags<T>(this T input) where T : struct
         {
             if (!typeof(T).IsEnum)
+            {
                 throw new NotSupportedException();
+            }
 
-            foreach (var value in Enum.GetValues(input.GetType()))
+            foreach (object value in Enum.GetValues(input.GetType()))
+            {
                 if ((input as Enum).HasFlag(value as Enum))
+                {
                     yield return (T)value;
+                }
+            }
         }
 
         public static string ToDisplay(this Enum value, DisplayProperty property = DisplayProperty.Name)
         {
             Assert.NotNull(value, nameof(value));
 
-            var attribute = value.GetType().GetField(value.ToString())
+            DisplayAttribute attribute = value.GetType().GetField(value.ToString())
                 .GetCustomAttributes<DisplayAttribute>(false).FirstOrDefault();
 
             if (attribute == null)
+            {
                 return value.ToString();
+            }
 
-            var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+            object propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
             return propValue.ToString();
         }
 

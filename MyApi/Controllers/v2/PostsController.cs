@@ -1,12 +1,18 @@
 ﻿using AutoMapper;
+
 using Data.Repositories;
+
 using Entities;
+
 using Microsoft.AspNetCore.Mvc;
+
 using MyApi.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WebFramework.Api;
 
 namespace MyApi.Controllers.v2
@@ -30,7 +36,7 @@ namespace MyApi.Controllers.v2
             return base.Delete(id, cancellationToken);
         }
 
-        public async override Task<ActionResult<List<PostSelectDto>>> Get(CancellationToken cancellationToken)
+        public override async Task<ActionResult<List<PostSelectDto>>> Get(CancellationToken cancellationToken)
         {
             return await Task.FromResult(new List<PostSelectDto>
             {
@@ -45,10 +51,13 @@ namespace MyApi.Controllers.v2
             });
         }
 
-        public async override Task<ApiResult<PostSelectDto>> Get(Guid id, CancellationToken cancellationToken)
+        public override async Task<ApiResult<PostSelectDto>> Get(Guid id, CancellationToken cancellationToken)
         {
             if (Guid.Empty == id)
+            {
                 return NotFound();
+            }
+
             return await base.Get(id, cancellationToken);
         }
 

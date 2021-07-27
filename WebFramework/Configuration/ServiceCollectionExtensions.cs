@@ -1,11 +1,15 @@
 ﻿using Common;
 using Common.Exceptions;
 using Common.Utilities;
+
 using Data;
 using Data.Repositories;
+
 using ElmahCore.Mvc;
 using ElmahCore.Sql;
+
 using Entities;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +18,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+
 using System;
 using System.Linq;
 using System.Net;
@@ -120,10 +126,10 @@ namespace WebFramework.Configuration
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                var secretKey = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
-                var encryptionKey = Encoding.UTF8.GetBytes(jwtSettings.EncryptKey);
+                byte[] secretKey = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
+                byte[] encryptionKey = Encoding.UTF8.GetBytes(jwtSettings.EncryptKey);
 
-                var validationParameters = new TokenValidationParameters
+                TokenValidationParameters validationParameters = new TokenValidationParameters
                 {
                     ClockSkew = TimeSpan.Zero, // default: 5 min
                     RequireSignedTokens = true,
@@ -154,36 +160,46 @@ namespace WebFramework.Configuration
                         //logger.LogError("Authentication failed.", context.Exception);
 
                         if (context.Exception != null)
+                        {
                             throw new AppException(ApiResultStatusCode.UnAuthorized, "Authentication failed.", HttpStatusCode.Unauthorized, context.Exception, null);
+                        }
 
                         return Task.CompletedTask;
                     },
                     OnTokenValidated = async context =>
                     {
-                        var signInManager = context.HttpContext.RequestServices.GetRequiredService<SignInManager<User>>();
-                        var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+                        SignInManager<User> signInManager = context.HttpContext.RequestServices.GetRequiredService<SignInManager<User>>();
+                        IUserRepository userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
 
-                        var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                        ClaimsIdentity claimsIdentity = context.Principal.Identity as ClaimsIdentity;
                         if (claimsIdentity.Claims?.Any() != true)
+                        {
                             context.Fail("This token has no claims.");
+                        }
 
-                        var securityStamp = claimsIdentity.FindFirstValue(new ClaimsIdentityOptions().SecurityStampClaimType);
+                        string securityStamp = claimsIdentity.FindFirstValue(new ClaimsIdentityOptions().SecurityStampClaimType);
                         if (!securityStamp.HasValue())
+                        {
                             context.Fail("This token has no security stamp");
+                        }
 
                         //Find user and token from database and perform your custom validation
-                        var userId = claimsIdentity.GetUserId<int>();
-                        var user = await userRepository.GetByIdAsync(context.HttpContext.RequestAborted, userId);
+                        int userId = claimsIdentity.GetUserId<int>();
+                        User user = await userRepository.GetByIdAsync(context.HttpContext.RequestAborted, userId);
 
                         //if (user.SecurityStamp != Guid.Parse(securityStamp))
                         //    context.Fail("Token security stamp is not valid.");
 
-                        var validatedUser = await signInManager.ValidateSecurityStampAsync(context.Principal);
+                        User validatedUser = await signInManager.ValidateSecurityStampAsync(context.Principal);
                         if (validatedUser == null)
+                        {
                             context.Fail("Token security stamp is not valid.");
+                        }
 
                         if (!user.IsActive)
+                        {
                             context.Fail("User is not active.");
+                        }
 
                         await userRepository.UpdateLastLoginDateAsync(user, context.HttpContext.RequestAborted);
                     },
@@ -193,7 +209,10 @@ namespace WebFramework.Configuration
                         //logger.LogError("OnChallenge error", context.Error, context.ErrorDescription);
 
                         if (context.AuthenticateFailure != null)
+                        {
                             throw new AppException(ApiResultStatusCode.UnAuthorized, "Authenticate failure.", HttpStatusCode.Unauthorized, context.AuthenticateFailure, null);
+                        }
+
                         throw new AppException(ApiResultStatusCode.UnAuthorized, "You are unauthorized to access this resource.", HttpStatusCode.Unauthorized);
 
                         //return Task.CompletedTask;

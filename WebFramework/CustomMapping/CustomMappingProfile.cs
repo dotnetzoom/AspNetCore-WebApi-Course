@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+
 using System.Collections.Generic;
 
 namespace WebFramework.CustomMapping
@@ -7,8 +8,10 @@ namespace WebFramework.CustomMapping
     {
         public CustomMappingProfile(IEnumerable<IHaveCustomMapping> haveCustomMappings)
         {
-            foreach (var item in haveCustomMappings)
+            foreach (IHaveCustomMapping item in haveCustomMappings)
+            {
                 item.CreateMappings(this);
+            }
         }
     }
 }

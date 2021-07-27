@@ -69,12 +69,16 @@ namespace Common.Utilities
         public static IEnumerable<Type> GetBaseTypesAndInterfaces(this Type type)
         {
             if ((type == null) || (type.BaseType == null))
+            {
                 yield break;
+            }
 
-            foreach (var i in type.GetInterfaces())
+            foreach (Type i in type.GetInterfaces())
+            {
                 yield return i;
+            }
 
-            var currentBaseType = type.BaseType;
+            Type currentBaseType = type.BaseType;
             while (currentBaseType != null)
             {
                 yield return currentBaseType;

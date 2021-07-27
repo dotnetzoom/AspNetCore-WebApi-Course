@@ -1,8 +1,11 @@
 ﻿using Common;
 using Common.Exceptions;
 using Common.Utilities;
+
 using Entities;
+
 using Microsoft.EntityFrameworkCore;
+
 using System;
 using System.Linq;
 using System.Threading;
@@ -19,7 +22,7 @@ namespace Data.Repositories
 
         public Task<User> GetByUserAndPass(string username, string password, CancellationToken cancellationToken)
         {
-            var passwordHash = SecurityHelper.GetSha256Hash(password);
+            string passwordHash = SecurityHelper.GetSha256Hash(password);
             return Table.Where(p => p.UserName == username && p.PasswordHash == passwordHash).SingleOrDefaultAsync(cancellationToken);
         }
 
@@ -43,11 +46,13 @@ namespace Data.Repositories
 
         public async Task AddAsync(User user, string password, CancellationToken cancellationToken)
         {
-            var exists = await TableNoTracking.AnyAsync(p => p.UserName == user.UserName);
+            bool exists = await TableNoTracking.AnyAsync(p => p.UserName == user.UserName);
             if (exists)
+            {
                 throw new BadRequestException("نام کاربری تکراری است");
+            }
 
-            var passwordHash = SecurityHelper.GetSha256Hash(password);
+            string passwordHash = SecurityHelper.GetSha256Hash(password);
             user.PasswordHash = passwordHash;
             await base.AddAsync(user, cancellationToken);
         }

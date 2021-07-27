@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace WebFramework.Swagger
@@ -7,9 +8,9 @@ namespace WebFramework.Swagger
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            var updatedPaths = new OpenApiPaths();
+            OpenApiPaths updatedPaths = new OpenApiPaths();
 
-            foreach (var entry in swaggerDoc.Paths)
+            foreach (System.Collections.Generic.KeyValuePair<string, OpenApiPathItem> entry in swaggerDoc.Paths)
             {
                 updatedPaths.Add(
                     entry.Key.Replace("v{version}", swaggerDoc.Info.Version),

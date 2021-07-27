@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+
 using Entities;
+
 using System.ComponentModel.DataAnnotations;
+
 using WebFramework.CustomMapping;
 
 namespace WebFramework.Api
@@ -34,15 +37,17 @@ namespace WebFramework.Api
 
         public void CreateMappings(Profile profile)
         {
-            var mappingExpression = profile.CreateMap<TDto, TEntity>();
+            IMappingExpression<TDto, TEntity> mappingExpression = profile.CreateMap<TDto, TEntity>();
 
-            var dtoType = typeof(TDto);
-            var entityType = typeof(TEntity);
+            System.Type dtoType = typeof(TDto);
+            System.Type entityType = typeof(TEntity);
             //Ignore any property of source (like Post.Author) that dose not contains in destination 
-            foreach (var property in entityType.GetProperties())
+            foreach (System.Reflection.PropertyInfo property in entityType.GetProperties())
             {
                 if (dtoType.GetProperty(property.Name) == null)
+                {
                     mappingExpression.ForMember(property.Name, opt => opt.Ignore());
+                }
             }
 
             CustomMappings(mappingExpression.ReverseMap());

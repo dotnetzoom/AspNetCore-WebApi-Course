@@ -1,8 +1,12 @@
 ﻿using Autofac;
+
 using Common;
+
 using Data;
 using Data.Repositories;
+
 using Entities;
+
 using Services;
 
 namespace WebFramework.Configuration
@@ -14,10 +18,10 @@ namespace WebFramework.Configuration
             //RegisterType > As > Liftetime
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 
-            var commonAssembly = typeof(SiteSettings).Assembly;
-            var entitiesAssembly = typeof(IEntity).Assembly;
-            var dataAssembly = typeof(ApplicationDbContext).Assembly;
-            var servicesAssembly = typeof(JwtService).Assembly;
+            System.Reflection.Assembly commonAssembly = typeof(SiteSettings).Assembly;
+            System.Reflection.Assembly entitiesAssembly = typeof(IEntity).Assembly;
+            System.Reflection.Assembly dataAssembly = typeof(ApplicationDbContext).Assembly;
+            System.Reflection.Assembly servicesAssembly = typeof(JwtService).Assembly;
 
             containerBuilder.RegisterAssemblyTypes(commonAssembly, entitiesAssembly, dataAssembly, servicesAssembly)
                 .AssignableTo<IScopedDependency>()

@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Entities;
-using Common;
-using Microsoft.AspNetCore.Identity;
+﻿using Common;
+
 using Data;
+
+using Entities;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebFramework.Configuration
 {

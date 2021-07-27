@@ -1,15 +1,17 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NLog.Web;
-using Sentry;
+
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace MyApi
 {
@@ -44,7 +46,7 @@ namespace MyApi
             // different file, you can call the following to load it for you: 
             //LogManager.Configuration = LogManager.LoadConfiguration("NLog-file.config").Configuration;
 
-            var logger = LogManager.GetCurrentClassLogger();
+            Logger logger = LogManager.GetCurrentClassLogger();
 
             // Or you can configure it with code:
             //UsingCodeConfiguration();
@@ -70,22 +72,24 @@ namespace MyApi
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .ConfigureLogging(options => options.ClearProviders())
-                .UseNLog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    //webBuilder.ConfigureLogging(options => options.ClearProviders());
-                    //webBuilder.UseNLog();
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+.ConfigureLogging(options => options.ClearProviders())
+.UseNLog()
+.ConfigureWebHostDefaults(webBuilder =>
+{
+    //webBuilder.ConfigureLogging(options => options.ClearProviders());
+    //webBuilder.UseNLog();
+    webBuilder.UseStartup<Startup>();
+});
+        }
 
         private static void UsingCodeConfiguration()
         {
             // Other overloads exist, for example, configure the SDK with only the DSN or no parameters at all.
-            var config = new LoggingConfiguration();
+            LoggingConfiguration config = new LoggingConfiguration();
 
             config.AddSentry(options =>
             {
