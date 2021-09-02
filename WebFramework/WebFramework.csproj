@@ -9,7 +9,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="ElmahCore" Version="2.0.6" />
+    <PackageReference Include="ElmahCore" Version="2.0.7" />
     <PackageReference Include="ElmahCore.Sql" Version="2.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.9" />
