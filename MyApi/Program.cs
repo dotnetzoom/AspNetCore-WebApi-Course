@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,7 @@ using NLog.Config;
 using NLog.Targets;
 using NLog.Web;
 using Sentry;
+using Services.DependcyResolvers.Autofac;
 
 namespace MyApi
 {
@@ -73,6 +75,10 @@ namespace MyApi
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                 .ConfigureContainer<ContainerBuilder>(builder => // Register Services to Autofac ContainerBuilder
+                 {
+                     builder.RegisterModule(new AutocBusinessModule());
+                 })
                 .ConfigureLogging(options => options.ClearProviders())
                 .UseNLog()
                 .ConfigureWebHostDefaults(webBuilder =>

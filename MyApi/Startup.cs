@@ -51,11 +51,11 @@ namespace MyApi
         // ConfigureContainer is where you can register things directly with Autofac. 
         // This runs after ConfigureServices so the things ere will override registrations made in ConfigureServices.
         // Don't build the container; that gets done for you by the factory.
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            //Register Services to Autofac ContainerBuilder
-            builder.AddServices();
-        }
+        //public void ConfigureContainer(ContainerBuilder builder)
+        //{
+        //    //Register Services to Autofac ContainerBuilder
+        //    builder.AddServices();
+        //}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
