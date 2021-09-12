@@ -101,6 +101,8 @@ namespace WebFramework.Configuration
             #endregion
         }
 
+        //Serilog usage recommendation
+        //source: https://veyselmutlu.medium.com/?p=4f908112e62a
         public static void AddElmahCore(this IServiceCollection services, IConfiguration configuration, SiteSettings siteSetting)
         {
             services.AddElmah<SqlErrorLog>(options =>
