@@ -9,7 +9,7 @@ namespace Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Post> builder)
         {
-            builder.Property<Guid>(x => x.Id).HasColumnName(@"Id").IsRequired(true).UseIdentityColumn().ValueGeneratedOnAdd();
+            builder.Property<Guid>(x => x.Id);
             builder.Property(p => p.Title).IsRequired().HasMaxLength(200);
             builder.Property(p => p.Description).IsRequired();
             builder.HasOne(p => p.Category).WithMany(c => c.Posts).HasForeignKey(p => p.CategoryId);
