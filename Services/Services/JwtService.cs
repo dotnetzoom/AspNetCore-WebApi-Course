@@ -15,12 +15,12 @@ namespace Services
     public class JwtService : IJwtService, IScopedDependency
     {
         private readonly SiteSettings _siteSetting;
-        private readonly SignInManager<User> signInManager;
+        private readonly SignInManager<User> _signInManager;
 
         public JwtService(IOptionsSnapshot<SiteSettings> settings, SignInManager<User> signInManager)
         {
-            _siteSetting = settings.Value;
-            this.signInManager = signInManager;
+            _siteSetting = settings.Value ?? throw new ArgumentNullException(nameof(settings));
+            _signInManager = signInManager;
         }
 
         public async Task<AccessToken> GenerateAsync(User user)
@@ -31,7 +31,7 @@ namespace Services
             var encryptionkey = Encoding.UTF8.GetBytes(_siteSetting.JwtSettings.EncryptKey); //must be 16 character
             var encryptingCredentials = new EncryptingCredentials(new SymmetricSecurityKey(encryptionkey), SecurityAlgorithms.Aes128KW, SecurityAlgorithms.Aes128CbcHmacSha256);
 
-            var claims = await _getClaimsAsync(user);
+            var claims = await _getClaimsAsync(user).ConfigureAwait(false); // ConfigureAwait(false) can be applied to the whole project;
 
             var descriptor = new SecurityTokenDescriptor
             {
@@ -60,7 +60,10 @@ namespace Services
 
         private async Task<IEnumerable<Claim>> _getClaimsAsync(User user)
         {
-            var result = await signInManager.ClaimsFactory.CreateAsync(user);
+            //source: https://qastack.info.tr/programming/13489065/best-practice-to-call-configureawait-for-all-server-side-code
+            // Generally speaking, you shouldn't need ConfigureAwait(false) to avoid a Result/Wait-based deadlock because on ASP.NET you should not be using Result/Wait in the first place. – Stephen Cleary
+
+            var result = await _signInManager.ClaimsFactory.CreateAsync(user).ConfigureAwait(false); // ConfigureAwait(false) can be applied to the whole project
             //add custom claims
             var list = new List<Claim>(result.Claims);
             list.Add(new Claim(ClaimTypes.MobilePhone, "09123456987"));
